@@ -18,4 +18,5 @@ public interface MealService {
     List<UserMealsModel> saveRecordMeal(UserMealsRequest request);
     List<UserMealsModel> getRecordMeal(int userId);
     void deleteRecordMeal(int recordId);
+    void deleteAllRecordMeal(int userId);
 }

@@ -69,4 +69,10 @@ public class MealController {
         mealService.deleteRecordMeal(recordId);
         return ResponseEntity.status(204).build();
     }
+
+    @DeleteMapping("/record/{userId}/all")
+    public ResponseEntity<?> deleteAllRecordMeal(@PathVariable int userId) {
+        mealService.deleteAllRecordMeal(userId);
+        return ResponseEntity.status(204).build();
+    }
 }

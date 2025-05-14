@@ -18,6 +18,8 @@ import com.example.Project4.repository.meal.MealsRepository;
 import com.example.Project4.repository.meal.MealSubCategoryRepository;
 import com.example.Project4.repository.meal.UserMealsRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class MealServiceImpl implements MealService {
     @Autowired
@@ -89,7 +91,12 @@ public class MealServiceImpl implements MealService {
     @Override
     public void deleteRecordMeal(int recordId) {
         uMealsRepository.deleteById(recordId);
+    }
 
+    @Override
+    @Transactional
+    public void deleteAllRecordMeal(int userId) {
+        uMealsRepository.deleteAllByUserId(userId);
     }
 
     @Override

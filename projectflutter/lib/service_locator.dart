@@ -31,6 +31,7 @@ import 'package:projectflutter/domain/exercise/usecase/get_exercise_session.dart
 import 'package:projectflutter/domain/exercise/usecase/get_exercises.dart';
 import 'package:projectflutter/domain/exercise/usecase/start_exercise.dart';
 import 'package:projectflutter/domain/meal/repository/meal_repository.dart';
+import 'package:projectflutter/domain/meal/usecase/delete_all_record_meal.dart';
 import 'package:projectflutter/domain/meal/usecase/delete_record_meal.dart';
 import 'package:projectflutter/domain/meal/usecase/get_all_category.dart';
 import 'package:projectflutter/domain/meal/usecase/get_all_sub_category.dart';
@@ -74,6 +75,8 @@ Future<void> initializeDependencies() async {
   // Meal
   sl.registerSingleton<SaveRecordMealUseCase>(SaveRecordMealUseCase());
   sl.registerSingleton<DeleteRecordMealUseCase>(DeleteRecordMealUseCase());
+  sl.registerSingleton<DeleteAllRecordMealUseCase>(
+      DeleteAllRecordMealUseCase());
   sl.registerSingleton<GetMealBySubCategoryUseCase>(
       GetMealBySubCategoryUseCase());
   sl.registerSingleton<GetAllCategoryUseCase>(GetAllCategoryUseCase());

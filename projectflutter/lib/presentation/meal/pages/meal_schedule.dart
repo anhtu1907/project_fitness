@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/common/helper/dialog/show_dialog.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/domain/meal/usecase/delete_all_record_meal.dart';
 import 'package:projectflutter/presentation/meal/bloc/user_meal_cubit.dart';
 import 'package:projectflutter/presentation/meal/bloc/user_meal_state.dart';
 import 'package:projectflutter/presentation/meal/widgets/meal_nutritions_row.dart';
@@ -132,11 +134,35 @@ class MealSchedule extends StatelessWidget {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    Text(
-                                      '${state.entity.length} items | ${kcal.toStringAsFixed(0)} calories',
-                                      style: TextStyle(
-                                          color: AppColors.gray, fontSize: 14),
-                                    ),
+                                    TextButton(
+                                        onPressed: () async {
+                                          var shouldConfirm =
+                                              await ShowDialog.shouldContinue(
+                                                  context,
+                                                  'Confirm?',
+                                                  'Are you sure want to clear?');
+                                          if (shouldConfirm == true) {
+                                            await DeleteAllRecordMealUseCase()
+                                                .call();
+                                            Future.delayed(
+                                                const Duration(
+                                                    milliseconds: 300),
+                                                () async {
+                                              if (context.mounted) {
+                                                context
+                                                    .read<UserMealCubit>()
+                                                    .displayRecord();
+                                              }
+                                            });
+                                          }
+                                        },
+                                        child: Text(
+                                          'CLEAR ALL',
+                                          style: TextStyle(
+                                              color: AppColors.primaryColor1,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ))
                                   ],
                                 ),
                               ),
@@ -149,7 +175,6 @@ class MealSchedule extends StatelessWidget {
                                       entity: state.entity[index]);
                                 },
                               ),
-
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 10),

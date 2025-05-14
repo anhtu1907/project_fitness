@@ -3,6 +3,9 @@ import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/round_button.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/data/meal_sub_category.dart';
+import 'package:projectflutter/domain/meal/entity/meals.dart';
+import 'package:projectflutter/domain/meal/usecase/get_meal_by_sub_category.dart';
+import 'package:projectflutter/domain/meal/usecase/save_record_meal.dart';
 import 'package:projectflutter/presentation/meal/pages/meal_by_sub_category.dart';
 
 class MealSubCategoryCard extends StatelessWidget {
@@ -101,7 +104,31 @@ class MealSubCategoryCard extends StatelessWidget {
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
-                              onPressed: () {},
+                              onPressed: () async {
+                                final getMeals = GetMealBySubCategoryUseCase();
+                                final result =
+                                    await getMeals.call(params: subCategoryId);
+                                result.fold((err) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Error: $err')));
+                                }, (data) async {
+                                  final List<MealsEntity> meals =
+                                      List<MealsEntity>.from(data);
+                                  List<int> mealIds =
+                                      meals.map((meal) => meal.id).toList();
+                                  final saveListRecord =
+                                      SaveRecordMealUseCase();
+                                  await saveListRecord.call(params: mealIds);
+                                  if (context.mounted) {
+                                    Navigator.pop(context);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Plan has been added to the meal schedule ')),
+                                    );
+                                  }
+                                });
+                              },
                             )),
                       ],
                     )

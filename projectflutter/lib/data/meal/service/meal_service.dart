@@ -11,8 +11,9 @@ abstract class MealService {
   Future<Either> getAllRecordMeal();
   Future<Either> getMealBySubCategory(int subCategoryId);
   Future<Either> getMealById(int mealId);
-  Future<Either> saveRecordMeal(int mealId);
+  Future<Either> saveRecordMeal(List<int> mealId);
   Future<void> deteleRecordMeal(int mealId);
+  Future<void> deteleAllRecordMeal();
   Future<Either> searchByMealName(String mealName);
 }
 
@@ -111,14 +112,14 @@ class MealServiceImpl extends MealService {
   }
 
   @override
-  Future<Either> saveRecordMeal(int mealId) async {
+  Future<Either> saveRecordMeal(List<int> mealId) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('id');
       Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/save/record");
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
-          body: json.encode({'user': userId, 'meal': [mealId]}));
+          body: json.encode({'user': userId, 'meal': mealId}));
       return Right(response.body);
     } catch (err) {
       return Left('Error Message: $err');
@@ -128,6 +129,19 @@ class MealServiceImpl extends MealService {
   @override
   Future<void> deteleRecordMeal(int mealId) async {
     Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/record/$mealId");
+    final response = await http.delete(url);
+    if (response.statusCode == 204) {
+      print("Record deleted successfully.");
+    } else {
+      print("Failed to delete record. Status code: ${response.statusCode}");
+    }
+  }
+
+  @override
+  Future<void> deteleAllRecordMeal() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getInt('id');
+    Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/record/$userId/all");
     final response = await http.delete(url);
     if (response.statusCode == 204) {
       print("Record deleted successfully.");

@@ -128,7 +128,7 @@ class _ExerciseStartsState extends State<ExerciseStart> {
                     flexibleSpace: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 50, 16, 12),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
@@ -152,27 +152,30 @@ class _ExerciseStartsState extends State<ExerciseStart> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 0),
-                            child: InkWell(
-                              onTap: () async {
-                                final result = await ShowDialog.shouldPop(
-                                    context,
-                                    'Confirm',
-                                    'Are you sure want to quit');
-                                if (result == true && context.mounted) {
-                                  Navigator.pop(context);
-                                }
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.25),
-                                  shape: BoxShape.circle,
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 0),
+                              child: InkWell(
+                                onTap: () async {
+                                  final result = await ShowDialog.shouldPop(
+                                      context,
+                                      'Confirm',
+                                      'Are you sure want to quit');
+                                  if (result == true && context.mounted) {
+                                    Navigator.pop(context);
+                                  }
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.25),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(Icons.close,
+                                      size: 15, color: Colors.white),
                                 ),
-                                child: const Icon(Icons.close,
-                                    size: 15, color: Colors.white),
                               ),
                             ),
                           ),

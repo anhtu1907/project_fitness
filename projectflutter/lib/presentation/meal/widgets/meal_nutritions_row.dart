@@ -44,7 +44,7 @@ class MealNutritionsRow extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '${totalValue.toStringAsFixed(0)} $unit',
+                '${value.toStringAsFixed(0)} / ${totalValue.toStringAsFixed(0)} $unit',
                 style: TextStyle(
                   color: AppColors.gray,
                   fontSize: 12,

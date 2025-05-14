@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
-import 'package:projectflutter/presentation/exercise/widgets/title_sub_title_cell_time.dart';
+import 'package:projectflutter/presentation/exercise/widgets/title_sub_title_cell_time_result.dart';
 import 'package:projectflutter/presentation/home/pages/tabs.dart';
 import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell_int.dart';
 
@@ -87,9 +87,6 @@ class ExerciseResultPage extends StatelessWidget {
                                 unit: "",
                               ),
                             ),
-                            const SizedBox(
-                              width: 15,
-                            ),
                             Expanded(
                               child: TitleSubtitleCellInt(
                                 value: 1230, // Kcal
@@ -99,18 +96,15 @@ class ExerciseResultPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(
+                        SizedBox(
                           height: 20,
                         ),
                         Row(
                           children: [
                             Expanded(
-                              child: TitleSubTitleCellTime(
+                              child: TitleSubTitleCellTimeResult(
                                   value: 120, // Duration
                                   subtitle: "Duration"),
-                            ),
-                            const SizedBox(
-                              width: 15,
                             ),
                             Expanded(
                               child: TitleSubtitleCellInt(
@@ -118,9 +112,6 @@ class ExerciseResultPage extends StatelessWidget {
                                 subtitle: "ResetBacth",
                                 unit: "",
                               ),
-                            ),
-                            const SizedBox(
-                              width: 15,
                             ),
                           ],
                         ),

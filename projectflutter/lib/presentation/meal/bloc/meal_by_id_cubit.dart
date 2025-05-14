@@ -16,7 +16,7 @@ class MealByIdCubit extends Cubit<MealByIdState> {
     });
   }
 
-  void saveRecordMeal(int mealId) async {
+  void saveRecordMeal(List<int> mealId) async {
     await sl<SaveRecordMealUseCase>().call(params: mealId);
   }
 }

@@ -7,7 +7,8 @@ abstract class MealRepository {
   Future<Either> getAllRecordMeal();
   Future<Either> getMealBySubCategory(int subCategoryId);
   Future<Either> getMealById(int mealId);
-  Future<Either> saveRecordMeal(int mealId);
+  Future<Either> saveRecordMeal(List<int> mealId);
   Future<void> deteleRecordMeal(int mealId);
+  Future<void> deteleAllRecordMeal();
   Future<Either> searchByMealName(String mealName);
 }

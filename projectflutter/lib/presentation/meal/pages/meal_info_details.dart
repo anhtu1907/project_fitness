@@ -256,7 +256,7 @@ class MealInfoDetails extends StatelessWidget {
                                       if (context.mounted) {
                                         context
                                             .read<MealByIdCubit>()
-                                            .saveRecordMeal(state.entity.id);
+                                            .saveRecordMeal([state.entity.id]);
                                         Navigator.pop(context, true);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(

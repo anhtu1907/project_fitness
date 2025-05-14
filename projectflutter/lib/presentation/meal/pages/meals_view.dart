@@ -43,6 +43,33 @@ class MealsPage extends StatelessWidget {
                 SizedBox(
                   height: media.width * 0.05,
                 ),
+                Text(
+                  'Goal',
+                  style: TextStyle(
+                      color: AppColors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: media.width * 0.05,
+                ),
+                Text(
+                  'Time of Day',
+                  style: TextStyle(
+                      color: AppColors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: media.width * 0.05,
+                ),
+                Text(
+                  'Diet',
+                  style: TextStyle(
+                      color: AppColors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ),

@@ -10,4 +10,5 @@ import com.example.Project4.models.meal.UserMealsModel;
 @Repository
 public interface UserMealsRepository  extends JpaRepository<UserMealsModel, Integer>{
     List<UserMealsModel> findByUserId(int userId);
+    void deleteAllByUserId(int userId);
 }
