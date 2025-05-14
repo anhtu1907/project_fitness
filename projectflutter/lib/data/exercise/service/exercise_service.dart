@@ -1,0 +1,171 @@
+import 'dart:convert';
+
+import 'package:dartz/dartz.dart';
+import 'package:http/http.dart' as http;
+import 'package:projectflutter/data/exercise/model/exercise_session_request.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+abstract class ExerciseService {
+  Future<Either> getExerciseBySubCategory(int subCategoryId);
+  Future<Either> getExerciseById(int exerciseId);
+  Future<Either> getAllSubCategory();
+  Future<Either> startExercise(ExerciseSessionRequest req);
+  Future<Either> getAllExerciseProgressByUserId();
+  Future<Either> getAllExerciseSessionByUserId();
+  Future<Either> getAllExerciseResultByUserId();
+  Future<Either> getAllExercise();
+  Future<Either> getAllCategory();
+}
+
+class ExerciseServiceImpl extends ExerciseService {
+  @override
+  Future<Either> getAllSubCategory() async {
+    try {
+      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/category/sub");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return const Left('Category not found');
+      }
+
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('Error Message: $err');
+    }
+  }
+
+  @override
+  Future<Either> getExerciseBySubCategory(int subCategoryId) async {
+    try {
+      final Uri url = Uri.parse(
+          "http://10.0.2.2:8080/api/exercise/category/sub/$subCategoryId");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return const Left('Exercise by category not found');
+      }
+
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('Error Message: $err');
+    }
+  }
+
+  @override
+  Future<Either> getExerciseById(int exerciseId) async {
+    try {
+      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/$exerciseId");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return const Left('Exercise not found');
+      }
+      return Right(response.body);
+    } catch (err) {
+      return Left('Error Message: $err');
+    }
+  }
+
+  // Progress Workout
+  @override
+  Future<Either> getAllExercise() async {
+    try {
+      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return const Left('No data');
+      }
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('Error Message: $err');
+    }
+  }
+
+  @override
+  Future<Either> getAllCategory() async {
+    try {
+      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/category");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return const Left('No data');
+      }
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('Error Message: $err');
+    }
+  }
+
+  @override
+  Future<Either> getAllExerciseProgressByUserId() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('id');
+      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/progress/$userId");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return const Left('No data to found');
+      }
+      List<dynamic> responseData = jsonDecode(response.body);
+      final progress = responseData.last['progress'];
+      prefs.setDouble("progress", progress);
+      return Right(responseData);
+    } catch (err) {
+      return Left('Error Message: $err');
+    }
+  }
+
+  @override
+  Future<Either> getAllExerciseResultByUserId() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('id');
+      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/user/$userId");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return const Left('No result for user');
+      }
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('Error Message: $err');
+    }
+  }
+
+  @override
+  Future<Either> getAllExerciseSessionByUserId() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('id');
+      Uri url = Uri.parse("http://10.0.2.2:8080/api/session/$userId");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return const Left('No session by user');
+      }
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('Error Message: $err');
+    }
+  }
+
+  @override
+  Future<Either> startExercise(ExerciseSessionRequest req) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('id');
+      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/start-session");
+      final response = await http.post(url,
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'userId': userId,
+            'exerciseId': req.exerciseId,
+            "duration": req.duration,
+            "resetBatch": req.resetBatch
+          }));
+      return Right(response.body);
+    } catch (err) {
+      return Left('Error Message: $err');
+    }
+  }
+}

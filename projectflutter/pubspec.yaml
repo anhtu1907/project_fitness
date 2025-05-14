@@ -1,0 +1,181 @@
+name: projectflutter
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name i s used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.4
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  http: ^1.3.0
+  shared_preferences: ^2.5.2
+  intl: ^0.17.0
+  flutter_bloc: ^9.1.0
+  dartz: ^0.10.1
+  get_it: ^8.0.3
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+  location: ^7.0.1
+  permission_handler: ^12.0.0+1
+  flutter_svg: ^2.1.0
+  fl_chart: ^0.62.0
+  simple_animation_progress_bar: ^1.9.1
+  animated_toggle_switch: ^0.8.4
+  calendar_agenda: ^0.0.2+3
+  readmore: ^3.0.0
+  extended_image: ^9.1.0
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^4.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    # Splash
+    - assets/images/fitness-logo.png
+    - assets/images/sent-email.png
+    #Gender
+    - assets/images/u1.png
+    - assets/images/u2.png
+    #Welcome
+    - assets/images/welcome.png
+    - assets/images/ArrowLeft.png
+    - assets/images/ArrowRight.png
+    - assets/images/More_V.png
+    #Home
+    - assets/images/bg_dots.png
+    - assets/images/run.png
+    - assets/images/fire.png
+    - assets/images/next_icon.png
+    - assets/images/next_go.png
+    # OnBoarding
+    - assets/images/on_1.png
+    - assets/images/on_2.png
+    - assets/images/on_3.png
+    - assets/images/on_4.png
+    #Personal
+    - assets/images/p_achi.png
+    - assets/images/p_activity.png
+    - assets/images/p_contact.png
+    - assets/images/p_personal.png
+    - assets/images/p_notification.png
+    - assets/images/p_setting.png
+    - assets/images/p_privacy.png
+    - assets/images/p_workout.png
+    - assets/images/p_next.png
+
+    # Meal
+    - assets/images/snack.png
+    - assets/images/seafood.jpg
+    - assets/images/grains.jpg
+    - assets/images/nuts.jpg
+    - assets/images/dairy.jpg
+    - assets/images/salad.png
+    - assets/images/fruit.jpg
+    - assets/images/cake.jpg
+    - assets/images/meat.jpg
+    - assets/images/black_btn.png
+    - assets/images/weight.png
+    - assets/images/kcal.png
+    - assets/images/fat.png
+    - assets/images/proteins.png
+    - assets/images/sugar.png
+    - assets/images/carbo.png
+    - assets/images/grass.png
+    - assets/images/burn.png
+    - assets/images/egg.png
+     #Workout
+    - assets/images/Workout1.png
+    - assets/images/Workout2.png
+    - assets/images/Workout3.png
+    - assets/images/leg.png
+    - assets/images/arm.png
+    - assets/images/shoulder.png
+    - assets/images/cardio.png
+    - assets/images/back_exercise.png
+    - assets/images/full_body.png
+    - assets/images/complete_workout.png
+    
+
+    #Exercise Category
+    - assets/images/full_body_category.png
+    - assets/images/arm_category.png
+    - assets/images/back_category.png
+    - assets/images/butt_leg_category.png
+    - assets/images/shoulder_category.png
+    - assets/images/chest_category.png
+    - assets/images/core_category.png
+
+
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package

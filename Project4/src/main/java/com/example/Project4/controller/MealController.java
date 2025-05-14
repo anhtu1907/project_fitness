@@ -1,0 +1,68 @@
+package com.example.Project4.controller;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.Project4.dto.UserMealsRequest;
+import com.example.Project4.services.meal.MealService;
+
+@RestController
+@RequestMapping("/api/meal")
+public class MealController {
+    @Autowired
+    private MealService mealService;
+
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllMeal() {
+        return ResponseEntity.status(200).body(mealService.getAllMeal());
+    }
+
+     @GetMapping("/search/{mealName}")
+    public ResponseEntity<?> getAllMealByName(@PathVariable String mealName) {
+        return ResponseEntity.status(200).body(mealService.searchByMealName(mealName));
+    }
+
+    @GetMapping("/{mealId}")
+    public ResponseEntity<?> getMealById(@PathVariable int mealId) {
+        return ResponseEntity.status(200).body(mealService.getMealById(mealId));
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<?> getAllCategory() {
+        return ResponseEntity.status(200).body(mealService.getAllCategory());
+    }
+
+    @GetMapping("/category/sub")
+    public ResponseEntity<?> getAllSubCategory() {
+        return ResponseEntity.status(200).body(mealService.getAllSubCategory());
+    }
+
+     @GetMapping("/category/sub/{subCategoryId}")
+    public ResponseEntity<?> getMealBySubCategoryId(@PathVariable int subCategoryId) {
+        return ResponseEntity.status(200).body(mealService.getMealBySubCategoryId(subCategoryId));
+    }
+    @PostMapping("/record/{userId}/{mealId}")
+    public ResponseEntity<?> saveRecordMeal(@RequestBody UserMealsRequest request) {
+        return ResponseEntity.status(201).body(mealService.saveRecordMeal(request));
+    }
+
+    @GetMapping("/record/{userId}")
+    public ResponseEntity<?> getRecordMeal(@PathVariable int userId) {
+        return ResponseEntity.status(201).body(mealService.getRecordMeal(userId));
+    }
+
+    @DeleteMapping("/record/{recordId}")
+    public ResponseEntity<?> deleteRecordMeal(@PathVariable int recordId) {
+        mealService.deleteRecordMeal(recordId);
+        return ResponseEntity.status(204).build();
+    }
+}

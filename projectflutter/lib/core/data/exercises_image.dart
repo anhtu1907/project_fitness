@@ -1,0 +1,62 @@
+Map<int, String> exerciseImageMap = {
+  1: "https://i.pinimg.com/736x/47/cd/47/47cd47b92d43e170ab45c5efef756ea7.jpg",
+  2: "https://i.pinimg.com/736x/8a/30/d6/8a30d60aabe3193772c17ca98abdf432.jpg",
+  3: "https://i.pinimg.com/736x/b0/65/8e/b0658ed6f47bc0de504752a2754170ee.jpg",
+  4: "https://i.pinimg.com/736x/a3/7f/62/a37f62ab026b2473b7c8575783a26e53.jpg",
+  5: "https://i.pinimg.com/736x/a7/3b/78/a73b78a4f5122b23064779b656c4d21f.jpg",
+  6: "https://i.pinimg.com/736x/47/cd/47/47cd47b92d43e170ab45c5efef756ea7.jpg",
+  // Exercise 6-10
+  7: "https://i.pinimg.com/736x/e8/e7/1f/e8e71f6611d65f0002bfca7272ad18b9.jpg",
+  8: "https://i.pinimg.com/736x/5f/49/81/5f4981fc2c3480383cd11abb8635e3ac.jpg",
+  9: "https://i.pinimg.com/736x/c5/e9/36/c5e9368f3b45d7121a088dcc5494b46b.jpg",
+  10: "https://liftmanual.com/wp-content/uploads/2023/04/arm-circles.jpg",
+  11: "https://i.pinimg.com/736x/44/0c/7c/440c7c6d1a343bdd76f7e4ff4fa7e1e1.jpg",
+  // Exercise 11=15
+  12: "https://i.pinimg.com/736x/bd/7c/e3/bd7ce3d34d163cddbba0eb203ed2178f.jpg",
+  13: "https://i.pinimg.com/736x/b1/0e/c2/b10ec2dc7ea385cdb1de9a34fa3fce1a.jpg",
+  14: "https://i.pinimg.com/736x/03/ac/0b/03ac0b6a58de28742086a6d8741fa3c4.jpg",
+  15: "https://i.pinimg.com/736x/b3/6c/86/b36c864427f042297116dc12526d532a.jpg",
+  16: "https://i.pinimg.com/736x/56/5a/3f/565a3fb9e3e5c7795a6e4c6c65d1faab.jpg",
+  // Exercise 16-20
+  17: "https://i.pinimg.com/736x/e8/9b/24/e89b24e13211e9a44ebe60d5e4b8328e.jpg",
+  18: "https://liftmanual.com/wp-content/uploads/2023/04/arm-circles.jpg",
+  19: "https://liftmanual.com/wp-content/uploads/2023/04/shoulder-tap-push-up.jpg",
+  20: "https://liftmanual.com/wp-content/uploads/2023/04/reverse-plank.jpg",
+  21: "https://i.pinimg.com/736x/61/b2/bc/61b2bc7f9af704e11e5eee665ded3427.jpg",
+  // Exercise 21-25
+  22: "https://i.pinimg.com/736x/6e/5e/32/6e5e32faed8910855a41739290d250c3.jpg",
+  23: "https://i.pinimg.com/736x/78/24/f6/7824f6fef1079b6f0f7a672c7cbf06b1.jpg",
+  24: "https://i.pinimg.com/736x/f2/4c/ee/f24cee6c0ddd5bd0d6de8850152880e7.jpg",
+  25: "https://i.pinimg.com/736x/f2/4c/ee/f24cee6c0ddd5bd0d6de8850152880e7.jpg",
+  26: "https://i.pinimg.com/736x/03/ac/0b/03ac0b6a58de28742086a6d8741fa3c4.jpg",
+  // Exercise 26-30
+  27: "https://i.pinimg.com/736x/5f/49/81/5f4981fc2c3480383cd11abb8635e3ac.jpg",
+  28: "https://i.pinimg.com/736x/e9/09/c6/e909c6b4f2c59c86854116f24f1c4033.jpg",
+  29: "https://i.pinimg.com/736x/e0/92/6e/e0926e27a858be396909c0a599b1b98d.jpg",
+  30: "https://i.pinimg.com/736x/fb/ec/da/fbecdacef1c3004474cf13581709b872.jpg",
+  31: "https://i.pinimg.com/736x/7c/78/bf/7c78bf5315b8ca309f3f2ee50e2320ab.jpg",
+  // Exercise 31-35
+  32: "https://i.pinimg.com/736x/a7/3b/78/a73b78a4f5122b23064779b656c4d21f.jpg",
+  33: "https://i.pinimg.com/736x/0b/17/4a/0b174ad363498dd1650bbfd3b09fbd56.jpg",
+  34: "https://i.pinimg.com/736x/7b/9b/26/7b9b267719e0b7ed0881d93060c2dcd3.jpg",
+  35: "https://i.pinimg.com/736x/72/d6/ed/72d6eddff1c306adf6e5c9427b9fa07d.jpg",
+  36: "https://i.pinimg.com/736x/60/e7/70/60e77000d9b3b41d818613ba1db1c4b8.jpg",
+// Exercise 36-40
+  37: "https://i.pinimg.com/736x/47/cd/47/47cd47b92d43e170ab45c5efef756ea7.jpg",
+  38: "https://i.pinimg.com/736x/8a/30/d6/8a30d60aabe3193772c17ca98abdf432.jpg",
+  39: "https://i.pinimg.com/736x/b0/65/8e/b0658ed6f47bc0de504752a2754170ee.jpg",
+  40: "https://i.pinimg.com/736x/a3/7f/62/a37f62ab026b2473b7c8575783a26e53.jpg",
+  41: "https://i.pinimg.com/736x/a7/3b/78/a73b78a4f5122b23064779b656c4d21f.jpg",
+  // Exercise 41-45
+  42: "https://i.pinimg.com/736x/a7/3b/78/a73b78a4f5122b23064779b656c4d21f.jpg",
+  43: "https://i.pinimg.com/736x/0b/17/4a/0b174ad363498dd1650bbfd3b09fbd56.jpg",
+  44: "https://i.pinimg.com/736x/7b/9b/26/7b9b267719e0b7ed0881d93060c2dcd3.jpg",
+  45: "https://i.pinimg.com/736x/72/d6/ed/72d6eddff1c306adf6e5c9427b9fa07d.jpg",
+  46: "https://i.pinimg.com/736x/60/e7/70/60e77000d9b3b41d818613ba1db1c4b8.jpg",
+  // Exercise 46-50
+  47: "https://i.pinimg.com/736x/47/cd/47/47cd47b92d43e170ab45c5efef756ea7.jpg",
+  48: "https://i.pinimg.com/736x/8a/30/d6/8a30d60aabe3193772c17ca98abdf432.jpg",
+  49: "https://i.pinimg.com/736x/b0/65/8e/b0658ed6f47bc0de504752a2754170ee.jpg",
+  50: "https://i.pinimg.com/736x/a3/7f/62/a37f62ab026b2473b7c8575783a26e53.jpg",
+  51: "https://i.pinimg.com/736x/a7/3b/78/a73b78a4f5122b23064779b656c4d21f.jpg",
+};
