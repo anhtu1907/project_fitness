@@ -78,6 +78,22 @@ class MealCategoryList extends StatelessWidget {
                     foodBySubCategory[subCatName] = foods.length;
                   });
 
+                  Map<String, List<MealsEntity>> mealsByCategory = {};
+                  for(var entry in groupedList){
+                    final subCategoryName = entry.key;
+                    final subCategoreies = entry.value;
+                    final meals = <MealsEntity>[];
+
+                    for(var subCategory in subCategoreies){
+                      final subCatName = subCategory.subCategoryName.trim();
+                      final mealsForSubCat = groupedSubCategory[subCatName];
+                      if(mealsForSubCat != null){
+                        meals.addAll(mealsForSubCat);
+                      }
+                    }
+                    mealsByCategory[subCategoryName] = meals;
+                  }
+
                   return GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,

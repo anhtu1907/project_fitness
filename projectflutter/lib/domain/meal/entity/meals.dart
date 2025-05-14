@@ -1,5 +1,5 @@
-
 import 'package:projectflutter/data/meal/model/meal_sub_category.dart';
+import 'package:projectflutter/data/meal/model/meal_time.dart';
 
 class MealsEntity {
   final int id;
@@ -13,6 +13,7 @@ class MealsEntity {
   final double fiber;
   final double sugar;
   final MealSubCategoryModel subCategory;
+  final MealTimeModel timeOfDay;
 
   MealsEntity(
       {required this.id,
@@ -25,5 +26,6 @@ class MealsEntity {
       required this.carbonhydrate,
       required this.fiber,
       required this.sugar,
-      required this.subCategory});
+      required this.subCategory,
+      required this.timeOfDay});
 }

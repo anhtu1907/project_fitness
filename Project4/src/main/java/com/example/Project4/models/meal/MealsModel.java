@@ -41,5 +41,7 @@ public class MealsModel {
     @ManyToOne
     @JoinColumn(name = "sub_category_id", referencedColumnName = "id")
     private MealSubCategoryModel subCategory;
-    
+    @ManyToOne
+    @JoinColumn(name = "time_id", referencedColumnName = "id")
+    private MealTimeModel timeOfDay;
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Project4.dto.UserMealsRequest;
@@ -26,9 +27,12 @@ public class MealController {
         return ResponseEntity.status(200).body(mealService.getAllMeal());
     }
 
-     @GetMapping("/search/{mealName}")
-    public ResponseEntity<?> getAllMealByName(@PathVariable String mealName) {
-        return ResponseEntity.status(200).body(mealService.searchByMealName(mealName));
+     @GetMapping("/search")
+    public ResponseEntity<?> getAllMealByName(@RequestParam(required = false) String mealName) {
+        if (mealName == null || mealName.trim().isEmpty()) {
+        return ResponseEntity.ok(mealService.getAllMeal());
+    }
+    return ResponseEntity.ok(mealService.searchByMealName(mealName));
     }
 
     @GetMapping("/{mealId}")
@@ -50,7 +54,7 @@ public class MealController {
     public ResponseEntity<?> getMealBySubCategoryId(@PathVariable int subCategoryId) {
         return ResponseEntity.status(200).body(mealService.getMealBySubCategoryId(subCategoryId));
     }
-    @PostMapping("/record/{userId}/{mealId}")
+    @PostMapping("save/record")
     public ResponseEntity<?> saveRecordMeal(@RequestBody UserMealsRequest request) {
         return ResponseEntity.status(201).body(mealService.saveRecordMeal(request));
     }

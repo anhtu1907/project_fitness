@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
-import 'package:projectflutter/core/data/meal_sub_category.dart';
 import 'package:projectflutter/domain/meal/entity/meal_sub_category.dart';
-import 'package:projectflutter/presentation/meal/widgets/meal_sub_category_row.dart';
+import 'package:projectflutter/presentation/meal/widgets/meal_sub_category_card.dart';
 
 class MealSubCategoryListPage extends StatelessWidget {
   final List<MealSubCategoryEntity> total;
@@ -35,12 +34,16 @@ class MealSubCategoryListPage extends StatelessWidget {
           child: ListView.builder(
             itemCount: total.length,
             itemBuilder: (context, index) {
-              return MealSubCategoryRow(
-                  image: mealSubCategoryImage[total[index].id].toString(),
-                  name: total[index].subCategoryName,
-                  kcal: kcal[total[index].subCategoryName] ?? 0,
-                  totalFood: totalFood[total[index].subCategoryName] ?? 0,
-                  onPressed: () {});
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: MealSubCategoryCard(
+                    subCategoryId: total[index].id,
+                    subCategoryName: total[index].subCategoryName,
+                    description: total[index].description,
+                    kcal: kcal[total[index].subCategoryName] ?? 0,
+                    totalFood: totalFood[total[index].subCategoryName] ?? 0,
+                    onPressed: () {}),
+              );
             },
           )),
     );

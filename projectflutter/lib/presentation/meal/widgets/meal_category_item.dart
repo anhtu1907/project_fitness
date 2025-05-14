@@ -7,9 +7,8 @@ import 'package:projectflutter/presentation/meal/pages/meal_sub_category_list.da
 
 class MealCategoryItem extends StatelessWidget {
   final List<MealSubCategoryEntity> total;
-  final Map<String,double> kcal;
-  final Map<String,int> totalFood;
-
+  final Map<String, double> kcal;
+  final Map<String, int> totalFood;
   const MealCategoryItem(
       {super.key,
       required this.total,

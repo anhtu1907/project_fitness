@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:projectflutter/data/meal/model/meal_sub_category.dart';
+import 'package:projectflutter/data/meal/model/meal_time.dart';
 import 'package:projectflutter/domain/meal/entity/meals.dart';
 
 class MealsModel {
@@ -15,6 +16,7 @@ class MealsModel {
   final double fiber;
   final double sugar;
   final MealSubCategoryModel? subCategory;
+  final MealTimeModel? timeOfDay;
 
   MealsModel(
       {required this.id,
@@ -27,7 +29,8 @@ class MealsModel {
       required this.carbonhydrate,
       required this.fiber,
       required this.sugar,
-      required this.subCategory});
+      required this.subCategory,
+      required this.timeOfDay});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -42,6 +45,7 @@ class MealsModel {
       'fiber': fiber,
       'sugar': sugar,
       'subCategory': subCategory,
+      'timeOfDay': timeOfDay
     };
   }
 
@@ -60,6 +64,9 @@ class MealsModel {
       subCategory: map['subCategory'] != null
           ? MealSubCategoryModel.fromMap(
               map['subCategory'] as Map<String, dynamic>)
+          : null,
+      timeOfDay: map['timeOfDay'] != null
+          ? MealTimeModel.fromMap(map['timeOfDay'] as Map<String, dynamic>)
           : null,
     );
   }
@@ -83,6 +90,7 @@ extension MealsXModel on MealsModel {
         carbonhydrate: carbonhydrate,
         fiber: fiber,
         sugar: sugar,
-        subCategory: subCategory!);
+        subCategory: subCategory!,
+        timeOfDay: timeOfDay!);
   }
 }

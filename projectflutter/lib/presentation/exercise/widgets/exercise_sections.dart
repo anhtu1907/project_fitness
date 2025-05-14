@@ -7,7 +7,7 @@ import 'package:projectflutter/presentation/exercise/bloc/exercise_sub_category_
 import 'package:projectflutter/presentation/exercise/bloc/exercise_sub_category_state.dart';
 import 'package:projectflutter/presentation/exercise/bloc/exercises_cubit.dart';
 import 'package:projectflutter/presentation/exercise/bloc/exercises_state.dart';
-import 'package:projectflutter/presentation/exercise/widgets/exercise_new_category.dart';
+import 'package:projectflutter/presentation/exercise/widgets/exercise_sub_category_card.dart';
 
 class ExerciseSections extends StatelessWidget {
   const ExerciseSections({super.key});
@@ -39,14 +39,6 @@ class ExerciseSections extends StatelessWidget {
 
           if (state is ExercisesLoaded) {
             final listExercise = state.entity;
-            // Map<String, List<ExercisesEntity>> groupedPrograming = {};
-            // for (var exercise in listExercise) {
-            //   final subCategoryName = exercise.subCategory!.subCategoryName;
-            //   if (specialSubCategoryNames.contains(subCategoryName)) {
-            //     groupedPrograming
-            //         .putIfAbsent(subCategoryName, () => [])
-            //         .add(exercise);
-            //   }
             final groupedPrograming = groupExercisesBySpecialSubCategory(
                 listExercise, specialSubCategoryNames);
 
@@ -130,7 +122,7 @@ class ExerciseSections extends StatelessWidget {
           final entry = grouped.entries.elementAt(index);
           return Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: ExerciseNewCategory(
+              child: ExerciseSubCategoryCard(
                 name: entry.key,
                 subCategoryId: entry.value.first.subCategory!.id,
                 subName: entry.value.first.subCategory!.description,

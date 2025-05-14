@@ -115,11 +115,10 @@ class MealServiceImpl extends MealService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('id');
-      Uri url =
-          Uri.parse("http://10.0.2.2:8080/api/meal/record/$userId/$mealId");
+      Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/save/record");
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
-          body: json.encode({'user': userId, 'meal': mealId}));
+          body: json.encode({'user': userId, 'meal': [mealId]}));
       return Right(response.body);
     } catch (err) {
       return Left('Error Message: $err');
@@ -140,7 +139,8 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> searchByMealName(String mealName) async {
     try {
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/search/$mealName");
+      Uri url =
+          Uri.parse("http://10.0.2.2:8080/api/meal/search?mealName=$mealName");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return Left('No meal by $mealName');

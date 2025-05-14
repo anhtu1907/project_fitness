@@ -7,6 +7,7 @@ class RoundButton extends StatelessWidget {
   final String title;
   final RoundButtonType type;
   final VoidCallback onPressed;
+  final Color color;
   final double fontSize;
   final double elevation;
   final FontWeight fontWeight;
@@ -18,16 +19,20 @@ class RoundButton extends StatelessWidget {
       this.fontSize = 16,
       this.elevation = 1,
       this.fontWeight = FontWeight.w700,
+      this.color = Colors.white,
       required this.onPressed});
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: type == RoundButtonType.bgSGradient ? AppColors.secondaryG :  AppColors.primaryG,
-              ),
+            colors: type == RoundButtonType.bgSGradient
+                ? AppColors.secondaryG
+                : AppColors.primaryG,
+          ),
           borderRadius: BorderRadius.circular(25),
-          boxShadow: type == RoundButtonType.bgGradient ||  type == RoundButtonType.bgSGradient 
+          boxShadow: type == RoundButtonType.bgGradient ||
+                  type == RoundButtonType.bgSGradient
               ? const [
                   BoxShadow(
                       color: Colors.black26,
@@ -41,14 +46,19 @@ class RoundButton extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         textColor: AppColors.primaryColor1,
         minWidth: double.maxFinite,
-        elevation: type == RoundButtonType.bgGradient ||  type == RoundButtonType.bgSGradient ? 0 : elevation,
-        color: type == RoundButtonType.bgGradient ||  type == RoundButtonType.bgSGradient
+        elevation: type == RoundButtonType.bgGradient ||
+                type == RoundButtonType.bgSGradient
+            ? 0
+            : elevation,
+        color: type == RoundButtonType.bgGradient ||
+                type == RoundButtonType.bgSGradient
             ? Colors.transparent
             : AppColors.white,
-        child: type == RoundButtonType.bgGradient ||  type == RoundButtonType.bgSGradient 
+        child: type == RoundButtonType.bgGradient ||
+                type == RoundButtonType.bgSGradient
             ? Text(title,
                 style: TextStyle(
-                    color: AppColors.white,
+                    color: color,
                     fontSize: fontSize,
                     fontWeight: fontWeight))
             : ShaderMask(
@@ -63,7 +73,7 @@ class RoundButton extends StatelessWidget {
                 },
                 child: Text(title,
                     style: TextStyle(
-                        color:  AppColors.primaryColor1,
+                        color: AppColors.primaryColor1,
                         fontSize: fontSize,
                         fontWeight: fontWeight)),
               ),

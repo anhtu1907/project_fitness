@@ -1,38 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
-import 'package:projectflutter/presentation/meal/bloc/meal_by_sub_category_cubit.dart';
-import 'package:projectflutter/presentation/meal/bloc/meal_by_sub_category_state.dart';
+import 'package:projectflutter/presentation/meal/bloc/meal_by_search_cubit.dart';
+import 'package:projectflutter/presentation/meal/bloc/meal_by_search_state.dart';
 import 'package:projectflutter/presentation/meal/widgets/meal_grid_item.dart';
 
-class MealBySubCategory extends StatelessWidget {
-  final int subCategoryId;
-  final String categoryName;
-  const MealBySubCategory(
-      {super.key, required this.subCategoryId, required this.categoryName});
+class MealSearchList extends StatelessWidget {
+  final String mealName;
+  const MealSearchList({super.key, required this.mealName});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BasicAppBar(
-        titlte: Text(categoryName),
+      appBar: const BasicAppBar(
+        titlte: Text('Search Results'),
       ),
       body: BlocProvider(
-        create: (context) =>
-            MealBySubCategoryCubit()..listMealBySubCategory(subCategoryId),
-        child: BlocBuilder<MealBySubCategoryCubit, MealBySubCategoryState>(
+        create: (context) => MealBySearchCubit()..listMealBySearch(mealName),
+        child: BlocBuilder<MealBySearchCubit, MealBySearchState>(
           builder: (context, state) {
-            if (state is MealBySubCategoryLoading) {
+            if (state is MealBySearchLoading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            if (state is LoadMealBySubCategoryFailure) {
+
+            if (state is LoadMealBySearchFailure) {
               return Center(
                 child: Text(state.errorMessage),
               );
             }
-            if (state is MealBySubCategoryLoaded) {
+
+            if (state is MealBySearchLoaded) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: GridView.builder(

@@ -5,7 +5,6 @@ import 'package:projectflutter/presentation/home/widgets/activity_status.dart';
 import 'package:projectflutter/presentation/home/widgets/bmi_review.dart';
 import 'package:projectflutter/presentation/home/widgets/header.dart';
 import 'package:projectflutter/presentation/home/widgets/latest_workout.dart';
-import 'package:projectflutter/presentation/home/widgets/what_train_row.dart';
 import 'package:projectflutter/presentation/profile/pages/workout_progress.dart';
 
 class HomePage extends StatelessWidget {
@@ -86,7 +85,7 @@ class HomePage extends StatelessWidget {
                   height: media.width * 0.02,
                 ),
                 Text(
-                  'What Do You Want to Train',
+                  'Workout Schedule',
                   style: TextStyle(
                       color: AppColors.black,
                       fontSize: 16,
@@ -95,7 +94,6 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   height: media.width * 0.02,
                 ),
-                const WhatTrainRow()
               ],
             ),
           ),

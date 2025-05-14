@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
-import 'package:projectflutter/common/components/fields/search_field.dart';
 import 'package:projectflutter/presentation/meal/widgets/meal_category_list.dart';
 import 'package:projectflutter/presentation/meal/widgets/meal_schedule_check.dart';
+import 'package:projectflutter/presentation/meal/widgets/meal_search_field.dart';
 
 class MealsPage extends StatelessWidget {
   const MealsPage({super.key});
@@ -21,10 +21,7 @@ class MealsPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SearchField(
-                  hintText: 'Search by meal...',
-                  onPressed: () {},
-                ),
+                const MealSearchField(),
                 SizedBox(
                   height: media.width * 0.05,
                 ),
