@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.Project4.dto.RunRequest;
+import com.example.Project4.dto.run.RunRequest;
 import com.example.Project4.models.run.RunModel;
 import com.example.Project4.repository.auth.UserRepository;
 import com.example.Project4.repository.run.MetRepository;

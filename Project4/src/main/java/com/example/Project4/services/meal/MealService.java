@@ -2,7 +2,7 @@ package com.example.Project4.services.meal;
 
 import java.util.List;
 
-import com.example.Project4.dto.UserMealsRequest;
+import com.example.Project4.dto.meal.UserMealsRequest;
 import com.example.Project4.models.meal.MealCategoryModel;
 import com.example.Project4.models.meal.MealSubCategoryModel;
 import com.example.Project4.models.meal.MealsModel;

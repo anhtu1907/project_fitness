@@ -10,8 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.Project4.dto.LoginRequest;
-import com.example.Project4.dto.RegisterRequest;
+import com.example.Project4.dto.auth.LoginRequest;
+import com.example.Project4.dto.auth.RegisterRequest;
 import com.example.Project4.models.auth.UserModel;
 import com.example.Project4.repository.auth.UserRepository;
 import com.example.Project4.services.MailService;

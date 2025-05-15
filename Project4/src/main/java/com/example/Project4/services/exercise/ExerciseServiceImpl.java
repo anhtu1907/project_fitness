@@ -6,16 +6,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.Project4.dto.ExerciseSessionRequest;
+import com.example.Project4.dto.exercise.ExerciseScheduleRequest;
+import com.example.Project4.dto.exercise.ExerciseSessionRequest;
+import com.example.Project4.dto.exercise.ExerciseUpdateScheduleRequest;
 import com.example.Project4.models.auth.UserModel;
 import com.example.Project4.models.exercise.ExerciseCategoryModel;
 import com.example.Project4.models.exercise.ExerciseProgressModel;
+import com.example.Project4.models.exercise.ExerciseScheduleModel;
 import com.example.Project4.models.exercise.ExerciseSessionModel;
 import com.example.Project4.models.exercise.ExerciseSubCategoyrModel;
 import com.example.Project4.models.exercise.ExerciseUserModel;
 import com.example.Project4.models.exercise.ExercisesModel;
 import com.example.Project4.repository.exercise.ExerciseCategoryRepository;
 import com.example.Project4.repository.exercise.ExerciseProgressRepository;
+import com.example.Project4.repository.exercise.ExerciseScheduleRepository;
 import com.example.Project4.repository.exercise.ExerciseSessionRepository;
 import com.example.Project4.repository.exercise.ExerciseSubCategoryRepository;
 import com.example.Project4.repository.exercise.ExerciseUserRepository;
@@ -35,6 +39,8 @@ public class ExerciseServiceImpl implements ExerciseService {
     private ExerciseUserRepository exerciseUserRepository;
     @Autowired
     private ExerciseSessionRepository exerciseSessionRepository;
+    @Autowired
+    private ExerciseScheduleRepository exerciseScheduleRepository;
 
     @Override
     public List<ExerciseCategoryModel> getAllCategory() {
@@ -68,8 +74,8 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public ExercisesModel getExerciseById(int exerciseId) {
-        ExercisesModel exercises = exercisesRepository.findById(exerciseId).orElseThrow(() ->
-        new RuntimeException("Exercise not found with id: " + exerciseId));
+        ExercisesModel exercises = exercisesRepository.findById(exerciseId)
+                .orElseThrow(() -> new RuntimeException("Exercise not found with id: " + exerciseId));
         return exercises;
     }
 
@@ -87,7 +93,8 @@ public class ExerciseServiceImpl implements ExerciseService {
                 .findByUserAndExerciseAndResetBatch(req.getUserId(), req.getExerciseId(), req.getResetBatch());
 
         if (!existingSession.isEmpty()) {
-            throw new RuntimeException("You have already performed this exercise in the current rest batch. Please reset the batch to continue.");
+            throw new RuntimeException(
+                    "You have already performed this exercise in the current rest batch. Please reset the batch to continue.");
         }
 
         ExerciseSubCategoyrModel subCategory = exercises.getSubCategory();
@@ -131,5 +138,40 @@ public class ExerciseServiceImpl implements ExerciseService {
         exerciseProgressRepository.save(exerciseProgress);
 
         return exerciseProgress;
+    }
+
+    @Override
+    public List<ExerciseScheduleModel> getAllScheduleByUserId(int userId) {
+        return exerciseScheduleRepository.findAllScheduleByUserId(userId);
+    }
+
+    @Override
+    public boolean findByIdAndUserId(int scheduleId, int userId) {
+        exerciseScheduleRepository.findByIdAndUser_Id(scheduleId, userId)
+                .orElseThrow(() -> new RuntimeException("Schedule not found or access denied"));
+        return true;
+    }
+
+    @Override
+    public ExerciseScheduleModel scheduleExercise(ExerciseScheduleRequest req) {
+        ExerciseSubCategoyrModel subCategories = exerciseSubCategoryRepository.findById(req.getSubCategory())
+                .orElseThrow(() -> new RuntimeException("Sub Category not found"));
+        UserModel user = new UserModel();
+        ExerciseScheduleModel newSchedule = new ExerciseScheduleModel();
+        user.setId(req.getUser());
+        newSchedule.setUser(user);
+        newSchedule.setSubCategory(subCategories);
+        newSchedule.setScheduleTime(req.getScheduleTime());
+        exerciseScheduleRepository.save(newSchedule);
+        return newSchedule;
+    }
+
+    @Override
+    public ExerciseScheduleModel updateScheduleExercise(ExerciseUpdateScheduleRequest req) {
+        ExerciseScheduleModel existSchedule = exerciseScheduleRepository
+                .findById(req.getScheduleId()).orElseThrow(() -> new RuntimeException("Schedule not found"));
+        existSchedule.setScheduleTime(req.getScheduleTime());
+        exerciseScheduleRepository.save(existSchedule);
+        return existSchedule;
     }
 }

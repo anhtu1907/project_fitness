@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.Project4.dto.UserMealsRequest;
+import com.example.Project4.dto.meal.UserMealsRequest;
 import com.example.Project4.models.meal.MealCategoryModel;
 import com.example.Project4.models.meal.MealSubCategoryModel;
 import com.example.Project4.models.meal.MealsModel;

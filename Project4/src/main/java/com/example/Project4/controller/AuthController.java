@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.Project4.dto.LoginRequest;
-import com.example.Project4.dto.RegisterRequest;
+import com.example.Project4.dto.auth.LoginRequest;
+import com.example.Project4.dto.auth.RegisterRequest;
 import com.example.Project4.models.auth.UserModel;
 import com.example.Project4.services.auth.AuthService;
 

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.Project4.dto.PersonHealDataRequest;
+import com.example.Project4.dto.bmi.PersonHealDataRequest;
 import com.example.Project4.models.auth.UserModel;
 import com.example.Project4.models.bmi.PersonHealModel;
 import com.example.Project4.repository.auth.UserRepository;
