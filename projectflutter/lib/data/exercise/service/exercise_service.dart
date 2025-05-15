@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
+import 'package:projectflutter/data/exercise/model/exercise_schedule_request.dart';
 import 'package:projectflutter/data/exercise/model/exercise_session_request.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,6 +16,9 @@ abstract class ExerciseService {
   Future<Either> getAllExerciseResultByUserId();
   Future<Either> getAllExercise();
   Future<Either> getAllCategory();
+  Future<Either> getAllExerciseScheduleByUserId();
+  Future<Either> scheduleExercise(ExerciseScheduleRequest req);
+  Future<void> deleteExerciseSchdedule(int scheduleId);
 }
 
 class ExerciseServiceImpl extends ExerciseService {
@@ -166,6 +170,54 @@ class ExerciseServiceImpl extends ExerciseService {
       return Right(response.body);
     } catch (err) {
       return Left('Error Message: $err');
+    }
+  }
+
+  @override
+  Future<Either> getAllExerciseScheduleByUserId() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt("id");
+      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/schedule/$userId");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return const Left('No schedule by user');
+      }
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('Error Mesage: $err');
+    }
+  }
+
+  @override
+  Future<Either> scheduleExercise(ExerciseScheduleRequest req) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getInt('id');
+      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/schedule/save");
+      final response = await http.post(url,
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'userId': userId,
+            'subCategory': req.subCategory,
+            "scheduleTime": req.scheduleTime
+          }));
+      return Right(response.body);
+    } catch (err) {
+      return Left('Error Message: $err');
+    }
+  }
+
+  @override
+  Future<void> deleteExerciseSchdedule(int scheduleId) async {
+    Uri url =
+        Uri.parse("http://10.0.2.2:8080/api/exercise/schedule/$scheduleId");
+    final response = await http.delete(url);
+    if (response.statusCode == 204) {
+      print("Record deleted successfully.");
+    } else {
+      print("Failed to delete record. Status code: ${response.statusCode}");
     }
   }
 }

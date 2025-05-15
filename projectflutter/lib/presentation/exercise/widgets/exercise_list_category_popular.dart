@@ -103,7 +103,6 @@ class ExerciseListCategoryPopular extends StatelessWidget {
                                   AppNavigator.push(
                                       context,
                                       ExerciseBySubCategoryView(
-                                          name: e.subCategoryName,
                                           subCategoryId: e.id));
                                 },
                                 duration: durationBySubCategory,

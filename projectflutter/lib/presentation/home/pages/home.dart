@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/presentation/home/pages/exercise_schedule.dart';
 import 'package:projectflutter/presentation/home/widgets/activity_status.dart';
-import 'package:projectflutter/presentation/home/widgets/bmi_review.dart';
+import 'package:projectflutter/presentation/bmi/widgets/bmi_review.dart';
+import 'package:projectflutter/presentation/home/widgets/exercise_schedule_list.dart';
 import 'package:projectflutter/presentation/home/widgets/header.dart';
 import 'package:projectflutter/presentation/home/widgets/latest_workout.dart';
 import 'package:projectflutter/presentation/profile/pages/workout_progress.dart';
@@ -84,16 +86,34 @@ class HomePage extends StatelessWidget {
                 SizedBox(
                   height: media.width * 0.02,
                 ),
-                Text(
-                  'Workout Schedule',
-                  style: TextStyle(
-                      color: AppColors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
+                Row(
+                  children: [
+                    Text(
+                      'Workout Schedule',
+                      style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                        onPressed: () {
+                          AppNavigator.push(
+                              context, const ExerciseSchedulePage());
+                        },
+                        child: Text(
+                          'See All',
+                          style: TextStyle(
+                              color: AppColors.primaryColor1,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ))
+                  ],
                 ),
                 SizedBox(
                   height: media.width * 0.02,
                 ),
+                const ExerciseScheduleList()
               ],
             ),
           ),

@@ -131,7 +131,6 @@ class WhatTrainRow extends StatelessWidget {
                                           AppNavigator.push(
                                               context,
                                               ExerciseBySubCategoryView(
-                                                name: subCategoryName,
                                                 subCategoryId: subCategoryId,
                                               ));
                                         },

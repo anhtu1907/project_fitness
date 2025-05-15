@@ -174,4 +174,9 @@ public class ExerciseServiceImpl implements ExerciseService {
         exerciseScheduleRepository.save(existSchedule);
         return existSchedule;
     }
+
+    @Override
+    public void deleteExerciseSchdedule(int scheduleId) {
+        exerciseScheduleRepository.deleteById(scheduleId);
+    }
 }

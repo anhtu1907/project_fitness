@@ -22,8 +22,7 @@ class ExerciseSubCategoryCard extends StatelessWidget {
       onTap: () {
         AppNavigator.push(
             context,
-            ExerciseBySubCategoryView(
-                name: name, subCategoryId: subCategoryId));
+            ExerciseBySubCategoryView( subCategoryId: subCategoryId));
       },
       child: Container(
         decoration: BoxDecoration(

@@ -21,14 +21,17 @@ import 'package:projectflutter/domain/bmi/repository/bmi_repository.dart';
 import 'package:projectflutter/domain/bmi/usecase/check_bmi_usecase.dart';
 import 'package:projectflutter/domain/bmi/usecase/save_data_usecase.dart';
 import 'package:projectflutter/domain/exercise/repository/exercise_repository.dart';
+import 'package:projectflutter/domain/exercise/usecase/delete_schedule.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_exercise_by_sub_category.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_exercise_by_id.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_exercise_category.dart';
+import 'package:projectflutter/domain/exercise/usecase/get_exercise_schedule.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_exercise_sub_category.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_exercise_progress.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_exercise_result.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_exercise_session.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_exercises.dart';
+import 'package:projectflutter/domain/exercise/usecase/schedule_exercise.dart';
 import 'package:projectflutter/domain/exercise/usecase/start_exercise.dart';
 import 'package:projectflutter/domain/meal/repository/meal_repository.dart';
 import 'package:projectflutter/domain/meal/usecase/delete_all_record_meal.dart';
@@ -92,14 +95,18 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<GetExerciseBySubCategoryUseCase>(
       GetExerciseBySubCategoryUseCase());
   sl.registerSingleton<GetExerciseByIdUseCase>(GetExerciseByIdUseCase());
+  sl.registerSingleton<DeleteScheduleUseCase>(DeleteScheduleUseCase());
   sl.registerSingleton<GetExercisesUseCase>(GetExercisesUseCase());
   sl.registerSingleton<GetExerciseProgressUseCase>(
       GetExerciseProgressUseCase());
+  sl.registerSingleton<GetExerciseScheduleUseCase>(
+      GetExerciseScheduleUseCase());
   sl.registerSingleton<GetExerciseSessionUseCase>(GetExerciseSessionUseCase());
   sl.registerSingleton<GetExerciseResultUseCase>(GetExerciseResultUseCase());
   sl.registerSingleton<GetExerciseCategoryUseCase>(
       GetExerciseCategoryUseCase());
   sl.registerSingleton<StartExerciseUseCase>(StartExerciseUseCase());
+  sl.registerSingleton<ScheduleExerciseUseCase>(ScheduleExerciseUseCase());
 
   // Exercise Total Kcal
   sl.registerSingleton<GetRecordRunByUserUseCase>(GetRecordRunByUserUseCase());

@@ -12,7 +12,7 @@ abstract class MealService {
   Future<Either> getMealBySubCategory(int subCategoryId);
   Future<Either> getMealById(int mealId);
   Future<Either> saveRecordMeal(List<int> mealId);
-  Future<void> deteleRecordMeal(int mealId);
+  Future<void> deteleRecordMeal(int recordId);
   Future<void> deteleAllRecordMeal();
   Future<Either> searchByMealName(String mealName);
 }
@@ -127,8 +127,8 @@ class MealServiceImpl extends MealService {
   }
 
   @override
-  Future<void> deteleRecordMeal(int mealId) async {
-    Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/record/$mealId");
+  Future<void> deteleRecordMeal(int recordId) async {
+    Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/record/$recordId");
     final response = await http.delete(url);
     if (response.statusCode == 204) {
       print("Record deleted successfully.");

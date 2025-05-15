@@ -51,7 +51,6 @@ class ExerciseSubCategoryListPage extends StatelessWidget {
                     AppNavigator.push(
                         context,
                         ExerciseBySubCategoryView(
-                            name: total[index].subCategoryName,
                             subCategoryId: total[index].id));
                   });
             },

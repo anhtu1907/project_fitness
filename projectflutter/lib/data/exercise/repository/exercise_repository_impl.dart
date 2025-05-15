@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:projectflutter/data/exercise/model/exercise_category_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_progress_model.dart';
+import 'package:projectflutter/data/exercise/model/exercise_schedule_model.dart';
+import 'package:projectflutter/data/exercise/model/exercise_schedule_request.dart';
 import 'package:projectflutter/data/exercise/model/exercise_session_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_session_request.dart';
 import 'package:projectflutter/data/exercise/model/exercise_sub_category_model.dart';
@@ -9,6 +11,7 @@ import 'package:projectflutter/data/exercise/model/exercises_model.dart';
 import 'package:projectflutter/data/exercise/service/exercise_service.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_category_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_progress_entity.dart';
+import 'package:projectflutter/domain/exercise/entity/exercise_schedule_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_session_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_sub_category_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_user_entity.dart';
@@ -44,7 +47,7 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
       List<ExercisesModel> models =
           (data as List).map((e) => ExercisesModel.fromMap(e)).toList();
       List<ExercisesEntity> entities = models.map((m) => m.toEntity()).toList();
-      
+
       return Right(entities);
     });
   }
@@ -145,5 +148,30 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
 
       return Right(entities);
     });
+  }
+
+  @override
+  Future<Either> getAllExerciseScheduleByUserId() async {
+    var exerciseSchedule =
+        await sl<ExerciseService>().getAllExerciseScheduleByUserId();
+    return exerciseSchedule.fold((err) {
+      return Left(err);
+    }, (data) {
+      List<ExerciseScheduleModel> models =
+          (data as List).map((e) => ExerciseScheduleModel.fromMap(e)).toList();
+      List<ExerciseScheduleEntity> entities =
+          models.map((m) => m.toEntity()).toList();
+      return Right(entities);
+    });
+  }
+
+  @override
+  Future<Either> scheduleExercise(ExerciseScheduleRequest req) async {
+    return await sl<ExerciseService>().scheduleExercise(req);
+  }
+
+  @override
+  Future<void> deleteExerciseSchdedule(int scheduleId) async {
+    return await sl<ExerciseService>().deleteExerciseSchdedule(scheduleId);
   }
 }

@@ -89,8 +89,8 @@ class MealRepositoryImpl extends MealRepository {
   }
 
   @override
-  Future<void> deteleRecordMeal(int mealId) async {
-    return await sl<MealService>().deteleRecordMeal(mealId);
+  Future<void> deteleRecordMeal(int recordId) async {
+    return await sl<MealService>().deteleRecordMeal(recordId);
   }
 
   @override
