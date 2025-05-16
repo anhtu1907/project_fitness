@@ -52,6 +52,11 @@ dependencies:
   calendar_agenda: ^0.0.2+3
   readmore: ^3.0.0
   extended_image: ^9.1.0
+  flutter_local_notifications: ^19.2.0
+  timezone: ^0.10.1
+  flutter_native_timezone: ^2.0.0
+  android_intent_plus: ^5.3.0
+  package_info_plus: ^8.3.0
   
 dev_dependencies:
   flutter_test:
@@ -92,6 +97,7 @@ flutter:
     - assets/images/bg_dots.png
     - assets/images/run.png
     - assets/images/fire.png
+    - assets/images/time.png
     - assets/images/next_icon.png
     - assets/images/next_go.png
     # OnBoarding
@@ -151,6 +157,8 @@ flutter:
     - assets/images/shoulder_category.png
     - assets/images/chest_category.png
     - assets/images/core_category.png
+
+    - assets/timezone/latest.tzf
 
 
 

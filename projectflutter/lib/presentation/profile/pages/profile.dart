@@ -16,7 +16,6 @@ import 'package:projectflutter/presentation/profile/pages/personal_data.dart';
 import 'package:projectflutter/presentation/profile/pages/privacy_policy.dart';
 import 'package:projectflutter/presentation/profile/pages/setting.dart';
 import 'package:projectflutter/presentation/profile/pages/workout_progress.dart';
-import 'package:projectflutter/presentation/profile/widgets/notification_setting.dart';
 import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell_int.dart';
 import 'package:projectflutter/presentation/profile/pages/history.dart';
 
@@ -118,10 +117,6 @@ class ProfilePage extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-                        notificationSetting(),
-                        const SizedBox(
-                          height: 20,
-                        ),
                         otherSetting(context),
                         const SizedBox(
                           height: 20,
@@ -207,32 +202,6 @@ class ProfilePage extends StatelessWidget {
                   onPressed: accountData[index].onPressed);
             },
           )
-        ],
-      ),
-    );
-  }
-
-  Widget notificationSetting() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 2)]),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Notification',
-            style: TextStyle(
-                color: AppColors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          const NotificationSetting(),
         ],
       ),
     );

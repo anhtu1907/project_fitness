@@ -27,7 +27,7 @@ class ExerciseScheduleList extends StatelessWidget {
             return ListView.builder(
               padding: const EdgeInsets.only(bottom: 8),
               shrinkWrap: true,
-              itemCount: 2,
+              itemCount: listSchedule.length > 2 ? 2 : listSchedule.length,
               itemBuilder: (context, index) {
                 return ExerciseScheduleRow(entity: listSchedule[index]);
               },

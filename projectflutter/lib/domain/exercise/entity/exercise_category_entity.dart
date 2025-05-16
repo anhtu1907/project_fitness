@@ -7,4 +7,5 @@ class ExerciseCategoryEntity {
       {required this.id,
       required this.categoryName,
       required this.categoryImage});
+
 }

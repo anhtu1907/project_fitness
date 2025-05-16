@@ -6,6 +6,7 @@ import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
 import 'package:projectflutter/presentation/exercise/pages/exercise_details.dart';
 import 'package:projectflutter/presentation/exercise/widgets/exercises_row.dart';
+import 'package:projectflutter/presentation/exercise/widgets/select_date_schedule.dart';
 import 'package:projectflutter/presentation/exercise/widgets/title_sub_title_cell_kcal.dart';
 import 'package:projectflutter/presentation/exercise/widgets/title_sub_title_cell_time.dart';
 import 'package:projectflutter/presentation/exercise/widgets/title_subtitle_cell_level.dart';
@@ -104,6 +105,15 @@ class ExerciseSubCategoryDetails extends StatelessWidget {
                   SizedBox(
                     height: media.width * 0.05,
                   ),
+                  SelectDateSchedule(
+                    icon: "assets/images/time.png",
+                    title: "Schedule Workout",
+                    subCategoryId: subCategoryId,
+                    color: AppColors.primaryColor2,
+                  ),
+                  SizedBox(
+                    height: media.width * 0.05,
+                  ),
                   ReadMoreText(
                     description,
                     trimLines: 4,
@@ -185,9 +195,6 @@ class ExerciseSubCategoryDetails extends StatelessWidget {
             value: kcal,
             subtitle: "Calories",
           ),
-        ),
-        const SizedBox(
-          width: 4,
         ),
       ],
     );

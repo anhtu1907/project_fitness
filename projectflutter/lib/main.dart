@@ -1,14 +1,48 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:projectflutter/core/config/themes/app_theme.dart';
+import 'package:projectflutter/domain/exercise/usecase/schedule_exercise.dart';
+import 'package:projectflutter/notification_service.dart';
 import 'package:projectflutter/presentation/splash/bloc/splash_cubit.dart';
 import 'package:projectflutter/presentation/splash/pages/splash.dart';
 import 'package:projectflutter/service_locator.dart';
+import 'package:timezone/timezone.dart' as tz;
 // import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
+  final byteData = await rootBundle.load('assets/timezone/latest.tzf');
+  tz.initializeDatabase(byteData.buffer.asUint8List());
+  final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(timeZoneName));
+
+  await NotificationService.initialize();
+  final notificationService = NotificationService();
+
+  // 1. Kiểm tra và yêu cầu quyền Notification (Android 13+)
+  if (Platform.isAndroid) {
+    final hasNotificationPermission =
+        await notificationService.requestNotificationPermission();
+    if (!hasNotificationPermission) {
+      print(
+          'Không có quyền notification, người dùng có thể không nhận được thông báo.');
+    }
+  }
+
+  // 2. Kiểm tra và yêu cầu quyền exact alarm (Android 12+)
+  if (Platform.isAndroid) {
+    final hasExactAlarmPermission =
+        await notificationService.checkExactAlarmPermission();
+    if (!hasExactAlarmPermission) {
+      print('Chưa có quyền exact alarm, mở cài đặt cho người dùng');
+      await notificationService.requestExactAlarmPermission();
+    }
+  }
   // final prefs = await SharedPreferences.getInstance();
   // await prefs.remove('token');
   // await prefs.remove('id');
@@ -19,6 +53,17 @@ Future<void> main() async {
   //   await prefs.remove('bmi_latest');
   // }
   runApp(const MyApp());
+  try {
+    await NotificationService.scheduleNotificationAt(
+      DateTime.now().add(Duration(seconds: 10)),
+      1,
+      title: 'Nhắc nhở',
+      body: 'Bạn có bài tập thể dục hôm nay!',
+    );
+    print('Notification scheduled');
+  } catch (e) {
+    print('Error scheduling notification: $e');
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -27,14 +72,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SplashCubit()..appstarted(),
-      child: MaterialApp(
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<ScheduleExerciseUseCase>(
+          create: (context) => sl<ScheduleExerciseUseCase>(),
+        ),
+        // Bạn có thể add thêm các use case khác tại đây
+      ],
+      child: BlocProvider(
+        create: (context) => SplashCubit()..appstarted(),
+        child: MaterialApp(
           theme: AppTheme.lightTheme,
-          // darkTheme: AppTheme.darkThem,
-          // themeMode: ThemeMode.system,
           debugShowCheckedModeBanner: false,
-          home: const SplashPage()),
+          home: const SplashPage(),
+        ),
+      ),
     );
   }
 }

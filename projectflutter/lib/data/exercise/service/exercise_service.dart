@@ -199,9 +199,9 @@ class ExerciseServiceImpl extends ExerciseService {
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
-            'userId': userId,
+            'user': userId,
             'subCategory': req.subCategory,
-            "scheduleTime": req.scheduleTime
+            "scheduleTime": req.scheduleTime.toIso8601String()
           }));
       return Right(response.body);
     } catch (err) {

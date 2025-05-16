@@ -17,6 +17,7 @@ import com.example.Project4.models.exercise.ExerciseSessionModel;
 import com.example.Project4.models.exercise.ExerciseSubCategoyrModel;
 import com.example.Project4.models.exercise.ExerciseUserModel;
 import com.example.Project4.models.exercise.ExercisesModel;
+import com.example.Project4.repository.auth.UserRepository;
 import com.example.Project4.repository.exercise.ExerciseCategoryRepository;
 import com.example.Project4.repository.exercise.ExerciseProgressRepository;
 import com.example.Project4.repository.exercise.ExerciseScheduleRepository;
@@ -41,6 +42,8 @@ public class ExerciseServiceImpl implements ExerciseService {
     private ExerciseSessionRepository exerciseSessionRepository;
     @Autowired
     private ExerciseScheduleRepository exerciseScheduleRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<ExerciseCategoryModel> getAllCategory() {
@@ -156,9 +159,9 @@ public class ExerciseServiceImpl implements ExerciseService {
     public ExerciseScheduleModel scheduleExercise(ExerciseScheduleRequest req) {
         ExerciseSubCategoyrModel subCategories = exerciseSubCategoryRepository.findById(req.getSubCategory())
                 .orElseThrow(() -> new RuntimeException("Sub Category not found"));
-        UserModel user = new UserModel();
+        UserModel user = userRepository.findById(req.getUser())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         ExerciseScheduleModel newSchedule = new ExerciseScheduleModel();
-        user.setId(req.getUser());
         newSchedule.setUser(user);
         newSchedule.setSubCategory(subCategories);
         newSchedule.setScheduleTime(req.getScheduleTime());

@@ -3,5 +3,7 @@ class ExerciseScheduleRequest {
   final DateTime scheduleTime;
 
   ExerciseScheduleRequest(
-      {required this.subCategory, required this.scheduleTime});
+      {
+      required this.subCategory,
+      required this.scheduleTime});
 }
