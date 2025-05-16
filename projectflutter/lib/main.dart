@@ -20,7 +20,8 @@ Future<void> main() async {
   tz.initializeDatabase(byteData.buffer.asUint8List());
   final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
   tz.setLocalLocation(tz.getLocation(timeZoneName));
-
+  print('TimeZone name: $timeZoneName');
+  print('TZ local location: ${tz.local.name}');
   await NotificationService.initialize();
   final notificationService = NotificationService();
 
@@ -38,6 +39,7 @@ Future<void> main() async {
   if (Platform.isAndroid) {
     final hasExactAlarmPermission =
         await notificationService.checkExactAlarmPermission();
+    print('Exact alarm permission: $hasExactAlarmPermission');
     if (!hasExactAlarmPermission) {
       print('Chưa có quyền exact alarm, mở cài đặt cho người dùng');
       await notificationService.requestExactAlarmPermission();
@@ -53,17 +55,7 @@ Future<void> main() async {
   //   await prefs.remove('bmi_latest');
   // }
   runApp(const MyApp());
-  try {
-    await NotificationService.scheduleNotificationAt(
-      DateTime.now().add(Duration(seconds: 10)),
-      1,
-      title: 'Nhắc nhở',
-      body: 'Bạn có bài tập thể dục hôm nay!',
-    );
-    print('Notification scheduled');
-  } catch (e) {
-    print('Error scheduling notification: $e');
-  }
+  
 }
 
 class MyApp extends StatelessWidget {

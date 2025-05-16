@@ -21,6 +21,7 @@ import 'package:projectflutter/domain/bmi/repository/bmi_repository.dart';
 import 'package:projectflutter/domain/bmi/usecase/check_bmi_usecase.dart';
 import 'package:projectflutter/domain/bmi/usecase/save_data_usecase.dart';
 import 'package:projectflutter/domain/exercise/repository/exercise_repository.dart';
+import 'package:projectflutter/domain/exercise/usecase/delete_all_schedule_by_time.dart';
 import 'package:projectflutter/domain/exercise/usecase/delete_schedule.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_exercise_by_sub_category.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_exercise_by_id.dart';
@@ -96,6 +97,8 @@ Future<void> initializeDependencies() async {
       GetExerciseBySubCategoryUseCase());
   sl.registerSingleton<GetExerciseByIdUseCase>(GetExerciseByIdUseCase());
   sl.registerSingleton<DeleteScheduleUseCase>(DeleteScheduleUseCase());
+  sl.registerSingleton<DeleteAllScheduleByTimeUseCase>(
+      DeleteAllScheduleByTimeUseCase());
   sl.registerSingleton<GetExercisesUseCase>(GetExercisesUseCase());
   sl.registerSingleton<GetExerciseProgressUseCase>(
       GetExerciseProgressUseCase());

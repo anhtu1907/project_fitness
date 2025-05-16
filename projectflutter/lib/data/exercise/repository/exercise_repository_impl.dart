@@ -174,4 +174,9 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
   Future<void> deleteExerciseSchdedule(int scheduleId) async {
     return await sl<ExerciseService>().deleteExerciseSchdedule(scheduleId);
   }
+
+  @override
+  Future<void> deleteAllExerciseScheduleByTime() async {
+    return await sl<ExerciseService>().deleteAllExerciseScheduleByTime();
+  }
 }

@@ -1,6 +1,8 @@
 package com.example.Project4.services.exercise;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,5 +183,21 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public void deleteExerciseSchdedule(int scheduleId) {
         exerciseScheduleRepository.deleteById(scheduleId);
+    }
+
+    @Override
+    public void deleteAllExerciseScheduleByTime() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        List<ExerciseScheduleModel> schedules = exerciseScheduleRepository.findAllByScheduleTimeBefore(startOfDay);
+        if (schedules.isEmpty()) {
+            System.out.println("No schedule");
+            return;
+        }
+        for (ExerciseScheduleModel schedule : schedules) {
+
+            exerciseScheduleRepository.delete(schedule);
+
+        }
     }
 }

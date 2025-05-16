@@ -28,4 +28,5 @@ public interface ExerciseService {
     ExerciseScheduleModel updateScheduleExercise(ExerciseUpdateScheduleRequest req);
     boolean findByIdAndUserId(int scheduleId, int userId);
     void deleteExerciseSchdedule(int scheduleId);
+    void deleteAllExerciseScheduleByTime();
 }

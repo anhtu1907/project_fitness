@@ -113,5 +113,11 @@ public class ExerciseController {
         return ResponseEntity.status(201).body(exerciseService.updateScheduleExercise(req));
     }
 
+
+    @DeleteMapping("/schedule/detele/time")
+    public ResponseEntity<?> deleteScheduleByTime(){
+        exerciseService.deleteAllExerciseScheduleByTime();
+        return ResponseEntity.status(204).build();
+    }
     
 }

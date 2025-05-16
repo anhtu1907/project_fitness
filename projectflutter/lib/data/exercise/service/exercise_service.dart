@@ -19,6 +19,7 @@ abstract class ExerciseService {
   Future<Either> getAllExerciseScheduleByUserId();
   Future<Either> scheduleExercise(ExerciseScheduleRequest req);
   Future<void> deleteExerciseSchdedule(int scheduleId);
+  Future<void> deleteAllExerciseScheduleByTime();
 }
 
 class ExerciseServiceImpl extends ExerciseService {
@@ -213,6 +214,18 @@ class ExerciseServiceImpl extends ExerciseService {
   Future<void> deleteExerciseSchdedule(int scheduleId) async {
     Uri url =
         Uri.parse("http://10.0.2.2:8080/api/exercise/schedule/$scheduleId");
+    final response = await http.delete(url);
+    if (response.statusCode == 204) {
+      print("Record deleted successfully.");
+    } else {
+      print("Failed to delete record. Status code: ${response.statusCode}");
+    }
+  }
+
+  @override
+  Future<void> deleteAllExerciseScheduleByTime() async {
+    Uri url =
+        Uri.parse("http://10.0.2.2:8080/api/exercise/schedule/detele/time");
     final response = await http.delete(url);
     if (response.statusCode == 204) {
       print("Record deleted successfully.");

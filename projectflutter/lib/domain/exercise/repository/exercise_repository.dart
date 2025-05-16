@@ -15,4 +15,5 @@ abstract class ExerciseRepository {
   Future<Either> getAllExercise();
   Future<Either> getAllCategory();
   Future<void> deleteExerciseSchdedule(int scheduleId);
+  Future<void> deleteAllExerciseScheduleByTime();
 }
