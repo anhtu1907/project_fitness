@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
+import 'package:projectflutter/common/api/base_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class RunService {
@@ -28,7 +29,7 @@ class RunServiceImpl extends RunService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('id');
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/run/record/$userId");
+      Uri url = Uri.parse("$baseAPI/api/run/record/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('No data to found');

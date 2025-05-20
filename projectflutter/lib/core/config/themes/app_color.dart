@@ -5,6 +5,8 @@ class AppColors {
   static const secondDarkBackground = Color(0xff342F3F);
   static const secondLightBackground = Colors.white;
 
+  static Color get iconColor => const Color(0xffF93827);
+
   static Color get primaryColor1 => const Color(0xff92A3FD);
   static Color get primaryColor2 => const Color(0xff9DCEFF);
   static Color get primaryBottomBar => const Color(0xff6B7AFD);

@@ -13,12 +13,13 @@ class ExerciseSchedulePage extends StatelessWidget {
     return Scaffold(
       appBar: const BasicAppBar(
         titlte: Text(
-          "Exercise Schedules",
+          "All Schedule",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
       ),
       body: BlocProvider(
-        create: (context) => ExerciseScheduleCubit()..displaySchedule(),
+        create: (context) =>
+            ExerciseScheduleCubit()..loadScheduleandNotification(),
         child: BlocBuilder<ExerciseScheduleCubit, ExerciseScheduleState>(
           builder: (context, state) {
             if (state is ExerciseScheduleLoading) {

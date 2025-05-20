@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
+import 'package:projectflutter/common/api/base_api.dart';
 import 'package:projectflutter/data/exercise/model/exercise_schedule_request.dart';
 import 'package:projectflutter/data/exercise/model/exercise_session_request.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,10 +24,11 @@ abstract class ExerciseService {
 }
 
 class ExerciseServiceImpl extends ExerciseService {
+
   @override
   Future<Either> getAllSubCategory() async {
     try {
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/category/sub");
+      Uri url = Uri.parse("$baseAPI/api/exercise/category/sub");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('Category not found');
@@ -42,8 +44,8 @@ class ExerciseServiceImpl extends ExerciseService {
   @override
   Future<Either> getExerciseBySubCategory(int subCategoryId) async {
     try {
-      final Uri url = Uri.parse(
-          "http://10.0.2.2:8080/api/exercise/category/sub/$subCategoryId");
+      final Uri url =
+          Uri.parse("$baseAPI/api/exercise/category/sub/$subCategoryId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('Exercise by category not found');
@@ -59,7 +61,7 @@ class ExerciseServiceImpl extends ExerciseService {
   @override
   Future<Either> getExerciseById(int exerciseId) async {
     try {
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/$exerciseId");
+      Uri url = Uri.parse("$baseAPI/api/exercise/$exerciseId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('Exercise not found');
@@ -74,7 +76,7 @@ class ExerciseServiceImpl extends ExerciseService {
   @override
   Future<Either> getAllExercise() async {
     try {
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise");
+      Uri url = Uri.parse("$baseAPI/api/exercise");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('No data');
@@ -89,7 +91,7 @@ class ExerciseServiceImpl extends ExerciseService {
   @override
   Future<Either> getAllCategory() async {
     try {
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/category");
+      Uri url = Uri.parse("$baseAPI/api/exercise/category");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('No data');
@@ -106,14 +108,12 @@ class ExerciseServiceImpl extends ExerciseService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('id');
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/progress/$userId");
+      Uri url = Uri.parse("$baseAPI/api/exercise/progress/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('No data to found');
       }
       List<dynamic> responseData = jsonDecode(response.body);
-      final progress = responseData.last['progress'];
-      prefs.setDouble("progress", progress);
       return Right(responseData);
     } catch (err) {
       return Left('Error Message: $err');
@@ -125,7 +125,7 @@ class ExerciseServiceImpl extends ExerciseService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('id');
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/user/$userId");
+      Uri url = Uri.parse("$baseAPI/api/exercise/user/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('No result for user');
@@ -142,7 +142,7 @@ class ExerciseServiceImpl extends ExerciseService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('id');
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/session/$userId");
+      Uri url = Uri.parse("$baseAPI/api/session/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('No session by user');
@@ -159,7 +159,7 @@ class ExerciseServiceImpl extends ExerciseService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('id');
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/start-session");
+      Uri url = Uri.parse("$baseAPI/api/exercise/start-session");
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
@@ -179,7 +179,7 @@ class ExerciseServiceImpl extends ExerciseService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt("id");
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/schedule/$userId");
+      Uri url = Uri.parse("$baseAPI/api/exercise/schedule/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('No schedule by user');
@@ -196,7 +196,7 @@ class ExerciseServiceImpl extends ExerciseService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('id');
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/exercise/schedule/save");
+      Uri url = Uri.parse("$baseAPI/api/exercise/schedule/save");
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
@@ -212,8 +212,7 @@ class ExerciseServiceImpl extends ExerciseService {
 
   @override
   Future<void> deleteExerciseSchdedule(int scheduleId) async {
-    Uri url =
-        Uri.parse("http://10.0.2.2:8080/api/exercise/schedule/$scheduleId");
+    Uri url = Uri.parse("$baseAPI/api/exercise/schedule/$scheduleId");
     final response = await http.delete(url);
     if (response.statusCode == 204) {
       print("Record deleted successfully.");
@@ -224,8 +223,7 @@ class ExerciseServiceImpl extends ExerciseService {
 
   @override
   Future<void> deleteAllExerciseScheduleByTime() async {
-    Uri url =
-        Uri.parse("http://10.0.2.2:8080/api/exercise/schedule/detele/time");
+    Uri url = Uri.parse("$baseAPI/api/exercise/schedule/detele/time");
     final response = await http.delete(url);
     if (response.statusCode == 204) {
       print("Record deleted successfully.");

@@ -47,6 +47,7 @@ import 'package:projectflutter/domain/meal/usecase/save_record_meal.dart';
 import 'package:projectflutter/domain/meal/usecase/search_by_meal_name.dart';
 import 'package:projectflutter/domain/run/repository/run_repository.dart';
 import 'package:projectflutter/domain/run/usecase/get_record_run_by_user.dart';
+import 'package:projectflutter/presentation/home/bloc/exercise_schedule_cubit.dart';
 
 final sl = GetIt.instance;
 Future<void> initializeDependencies() async {
@@ -113,4 +114,7 @@ Future<void> initializeDependencies() async {
 
   // Exercise Total Kcal
   sl.registerSingleton<GetRecordRunByUserUseCase>(GetRecordRunByUserUseCase());
+
+  sl.registerLazySingleton<ExerciseScheduleCubit>(
+      () => ExerciseScheduleCubit());
 }

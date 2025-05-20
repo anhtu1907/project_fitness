@@ -13,7 +13,6 @@ import 'package:projectflutter/presentation/exercise/pages/exercise_result.dart'
 import 'package:projectflutter/presentation/exercise/pages/exercise_start.dart';
 import 'package:projectflutter/presentation/profile/bloc/workout_progress_cubit.dart';
 import 'package:projectflutter/presentation/profile/bloc/workout_progress_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class WorkoutProgressPage extends StatelessWidget {
   const WorkoutProgressPage({super.key});
@@ -24,7 +23,7 @@ class WorkoutProgressPage extends StatelessWidget {
       appBar: const BasicAppBar(
         hideBack: false,
         titlte: Text(
-          "Workout Progress",
+          "Latest Workout",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
       ),
@@ -51,7 +50,6 @@ class WorkoutProgressPage extends StatelessWidget {
             if (exerciseState is ExercisesLoaded) {
               final exerciseList = exerciseState.entity;
 
-              // Tạo uniqueExercisesPerCategory
               final Map<String, Set<int>> uniqueExercisesSubPerCategory = {};
               for (var e in exerciseList) {
                 final subCategoryName = e.subCategory!.subCategoryName;
@@ -97,7 +95,7 @@ class WorkoutProgressPage extends StatelessWidget {
                     return SafeArea(
                       child: SingleChildScrollView(
                         child: Column(
-                          children: sortedEntries.take(2).map((entry) {
+                          children: sortedEntries.map((entry) {
                             final list = entry.value;
                             var duration =
                                 list.first.exercise!.exercise!.duration;
@@ -130,12 +128,7 @@ class WorkoutProgressPage extends StatelessWidget {
                                   progress: progressRatio,
                                   kcal: totalKcal,
                                   onPressed: () async {
-                                    final prefs =
-                                        await SharedPreferences.getInstance();
-
-                                    final progress =
-                                        prefs.getDouble("progress");
-                                    if (progress! < 100) {
+                                    if (progressRatio * 100 < 100) {
                                       var shouldContinue =
                                           await ShowDialog.shouldContinue(
                                               context,

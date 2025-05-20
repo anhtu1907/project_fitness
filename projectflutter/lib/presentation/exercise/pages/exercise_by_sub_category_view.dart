@@ -7,8 +7,7 @@ import 'package:projectflutter/presentation/exercise/widgets/exercise_sub_catego
 
 class ExerciseBySubCategoryView extends StatelessWidget {
   final int subCategoryId;
-  const ExerciseBySubCategoryView(
-      {super.key, required this.subCategoryId});
+  const ExerciseBySubCategoryView({super.key, required this.subCategoryId});
 
   @override
   Widget build(BuildContext context) {

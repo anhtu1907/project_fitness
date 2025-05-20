@@ -87,6 +87,9 @@ class ExerciseResultPage extends StatelessWidget {
                                 unit: "",
                               ),
                             ),
+                            SizedBox(
+                              width: 10,
+                            ),
                             Expanded(
                               child: TitleSubtitleCellInt(
                                 value: 1230, // Kcal
@@ -105,6 +108,9 @@ class ExerciseResultPage extends StatelessWidget {
                               child: TitleSubTitleCellTimeResult(
                                   value: 120, // Duration
                                   subtitle: "Duration"),
+                            ),
+                            SizedBox(
+                              width: 10,
                             ),
                             Expanded(
                               child: TitleSubtitleCellInt(

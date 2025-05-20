@@ -2,7 +2,6 @@ package com.example.Project4.services.exercise;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +93,8 @@ public class ExerciseServiceImpl implements ExerciseService {
         ExercisesModel exercises = exercisesRepository.findById(req.getExerciseId())
                 .orElseThrow(() -> new RuntimeException("Exercise not found"));
 
+        UserModel user = userRepository.findById(req.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         List<ExerciseSessionModel> existingSession = exerciseSessionRepository
                 .findByUserAndExerciseAndResetBatch(req.getUserId(), req.getExerciseId(), req.getResetBatch());
 
@@ -106,8 +107,6 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         // Tạo mới ExerciseSession
         ExerciseSessionModel newSession = new ExerciseSessionModel();
-        UserModel user = new UserModel();
-        user.setId(req.getUserId());
         newSession.setUser(user);
         newSession.setExercise(exercises);
         newSession.setKcal(exercises.getKcal());
@@ -190,10 +189,6 @@ public class ExerciseServiceImpl implements ExerciseService {
         LocalDate today = LocalDate.now();
         LocalDateTime startOfDay = today.atStartOfDay();
         List<ExerciseScheduleModel> schedules = exerciseScheduleRepository.findAllByScheduleTimeBefore(startOfDay);
-        if (schedules.isEmpty()) {
-            System.out.println("No schedule");
-            return;
-        }
         for (ExerciseScheduleModel schedule : schedules) {
 
             exerciseScheduleRepository.delete(schedule);

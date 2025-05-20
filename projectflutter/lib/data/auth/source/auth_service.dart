@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:projectflutter/common/api/base_api.dart';
 import 'package:projectflutter/data/auth/model/register_request.dart';
 import 'package:projectflutter/data/auth/model/signin_request.dart';
 import 'package:http/http.dart' as http;
@@ -21,10 +22,15 @@ class AuthServiceImpl extends AuthService {
   @override
   Future<Either> signin(SigninRequest user) async {
     try {
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/auth/login");
-      final response = await http.post(url,
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode({'email': user.email, 'password': user.password}));
+      Uri url = Uri.parse("$baseAPI/api/auth/login");
+      final response = await http
+          .post(url,
+              headers: {'Content-Type': 'application/json'},
+              body:
+                  json.encode({'email': user.email, 'password': user.password}))
+          .timeout(Duration(seconds: 5), onTimeout: () {
+        throw Exception('Timeout kết nối');
+      });
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
         final prefs = await SharedPreferences.getInstance();
@@ -60,7 +66,7 @@ class AuthServiceImpl extends AuthService {
   @override
   Future<Either> signup(RegisterRequest user) async {
     try {
-      Uri url = Uri.parse('http://10.0.2.2:8080/api/auth/register');
+      Uri url = Uri.parse('$baseAPI/api/auth/register');
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
@@ -89,7 +95,7 @@ class AuthServiceImpl extends AuthService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('id');
-      Uri url = Uri.parse('http://10.0.2.2:8080/api/auth/getUser/${userId}');
+      Uri url = Uri.parse('$baseAPI/api/auth/getUser/$userId');
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('User not found');

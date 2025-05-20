@@ -1,19 +1,27 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/common/helper/dialog/show_dialog.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:projectflutter/data/exercise/model/exercise_session_request.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
+import 'package:projectflutter/domain/exercise/usecase/start_exercise.dart';
+import 'package:projectflutter/presentation/exercise/bloc/button_exercise_cubit.dart';
 import 'package:projectflutter/presentation/exercise/pages/exercise_result.dart';
 import 'package:projectflutter/presentation/exercise/widgets/exercise_rest.dart';
 
 class ExerciseStart extends StatefulWidget {
   final List<ExercisesEntity> exercises;
   final int currentIndex;
+  final int resetBatch;
   const ExerciseStart(
-      {super.key, required this.exercises, required this.currentIndex});
+      {super.key,
+      required this.exercises,
+      required this.currentIndex,
+      this.resetBatch = 0});
 
   @override
   State<ExerciseStart> createState() => _ExerciseStartsState();
@@ -27,6 +35,8 @@ class _ExerciseStartsState extends State<ExerciseStart> {
   bool _buttonState = false;
   int _countdown = 5;
   Timer? _countdownTimer;
+  Timer? _totalDurationTimer;
+  int _totalDuration = 0;
   bool _isResting = false;
 
   @override
@@ -34,45 +44,81 @@ class _ExerciseStartsState extends State<ExerciseStart> {
     super.initState();
     currentExercise = widget.exercises[widget.currentIndex];
     // _counter = currentExercise.duration;
-    _counter = 1;
-
+    _counter = 10;
+    _startTotalDurationTimer();
     if (_showOverlay) {
       _startCountdown();
     }
   }
 
-  void _startCountdown() {
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  void _startTotalDurationTimer() {
+    _totalDurationTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) return;
       setState(() {
-        if (_countdown > 0) {
-          _countdown--;
+        _totalDuration++;
+      });
+    });
+  }
+
+  void _startGenericTimer({
+    required int initialValue,
+    required void Function() onFinish,
+    required void Function(int) onTick,
+  }) {
+    int value = initialValue;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) return;
+      setState(() {
+        if (value > 0) {
+          value--;
+          onTick(value);
         } else {
-          _countdownTimer?.cancel();
-          _showOverlay = false;
-          _startTimer();
+          timer.cancel();
+          onFinish();
         }
       });
     });
   }
 
-  void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) return;
-      setState(() {
-        if (_counter > 0) {
-          _counter--;
+  void _startCountdown() {
+    _startGenericTimer(
+      initialValue: _countdown,
+      onTick: (val) => _countdown = val,
+      onFinish: () {
+        _showOverlay = false;
+        _startExercise();
+      },
+    );
+  }
+
+  void _startExercise() async {
+    final currentResetBatch = await context
+        .read<ButtonExerciseCubit>()
+        .getResetBatchBySubCategory(currentExercise.subCategory!.id);
+    _startGenericTimer(
+      initialValue: _counter,
+      onTick: (val) => _counter = val,
+      onFinish: () {
+        currentExercise = widget.exercises[widget.currentIndex];
+
+        ExerciseSessionRequest req = ExerciseSessionRequest(
+          exerciseId: currentExercise.id,
+          duration: _totalDuration,
+          resetBatch: currentResetBatch!,
+        );
+
+        print(
+            "Exercise ID: ${currentExercise.id} - Duration: $_totalDuration - Reset Batch: ${currentResetBatch}");
+        StartExerciseUseCase().call(params: req);
+
+        if (widget.currentIndex < widget.exercises.length - 1) {
+          _isResting = true;
+          _showOverlay = false;
         } else {
-          _timer.cancel();
-          if (widget.currentIndex < widget.exercises.length - 1) {
-            _isResting = true;
-            _showOverlay = false;
-          } else {
-            _onExerciseFinished();
-          }
+          _onExerciseFinished();
         }
-      });
-    });
+      },
+    );
   }
 
   void _onExerciseFinished() {
@@ -104,6 +150,7 @@ class _ExerciseStartsState extends State<ExerciseStart> {
   void dispose() {
     _timer.cancel();
     _countdownTimer?.cancel();
+    _totalDurationTimer?.cancel();
     super.dispose();
   }
 
@@ -232,7 +279,7 @@ class _ExerciseStartsState extends State<ExerciseStart> {
                               if (_buttonState) {
                                 _timer.cancel();
                               } else {
-                                _startTimer();
+                                _startExercise();
                               }
                             });
                           },
@@ -261,7 +308,7 @@ class _ExerciseStartsState extends State<ExerciseStart> {
                 setState(() {
                   _onExerciseFinished();
                 });
-                _startTimer();
+                _startExercise();
               },
             ),
           ),
@@ -322,7 +369,7 @@ class _ExerciseStartsState extends State<ExerciseStart> {
                         setState(() {
                           _showOverlay = false;
                         });
-                        _startTimer();
+                        _startExercise();
                       },
                       child: const Text('Start'),
                     ),

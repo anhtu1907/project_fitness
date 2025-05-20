@@ -110,6 +110,10 @@ class _IconTitleRowState extends State<SelectDateSchedule> {
 
         String formatted =
             "${dateTime.day}/${dateTime.month}/${dateTime.year} ${time.format(context)}";
+
+        setState(() {
+          selectedDateTime = formatted;
+        });
         ExerciseScheduleRequest req = ExerciseScheduleRequest(
             subCategory: widget.subCategoryId, scheduleTime: dateTime);
         if (context.mounted) {
@@ -131,10 +135,6 @@ class _IconTitleRowState extends State<SelectDateSchedule> {
           );
           return;
         }
-
-        setState(() {
-          selectedDateTime = formatted;
-        });
       }
     }
   }

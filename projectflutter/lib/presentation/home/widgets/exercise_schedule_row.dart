@@ -108,7 +108,9 @@ class ExerciseScheduleRow extends StatelessWidget {
                 if (result == true) {
                   Future.delayed(const Duration(milliseconds: 300), () {
                     if (context.mounted) {
-                      context.read<ExerciseScheduleCubit>().displaySchedule();
+                      context
+                          .read<ExerciseScheduleCubit>()
+                          .loadScheduleandNotification();
                     }
                   });
                 }
@@ -117,7 +119,9 @@ class ExerciseScheduleRow extends StatelessWidget {
                 await deleteUseCase.call(params: entity.id);
 
                 if (context.mounted) {
-                  context.read<ExerciseScheduleCubit>().displaySchedule();
+                  context
+                      .read<ExerciseScheduleCubit>()
+                      .loadScheduleandNotification();
                 }
               }
             },

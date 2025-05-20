@@ -9,7 +9,7 @@ import 'package:projectflutter/common/widget/button/basic_reactive_button.dart';
 import 'package:projectflutter/core/icon/icon_custom.dart';
 import 'package:projectflutter/data/bmi/model/bmi_request.dart';
 import 'package:projectflutter/domain/bmi/usecase/save_data_usecase.dart';
-import 'package:projectflutter/presentation/bmi/pages/bmi.dart';
+import 'package:projectflutter/presentation/bmi/pages/bmi_view.dart';
 
 class HeightWeightPage extends StatelessWidget {
   HeightWeightPage({super.key});

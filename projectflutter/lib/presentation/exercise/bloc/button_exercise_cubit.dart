@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_progress_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
@@ -7,15 +9,32 @@ import 'package:projectflutter/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ButtonExerciseCubit extends Cubit<ButtonExerciseState> {
+  int resetBatch = 0;
   ButtonExerciseCubit() : super(ButtonInitialize());
+
+  Future<int?> getResetBatchBySubCategory(int subCategoryId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final value = prefs.getInt("reset_batch_subCategory_$subCategoryId");
+    if (value == null) {
+      resetBatch = 0;
+    } else {
+      resetBatch = value;
+    }
+    return resetBatch;
+  }
+
+  Future<void> setResetBatchBySubCategory(int subCategoryId, int value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt("reset_batch_subCategory_$subCategoryId", value);
+  }
 
   Future<void> checkExerciseState(int subCategoryId) async {
     emit(ButtonLoading());
     var result = await sl<GetExerciseProgressUseCase>().call();
-    final prefs = await SharedPreferences.getInstance();
-    var reset = prefs.getInt('reset_batch');
+    final resetBatch = await getResetBatchBySubCategory(subCategoryId);
     result.fold((err) {
       emit(ButtonInitialize());
+      print(err);
     }, (data) {
       if (data is List<ExerciseProgressEntity> && data.isNotEmpty) {
         final filteredData = data
@@ -27,12 +46,18 @@ class ButtonExerciseCubit extends Cubit<ButtonExerciseState> {
           return;
         }
         final last = filteredData.last;
-        final resetBatch = reset;
         final progress = last.progress;
-        if (resetBatch == 0 && progress == 100) {
+        final maxBatch = filteredData
+            .map((e) => e.exercise!.resetBatch)
+            .fold<int>(0, (a, b) => a > b ? a : b);
+        final latestBatchData = filteredData
+            .where((e) => e.exercise!.resetBatch == maxBatch)
+            .toList();
+        final allCompleted = latestBatchData.any((e) => e.progress == 100);
+        final hasIncomplete = latestBatchData.any((e) => e.progress < 100);
+        if (allCompleted) {
           emit(ButtonRestart());
-          reset = reset! + 1;
-        } else if (progress < 100) {
+        } else if (hasIncomplete) {
           emit(ButtonContinue());
         } else {
           emit(ButtonInitialize());
@@ -48,11 +73,13 @@ class ButtonExerciseCubit extends Cubit<ButtonExerciseState> {
     return await reuslt.fold((err) {
       return err;
     }, (progressList) async {
-      int? categoryId = exercises.first.subCategory!.id;
-
+      int? subCategoryId = exercises.first.subCategory!.id;
+      final resetBatch = await getResetBatchBySubCategory(subCategoryId);
+      print('Reset Batch: $resetBatch');
       final exerciseIds = (progressList as List<ExerciseProgressEntity>)
           .where((e) =>
-              e.exercise!.exercise!.subCategory!.id == categoryId &&
+              e.exercise!.exercise!.subCategory!.id == subCategoryId &&
+              e.exercise!.resetBatch == resetBatch &&
               e.exercise!.exercise != null)
           .map((e) => e.exercise!.exercise!.id)
           .toList();
@@ -68,4 +95,12 @@ class ButtonExerciseCubit extends Cubit<ButtonExerciseState> {
       }
     });
   }
+
+  Future<void> incrementResetBatch(int subCategoryId) async {
+    final resetBatch = await getResetBatchBySubCategory(subCategoryId);
+    final newBatch = resetBatch! + 1;
+    await setResetBatchBySubCategory(subCategoryId, newBatch);
+  }
+
+  int getResetBatch() => resetBatch;
 }

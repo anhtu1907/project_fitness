@@ -20,7 +20,7 @@ class AppBottomNavigator extends StatelessWidget {
         children: [
           _buildNavItem(icon: Icons.home_filled, index: 0, label: 'Home'),
           _buildNavItem(icon: Icons.fastfood, index: 1, label: 'Meal'),
-          const SizedBox(width: 36),
+          _buildNavItem(icon: Icons.bar_chart, index: 2, label: 'Personal'),
           _buildNavItem(
               icon: Icons.fitness_center, index: 3, label: 'Exercise'),
           _buildNavItem(icon: Icons.person, index: 4, label: 'Profile'),

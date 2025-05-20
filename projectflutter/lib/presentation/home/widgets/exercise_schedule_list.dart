@@ -9,7 +9,8 @@ class ExerciseScheduleList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ExerciseScheduleCubit()..displaySchedule(),
+      create: (context) =>
+          ExerciseScheduleCubit()..loadScheduleandNotification(),
       child: BlocBuilder<ExerciseScheduleCubit, ExerciseScheduleState>(
         builder: (context, state) {
           if (state is ExerciseScheduleLoading) {

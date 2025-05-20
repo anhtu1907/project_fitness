@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
+import 'package:projectflutter/common/api/base_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class MealService {
@@ -21,7 +22,7 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> getAllCategory() async {
     try {
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/category");
+      Uri url = Uri.parse("$baseAPI/api/meal/category");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('Category not found');
@@ -37,7 +38,7 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> getAllMeal() async {
     try {
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/meal");
+      Uri url = Uri.parse("$baseAPI/api/meal");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('Meals not found');
@@ -52,7 +53,7 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> getAllSubCategory() async {
     try {
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/category/sub");
+      Uri url = Uri.parse("$baseAPI/api/meal/category/sub");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('Sub Category not found');
@@ -67,8 +68,8 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> getMealBySubCategory(int subCategoryId) async {
     try {
-      final Uri url = Uri.parse(
-          "http://10.0.2.2:8080/api/meal/category/sub/$subCategoryId");
+      final Uri url =
+          Uri.parse("$baseAPI/api/meal/category/sub/$subCategoryId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('Meal by category not found');
@@ -83,7 +84,7 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> getMealById(int mealId) async {
     try {
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/$mealId");
+      Uri url = Uri.parse("$baseAPI/api/meal/$mealId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('Meal not found');
@@ -99,7 +100,7 @@ class MealServiceImpl extends MealService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('id');
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/record/$userId");
+      Uri url = Uri.parse("$baseAPI/api/meal/record/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return const Left('No record for user');
@@ -116,7 +117,7 @@ class MealServiceImpl extends MealService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('id');
-      Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/save/record");
+      Uri url = Uri.parse("$baseAPI/api/meal/save/record");
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
           body: json.encode({'user': userId, 'meal': mealId}));
@@ -128,7 +129,7 @@ class MealServiceImpl extends MealService {
 
   @override
   Future<void> deteleRecordMeal(int recordId) async {
-    Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/record/$recordId");
+    Uri url = Uri.parse("$baseAPI/api/meal/record/$recordId");
     final response = await http.delete(url);
     if (response.statusCode == 204) {
       print("Record deleted successfully.");
@@ -141,7 +142,7 @@ class MealServiceImpl extends MealService {
   Future<void> deteleAllRecordMeal() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getInt('id');
-    Uri url = Uri.parse("http://10.0.2.2:8080/api/meal/record/$userId/all");
+    Uri url = Uri.parse("$baseAPI/api/meal/record/$userId/all");
     final response = await http.delete(url);
     if (response.statusCode == 204) {
       print("Record deleted successfully.");
@@ -153,8 +154,7 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> searchByMealName(String mealName) async {
     try {
-      Uri url =
-          Uri.parse("http://10.0.2.2:8080/api/meal/search?mealName=$mealName");
+      Uri url = Uri.parse("$baseAPI/api/meal/search?mealName=$mealName");
       final response = await http.get(url);
       if (response.statusCode == 404) {
         return Left('No meal by $mealName');

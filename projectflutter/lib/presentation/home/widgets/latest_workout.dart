@@ -12,7 +12,6 @@ import 'package:projectflutter/presentation/exercise/pages/exercise_result.dart'
 import 'package:projectflutter/presentation/exercise/pages/exercise_start.dart';
 import 'package:projectflutter/presentation/profile/bloc/workout_progress_cubit.dart';
 import 'package:projectflutter/presentation/profile/bloc/workout_progress_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LatestWorkout extends StatelessWidget {
   const LatestWorkout({super.key});
@@ -119,16 +118,13 @@ class LatestWorkout extends StatelessWidget {
                                 progress: progressRatio,
                                 kcal: totalKcal,
                                 onPressed: () async {
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-
-                                  final progress = prefs.getDouble("progress");
-                                  if (progress! < 100) {
+                                  if (progressRatio * 100 < 100) {
                                     var shouldContinue =
                                         await ShowDialog.shouldContinue(
                                             context,
                                             'Continue?',
                                             'Are you sure want to continue?');
+                                    print('Progress: ${progressRatio * 100}');
                                     if (shouldContinue == true) {
                                       final filteredExercises = exerciseList
                                           .where((e) =>
@@ -139,6 +135,7 @@ class LatestWorkout extends StatelessWidget {
                                           .read<ButtonExerciseCubit>()
                                           .getNextExerciseIndex(
                                               filteredExercises);
+                                      print('Current Index: $currentIndex');
                                       if (context.mounted &&
                                           currentIndex != null) {
                                         AppNavigator.push(

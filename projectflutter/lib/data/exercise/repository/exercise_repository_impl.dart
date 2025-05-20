@@ -73,13 +73,24 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
           (data as List).map((e) => ExerciseProgressModel.fromMap(e)).toList();
       List<ExerciseProgressEntity> entities =
           models.map((m) => m.toEntity()).toList();
-      final lastSession = entities.isNotEmpty ? entities.last : null;
-      if (lastSession != null) {
-        final prefs = await SharedPreferences.getInstance();
-        final resetBatch = lastSession.exercise!.resetBatch;
-        final lastUpdated = lastSession.lastUpdated;
-        prefs.setInt("reset_batch", resetBatch);
-        prefs.setString("last_updated", lastUpdated!.toIso8601String());
+      final Map<int, List<ExerciseProgressEntity>> sessionsBySubCategory = {};
+
+      for (var session in entities) {
+        final subCategoryId = session.exercise!.exercise!.subCategory!.id;
+
+        sessionsBySubCategory.putIfAbsent(subCategoryId, () => []);
+        sessionsBySubCategory[subCategoryId]!.add(session);
+      }
+      final prefs = await SharedPreferences.getInstance();
+
+      for (var entry in sessionsBySubCategory.entries) {
+        final subCategoryId = entry.key;
+        final sessions = entry.value;
+        final maxBatch = sessions
+            .map((s) => s.exercise?.resetBatch ?? 0)
+            .fold<int>(0, (prev, current) => current > prev ? current : prev);
+
+        await prefs.setInt("reset_batch_subCategory_$subCategoryId", maxBatch);
       }
       return Right(entities);
     });
@@ -107,11 +118,12 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
         await sl<ExerciseService>().getAllExerciseSessionByUserId();
     return exerciseSession.fold((err) {
       return Left(err);
-    }, (data) {
+    }, (data) async {
       List<ExerciseSessionModel> models =
           (data as List).map((e) => ExerciseSessionModel.fromMap(e)).toList();
       List<ExerciseSessionEntity> entities =
           models.map((m) => m.toEntity()).toList();
+
       return Right(entities);
     });
   }
