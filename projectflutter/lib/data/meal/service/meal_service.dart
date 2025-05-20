@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:projectflutter/common/api/base_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:projectflutter/common/api/shared_preference_service.dart';
 
 abstract class MealService {
   Future<Either> getAllMeal();
@@ -98,8 +98,7 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> getAllRecordMeal() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getInt('id');
+      final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse("$baseAPI/api/meal/record/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
@@ -115,8 +114,7 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> saveRecordMeal(List<int> mealId) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getInt('id');
+      final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse("$baseAPI/api/meal/save/record");
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
@@ -140,8 +138,7 @@ class MealServiceImpl extends MealService {
 
   @override
   Future<void> deteleAllRecordMeal() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getInt('id');
+    final userId = SharedPreferenceService.userId;
     Uri url = Uri.parse("$baseAPI/api/meal/record/$userId/all");
     final response = await http.delete(url);
     if (response.statusCode == 204) {

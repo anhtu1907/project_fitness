@@ -29,7 +29,7 @@ class ExerciseSubCategoryListPage extends StatelessWidget {
 
     return Scaffold(
       appBar: BasicAppBar(
-        titlte: Text(categoryName),
+        title: Text(categoryName),
         subTitle: Text(
           '${total.length} workouts',
           style: TextStyle(

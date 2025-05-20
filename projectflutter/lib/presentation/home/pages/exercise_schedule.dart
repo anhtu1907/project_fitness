@@ -12,7 +12,7 @@ class ExerciseSchedulePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const BasicAppBar(
-        titlte: Text(
+        title: Text(
           "All Schedule",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),

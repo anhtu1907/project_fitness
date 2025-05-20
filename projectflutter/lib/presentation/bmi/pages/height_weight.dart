@@ -6,6 +6,8 @@ import 'package:projectflutter/common/components/fields/height_weight_field.dart
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/common/widget/button/basic_reactive_button.dart';
+import 'package:projectflutter/core/config/assets/app_image.dart';
+import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/icon/icon_custom.dart';
 import 'package:projectflutter/data/bmi/model/bmi_request.dart';
 import 'package:projectflutter/domain/bmi/usecase/save_data_usecase.dart';
@@ -18,6 +20,7 @@ class HeightWeightPage extends StatelessWidget {
   final TextEditingController _weightCon = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: const BasicAppBar(
         hideBack: true,
@@ -38,27 +41,48 @@ class HeightWeightPage extends StatelessWidget {
               AppNavigator.pushReplacement(context, const BmiPage());
             }
           },
-          child: SingleChildScrollView(
-            child: SafeArea(
+          child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: SafeArea(
                 child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      _heightField(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _weightField(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _continueButton()
-                    ],
-                  )),
-            )),
-          ),
+                  padding: const EdgeInsets.all(16),
+                  child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          Image.asset(
+                            AppImages.on2,
+                            width: media.width * 0.8,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Text(
+                            "Accurate height and weight lead to better results",
+                            style: TextStyle(
+                              color: AppColors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _heightField(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _weightField(),
+                          const Spacer(),
+                          _continueButton()
+                        ],
+                      )),
+                ),
+              )),
         ),
       ),
     );
@@ -76,6 +100,9 @@ class HeightWeightPage extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return 'Height is required';
         }
+        if (double.parse(value) < 50 || double.parse(value) > 300) {
+          return 'Height must be between 50cm and 300cm';
+        }
         return null;
       },
     );
@@ -92,6 +119,9 @@ class HeightWeightPage extends StatelessWidget {
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Weight is required';
+        }
+        if (double.parse(value) < 10 || double.parse(value) > 500) {
+          return 'Weight must be between 10kg and 500kg';
         }
         return null;
       },

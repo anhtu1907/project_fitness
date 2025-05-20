@@ -17,7 +17,7 @@ class PersonalDataPage extends StatelessWidget {
     return Scaffold(
         appBar: const BasicAppBar(
           hideBack: false,
-          titlte: Text(
+          title: Text(
             "Personal Data",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),

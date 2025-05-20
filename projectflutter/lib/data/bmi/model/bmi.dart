@@ -8,12 +8,25 @@ class BmiModel {
   final int height;
   final int weight;
   final double bmi;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  BmiModel(
+      {required this.id,
+      required this.height,
+      required this.weight,
+      required this.bmi,
+      required this.createdAt,
+      required this.updatedAt});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'height': height,
       'weight': weight,
       'bmi': bmi,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 
@@ -23,6 +36,10 @@ class BmiModel {
       height: map['height'] as int,
       weight: map['weight'] as int,
       bmi: map['bmi'] as double,
+      createdAt:
+          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
+      updatedAt:
+          map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
     );
   }
 
@@ -30,16 +47,16 @@ class BmiModel {
 
   factory BmiModel.fromJson(String source) =>
       BmiModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  BmiModel(
-      {required this.id,
-      required this.height,
-      required this.weight,
-      required this.bmi});
 }
 
 extension BmiXModel on BmiModel {
   BmiEntity toEntity() {
-    return BmiEntity(id: id, height: height, weight: weight, bmi: bmi);
+    return BmiEntity(
+        id: id,
+        height: height,
+        weight: weight,
+        bmi: bmi,
+        createdAt: createdAt,
+        updatedAt: updatedAt);
   }
 }

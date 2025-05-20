@@ -13,7 +13,7 @@ class MealSearchList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const BasicAppBar(
-        titlte: Text('Search Results'),
+        title: Text('Search Results'),
       ),
       body: BlocProvider(
         create: (context) => MealBySearchCubit()..listMealBySearch(mealName),

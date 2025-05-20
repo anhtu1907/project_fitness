@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:projectflutter/common/api/base_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:projectflutter/common/api/shared_preference_service.dart';
 abstract class RunService {
   Future<void> stratTracking();
   Future<void> stopTracking();
@@ -27,8 +26,7 @@ class RunServiceImpl extends RunService {
   @override
   Future<Either> getRecordRunByUserId() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getInt('id');
+      final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse("$baseAPI/api/run/record/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {

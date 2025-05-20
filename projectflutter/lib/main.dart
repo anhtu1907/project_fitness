@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:projectflutter/common/api/shared_preference_service.dart';
 import 'package:projectflutter/core/config/themes/app_theme.dart';
 import 'package:projectflutter/domain/exercise/usecase/schedule_exercise.dart';
 import 'package:projectflutter/notification_service.dart';
@@ -15,6 +16,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferenceService.init();
   await initializeDependencies();
   tz.initializeTimeZones();
   final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
@@ -26,7 +28,7 @@ Future<void> main() async {
 
   // final prefs = await SharedPreferences.getInstance();
   // await prefs.remove('token');
-  // await prefs.remove('id');
+  // await prefs.remove('userId');
   // await prefs.remove('bmi_exist');
   // await prefs.remove('onboarding_done');
   // final bmiLatest = prefs.getString('bmi_latest');
@@ -62,6 +64,8 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme,
+          // darkTheme: AppTheme.darkThem,
+          // themeMode: ThemeMode.system,
           debugShowCheckedModeBanner: false,
           home: const SplashPage(),
         ),

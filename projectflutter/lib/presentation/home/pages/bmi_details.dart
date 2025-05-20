@@ -16,7 +16,7 @@ class BmiDetailsPage extends StatelessWidget {
     return Scaffold(
         appBar: const BasicAppBar(
           hideBack: true,
-          titlte: Text(
+          title: Text(
             "BMI Details",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),

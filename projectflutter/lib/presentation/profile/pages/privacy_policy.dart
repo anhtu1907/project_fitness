@@ -9,7 +9,7 @@ class PrivacyPolicyPage extends StatelessWidget {
     return const Scaffold(
       appBar: BasicAppBar(
         hideBack: false,
-        titlte: Text(
+        title: Text(
           "Privacy Policy",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),

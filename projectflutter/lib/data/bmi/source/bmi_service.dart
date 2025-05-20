@@ -2,12 +2,16 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:projectflutter/common/api/base_api.dart';
+import 'package:projectflutter/common/api/shared_preference_service.dart';
 import 'package:projectflutter/data/bmi/model/bmi_request.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 abstract class BmiService {
   Future<Either> saveData(BmiRequest model);
+  Future<Either> updateData(int weight);
+  Future<Either> saveGoal(int targetWeight);
+  Future<Either> updateGoal(int targetWeight);
   Future<bool> checkBmi();
 }
 
@@ -16,7 +20,7 @@ class BmiServiceImpl extends BmiService {
   Future<Either> saveData(BmiRequest model) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getInt('id');
+      final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse('$baseAPI/api/bmi/save/$userId');
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
@@ -30,6 +34,24 @@ class BmiServiceImpl extends BmiService {
     } catch (err) {
       return Left('Error Message: $err');
     }
+  }
+
+  @override
+  Future<Either> updateData(int weight) {
+    // TODO: implement updateData
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either> saveGoal(int targetWeight) {
+    // TODO: implement saveGoal
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either> updateGoal(int targetWeight) {
+    // TODO: implement updateGoal
+    throw UnimplementedError();
   }
 
   @override

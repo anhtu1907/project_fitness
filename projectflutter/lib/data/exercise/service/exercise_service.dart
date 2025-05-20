@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:projectflutter/common/api/base_api.dart';
+import 'package:projectflutter/common/api/shared_preference_service.dart';
 import 'package:projectflutter/data/exercise/model/exercise_schedule_request.dart';
 import 'package:projectflutter/data/exercise/model/exercise_session_request.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ExerciseService {
   Future<Either> getExerciseBySubCategory(int subCategoryId);
@@ -106,8 +106,7 @@ class ExerciseServiceImpl extends ExerciseService {
   @override
   Future<Either> getAllExerciseProgressByUserId() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getInt('id');
+      final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse("$baseAPI/api/exercise/progress/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
@@ -123,8 +122,7 @@ class ExerciseServiceImpl extends ExerciseService {
   @override
   Future<Either> getAllExerciseResultByUserId() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getInt('id');
+      final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse("$baseAPI/api/exercise/user/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
@@ -140,8 +138,7 @@ class ExerciseServiceImpl extends ExerciseService {
   @override
   Future<Either> getAllExerciseSessionByUserId() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getInt('id');
+      final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse("$baseAPI/api/session/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
@@ -157,8 +154,7 @@ class ExerciseServiceImpl extends ExerciseService {
   @override
   Future<Either> startExercise(ExerciseSessionRequest req) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getInt('id');
+      final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse("$baseAPI/api/exercise/start-session");
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
@@ -177,8 +173,7 @@ class ExerciseServiceImpl extends ExerciseService {
   @override
   Future<Either> getAllExerciseScheduleByUserId() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getInt("id");
+      final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse("$baseAPI/api/exercise/schedule/$userId");
       final response = await http.get(url);
       if (response.statusCode == 404) {
@@ -194,8 +189,7 @@ class ExerciseServiceImpl extends ExerciseService {
   @override
   Future<Either> scheduleExercise(ExerciseScheduleRequest req) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getInt('id');
+      final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse("$baseAPI/api/exercise/schedule/save");
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},

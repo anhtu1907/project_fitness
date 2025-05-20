@@ -15,7 +15,7 @@ class MealBySubCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BasicAppBar(
-        titlte: Text(categoryName),
+        title: Text(categoryName),
       ),
       body: BlocProvider(
         create: (context) =>

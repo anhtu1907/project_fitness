@@ -22,7 +22,7 @@ class WorkoutProgressPage extends StatelessWidget {
     return Scaffold(
       appBar: const BasicAppBar(
         hideBack: false,
-        titlte: Text(
+        title: Text(
           "Latest Workout",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),

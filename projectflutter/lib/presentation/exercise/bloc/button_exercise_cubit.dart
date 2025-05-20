@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_progress_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
@@ -31,7 +29,6 @@ class ButtonExerciseCubit extends Cubit<ButtonExerciseState> {
   Future<void> checkExerciseState(int subCategoryId) async {
     emit(ButtonLoading());
     var result = await sl<GetExerciseProgressUseCase>().call();
-    final resetBatch = await getResetBatchBySubCategory(subCategoryId);
     result.fold((err) {
       emit(ButtonInitialize());
       print(err);
@@ -45,8 +42,6 @@ class ButtonExerciseCubit extends Cubit<ButtonExerciseState> {
           emit(ButtonInitialize());
           return;
         }
-        final last = filteredData.last;
-        final progress = last.progress;
         final maxBatch = filteredData
             .map((e) => e.exercise!.resetBatch)
             .fold<int>(0, (a, b) => a > b ? a : b);

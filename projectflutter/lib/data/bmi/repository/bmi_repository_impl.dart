@@ -11,6 +11,21 @@ class BmiRepositoryImpl extends BmiRepository {
   }
 
   @override
+  Future<Either> updateData(int weight) async {
+    return await sl<BmiService>().updateData(weight);
+  }
+
+  @override
+  Future<Either> saveGoal(int targetWeight) async {
+    return await sl<BmiService>().saveGoal(targetWeight);
+  }
+
+  @override
+  Future<Either> updateGoal(int targetWeight) async {
+    return await sl<BmiService>().updateGoal(targetWeight);
+  }
+
+  @override
   Future<bool> checkBmi() async {
     return await sl<BmiService>().checkBmi();
   }

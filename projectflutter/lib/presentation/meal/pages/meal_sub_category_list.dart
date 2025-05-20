@@ -22,7 +22,7 @@ class MealSubCategoryListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BasicAppBar(
-        titlte: Text(categoryName),
+        title: Text(categoryName),
         subTitle: Text(
           '${total.length} meals',
           style: TextStyle(

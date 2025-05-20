@@ -14,7 +14,7 @@ class MealsPage extends StatelessWidget {
     var media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: BasicAppBar(
-        titlte: Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Text('Meals'),

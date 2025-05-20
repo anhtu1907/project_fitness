@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:projectflutter/common/api/base_api.dart';
+import 'package:projectflutter/common/api/shared_preference_service.dart';
 import 'package:projectflutter/data/auth/model/register_request.dart';
 import 'package:projectflutter/data/auth/model/signin_request.dart';
 import 'package:http/http.dart' as http;
@@ -47,8 +48,7 @@ class AuthServiceImpl extends AuthService {
 
         await prefs.setString('token', token);
         await prefs.setString('firstname', firstname);
-        await prefs.setInt('id', userId);
-
+        SharedPreferenceService.userId = userId;
         await Future.delayed(const Duration(milliseconds: 300));
         return const Right('Sign in was successfully');
       } else if (response.statusCode == 401) {
@@ -93,8 +93,7 @@ class AuthServiceImpl extends AuthService {
   @override
   Future<Either> getUser() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getInt('id');
+      final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse('$baseAPI/api/auth/getUser/$userId');
       final response = await http.get(url);
       if (response.statusCode == 404) {
@@ -123,7 +122,7 @@ class AuthServiceImpl extends AuthService {
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
-    await prefs.remove('id');
+    await prefs.remove('userId');
     await prefs.remove('bmi_exist');
     await prefs.remove('bmi_latest');
   }

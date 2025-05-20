@@ -18,7 +18,7 @@ class MealSchedule extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const BasicAppBar(
-          titlte: Text('Meal Schedule'),
+          title: Text('Meal Schedule'),
         ),
         body: BlocProvider(
             create: (context) => UserMealCubit()..displayRecord(),

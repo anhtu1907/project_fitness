@@ -17,7 +17,7 @@ class HistoryPage extends StatelessWidget {
     return Scaffold(
         appBar: const BasicAppBar(
           hideBack: false,
-          titlte: Text(
+          title: Text(
             "Activity History",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),

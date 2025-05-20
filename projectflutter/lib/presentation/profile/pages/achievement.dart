@@ -9,7 +9,7 @@ class AchievementPage extends StatelessWidget {
     return const Scaffold(
       appBar: BasicAppBar(
         hideBack: false,
-        titlte: Text(
+        title: Text(
           "Achievement",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),

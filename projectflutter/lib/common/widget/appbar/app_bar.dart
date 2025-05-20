@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Widget? titlte;
+  final Widget? title;
   final Widget? subTitle;
   final Widget? action;
   final Color? backgroundColor;
   final bool hideBack;
   const BasicAppBar(
       {super.key,
-      this.titlte,
+      this.title,
       this.subTitle,
       this.action,
       this.backgroundColor,
@@ -21,7 +21,7 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: true,
       title: Column(
-        children: [titlte ?? const Text(''), subTitle ?? const Text('')],
+        children: [title ?? const Text(''), subTitle ?? const Text('')],
       ),
       actions: [action ?? Container()],
       leading: hideBack

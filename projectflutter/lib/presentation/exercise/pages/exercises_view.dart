@@ -15,7 +15,7 @@ class ExercisesPage extends StatelessWidget {
     return Scaffold(
       appBar: BasicAppBar(
         hideBack: true,
-        titlte: Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Text('Exercises'),
