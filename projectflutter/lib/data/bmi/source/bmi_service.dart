@@ -9,10 +9,11 @@ import 'package:http/http.dart' as http;
 
 abstract class BmiService {
   Future<Either> saveData(BmiRequest model);
-  Future<Either> updateData(int weight);
-  Future<Either> saveGoal(int targetWeight);
-  Future<Either> updateGoal(int targetWeight);
+  Future<Either> updateData(double weight);
+  Future<Either> saveGoal(double targetWeight);
+  Future<Either> updateGoal(double targetWeight);
   Future<bool> checkBmi();
+  Future<bool> checkBmiGoal();
 }
 
 class BmiServiceImpl extends BmiService {
@@ -37,19 +38,33 @@ class BmiServiceImpl extends BmiService {
   }
 
   @override
-  Future<Either> updateData(int weight) {
+  Future<Either> updateData(double weight) {
     // TODO: implement updateData
     throw UnimplementedError();
   }
 
   @override
-  Future<Either> saveGoal(int targetWeight) {
-    // TODO: implement saveGoal
-    throw UnimplementedError();
+  Future<Either> saveGoal(double targetWeight) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = SharedPreferenceService.userId;
+      Uri url = Uri.parse('$baseAPI/api/bmi/goal/save/$userId');
+      final response = await http.post(url,
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({'targetWeight': targetWeight}));
+      if (response.statusCode == 201) {
+        await prefs.setString('goal_latest', response.body);
+        return Right(response.body);
+      } else {
+        return Left('Save BMI Goal failed with code ${response.statusCode}');
+      }
+    } catch (err) {
+      return Left('Error Message: $err');
+    }
   }
 
   @override
-  Future<Either> updateGoal(int targetWeight) {
+  Future<Either> updateGoal(double targetWeight) {
     // TODO: implement updateGoal
     throw UnimplementedError();
   }
@@ -61,5 +76,14 @@ class BmiServiceImpl extends BmiService {
     final bmiLatest = prefs.getString('bmi_latest');
     return (bmiExist != null && bmiExist.isNotEmpty) ||
         (bmiLatest != null && bmiLatest.isNotEmpty);
+  }
+
+  @override
+  Future<bool> checkBmiGoal() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bmiGoalExist = prefs.getString('goal_exist');
+    final bmiGoalLatest = prefs.getString('goal_latest');
+    return (bmiGoalExist != null && bmiGoalExist.isNotEmpty) ||
+        (bmiGoalLatest != null && bmiGoalLatest.isNotEmpty);
   }
 }

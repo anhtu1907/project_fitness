@@ -31,7 +31,7 @@ class ExerciseSessionModel {
       'kcal': kcal,
       'resetBatch': resetBatch,
       'duration': duration,
-      'createdAt': createdAt
+      'createdAt': createdAt?.toIso8601String()
     };
   }
 

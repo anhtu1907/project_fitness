@@ -28,23 +28,22 @@ class BmiGoalCubit extends Cubit<BmiGoalState> {
       return;
     }
     final prefs = await SharedPreferences.getInstance();
-    final bmiJson = prefs.getString('bmi_latest');
+    final bmiJson =
+        prefs.getString('bmi_latest') ?? prefs.getString('bmi_exist');
     if (bmiJson == null) {
       emit(state.copyWith(error: 'BMI data not found'));
       return;
     }
     final bmiData = jsonDecode(bmiJson);
-    final dynamic weightValue = bmiData['weight'];
-    if (weightValue == null) {
-      emit(state.copyWith(error: 'Weight not found in BMI data'));
+    final dynamic bmi = bmiData['bmi'];
+    if (bmi == null) {
+      emit(state.copyWith(error: 'Nou found BMI data'));
       return;
     }
-
+    final weightValue = bmi['weight'];
     final currentWeight = weightValue is num
         ? weightValue.toDouble()
         : double.tryParse(weightValue.toString());
-
-    print('Current Weight: $currentWeight');
     if (currentWeight == null) {
       emit(state.copyWith(error: 'Weight data not found'));
       return;
@@ -63,7 +62,7 @@ class BmiGoalCubit extends Cubit<BmiGoalState> {
         'Muscle Gain' => 'Target weight greater than current weight',
         'Weight Loss' => 'Target weight less than current weight',
         'Maintance' => 'Target weight greater or equal than current weight',
-        _ => 'Cân nặng không hợp lệ'
+        _ => 'Weight not is valid'
       };
       emit(state.copyWith(error: message));
       return;

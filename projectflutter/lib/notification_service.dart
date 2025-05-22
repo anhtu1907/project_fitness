@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:device_info_plus/device_info_plus.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -19,6 +20,17 @@ class NotificationService {
         onDidReceiveNotificationResponse: (NotificationResponse response) {
       debugPrint("Notification clicked: ${response.payload}");
     });
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'exercise_channel',
+      'Exercise Notifications',
+      description: 'Notification Workout',
+      importance: Importance.max,
+    );
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
   }
 
   static Future<void> scheduleNotificationAt(
@@ -58,11 +70,17 @@ class NotificationService {
   }
 
   Future<bool> checkExactAlarmPermission() async {
-    if (Platform.isAndroid && Platform.version.compareTo('12') >= 0) {
-      const platform = MethodChannel('alarm_channel');
-      final result =
-          await platform.invokeMethod<bool>('canScheduleExactAlarms');
-      return result ?? false;
+    if (Platform.isAndroid) {
+      final deviceInfo = DeviceInfoPlugin();
+      final androidInfo = await deviceInfo.androidInfo;
+      final sdkInt = androidInfo.version.sdkInt;
+
+      if (sdkInt >= 31) {
+        const platform = MethodChannel('alarm_channel');
+        final result =
+            await platform.invokeMethod<bool>('canScheduleExactAlarms');
+        return result ?? false;
+      }
     }
     return true;
   }

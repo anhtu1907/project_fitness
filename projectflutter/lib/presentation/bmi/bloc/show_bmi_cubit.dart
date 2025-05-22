@@ -11,7 +11,7 @@ class ShowBmiCubit extends Cubit<ShowBmiState> {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = prefs.getString('bmi_latest');
     final data = json.decode(jsonString!);
-    final double bmi = data['bmiid']['bmi'];
+    final double bmi = data['bmi']['bmi'];
     emit(BmiLoading());
     try {
       emit(BmiLoaded(bmi: bmi));

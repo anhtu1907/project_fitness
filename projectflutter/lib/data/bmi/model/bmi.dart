@@ -5,8 +5,8 @@ import 'package:projectflutter/domain/bmi/entity/bmi.dart';
 
 class BmiModel {
   final int id;
-  final int height;
-  final int weight;
+  final double height;
+  final double weight;
   final double bmi;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -25,16 +25,16 @@ class BmiModel {
       'height': height,
       'weight': weight,
       'bmi': bmi,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
     };
   }
 
   factory BmiModel.fromMap(Map<String, dynamic> map) {
     return BmiModel(
       id: map['id'] as int,
-      height: map['height'] as int,
-      weight: map['weight'] as int,
+      height: map['height'] as double,
+      weight: map['weight'] as double,
       bmi: map['bmi'] as double,
       createdAt:
           map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,

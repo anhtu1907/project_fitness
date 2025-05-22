@@ -22,7 +22,7 @@ class UserMealRecord {
       'id': id,
       'user': user,
       'meal': meal,
-      'createdAt': createdAt,
+      'createdAt': createdAt?.toIso8601String(),
     };
   }
 

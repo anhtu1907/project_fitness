@@ -25,7 +25,7 @@ class ExerciseUserModel {
       'user': user,
       'session': session,
       'kcal': kcal,
-      'createdAt': createdAt,
+      'createdAt': createdAt?.toIso8601String(),
     };
   }
 

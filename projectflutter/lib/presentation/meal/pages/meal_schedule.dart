@@ -72,7 +72,7 @@ class MealSchedule extends StatelessWidget {
                         var totalCarbo;
                         var totalFiber;
                         var totalSugar;
-                        if (state.entity[0].user.bmiid!.bmi < 18.5) {
+                        if (state.entity[0].user.bmi!.bmi < 18.5) {
                           totalKcal = 2800.0;
                           totalProtein = 80.0;
                           totalFat = 90.0;
@@ -80,8 +80,8 @@ class MealSchedule extends StatelessWidget {
                           totalFiber = 28.0;
                           totalSugar = 70.0;
                         }
-                        if (state.entity[0].user.bmiid!.bmi >= 18.5 &&
-                            state.entity[0].user.bmiid!.bmi < 24.9) {
+                        if (state.entity[0].user.bmi!.bmi >= 18.5 &&
+                            state.entity[0].user.bmi!.bmi < 24.9) {
                           totalKcal = 2400.0;
                           totalProtein = 70.0;
                           totalFat = 80.0;
@@ -89,8 +89,8 @@ class MealSchedule extends StatelessWidget {
                           totalFiber = 32.0;
                           totalSugar = 50.0;
                         }
-                        if (state.entity[0].user.bmiid!.bmi >= 25 &&
-                            state.entity[0].user.bmiid!.bmi < 29.9) {
+                        if (state.entity[0].user.bmi!.bmi >= 25 &&
+                            state.entity[0].user.bmi!.bmi < 29.9) {
                           totalKcal = 1800.0;
                           totalProtein = 90.0;
                           totalFat = 80.0;
@@ -98,8 +98,8 @@ class MealSchedule extends StatelessWidget {
                           totalFiber = 35.0;
                           totalSugar = 25.0;
                         }
-                        if (state.entity[0].user.bmiid!.bmi >= 30 &&
-                            state.entity[0].user.bmiid!.bmi < 34.9) {
+                        if (state.entity[0].user.bmi!.bmi >= 30 &&
+                            state.entity[0].user.bmi!.bmi < 34.9) {
                           totalKcal = 1500.0;
                           totalProtein = 100.0;
                           totalFat = 55.0;
@@ -107,7 +107,7 @@ class MealSchedule extends StatelessWidget {
                           totalFiber = 40.0;
                           totalSugar = 20.0;
                         }
-                        if (state.entity[0].user.bmiid!.bmi >= 35) {
+                        if (state.entity[0].user.bmi!.bmi >= 35) {
                           totalKcal = 1300.0;
                           totalProtein = 120.0;
                           totalFat = 40.0;

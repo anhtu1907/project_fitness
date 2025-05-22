@@ -141,45 +141,45 @@ class BmiDetailsPage extends StatelessWidget {
     double? fatmass; // Khối lượng mỡ cơ thể
     Color? color;
     if (user.gender == 1) {
-      bodyfat = (1.20 * user.bmiid!.bmi) + (0.23 * age) - 16.2;
-      smm = user.bmiid!.bmi * 0.407;
-      tbw = user.bmiid!.weight * 0.6;
+      bodyfat = (1.20 * user.bmi!.bmi) + (0.23 * age) - 16.2;
+      smm = user.bmi!.bmi * 0.407;
+      tbw = user.bmi!.weight * 0.6;
       bmr = 88.362 +
-          (13.397 * user.bmiid!.weight) +
-          (4.799 * user.bmiid!.height) -
+          (13.397 * user.bmi!.weight) +
+          (4.799 * user.bmi!.height) -
           (5.677 * age);
-      fatmass = user.bmiid!.weight * (bodyfat / 100);
+      fatmass = user.bmi!.weight * (bodyfat / 100);
     } else if (user.gender == 2) {
-      bodyfat = (1.20 * user.bmiid!.bmi) + (0.23 * age) - 5.4;
-      smm = user.bmiid!.bmi * 0.407;
-      tbw = user.bmiid!.weight * 0.55;
+      bodyfat = (1.20 * user.bmi!.bmi) + (0.23 * age) - 5.4;
+      smm = user.bmi!.bmi * 0.407;
+      tbw = user.bmi!.weight * 0.55;
       bmr = 447.593 +
-          (9.247 * user.bmiid!.weight) +
-          (3.098 * user.bmiid!.height) -
+          (9.247 * user.bmi!.weight) +
+          (3.098 * user.bmi!.height) -
           (4.330 * age);
-      fatmass = user.bmiid!.weight * (bodyfat / 100);
+      fatmass = user.bmi!.weight * (bodyfat / 100);
     }
     var bmiName = '';
-    if (user.bmiid!.bmi < 18.4) {
+    if (user.bmi!.bmi < 18.4) {
       color = AppColors.underweight;
       bmiName = 'Underweight';
     }
 
-    if (user.bmiid!.bmi >= 18.5 && user.bmiid!.bmi < 24.9) {
+    if (user.bmi!.bmi >= 18.5 && user.bmi!.bmi < 24.9) {
       color = AppColors.normalweight;
       bmiName = 'Normalweight';
     }
-    if (user.bmiid!.bmi >= 25 && user.bmiid!.bmi < 29.9) {
+    if (user.bmi!.bmi >= 25 && user.bmi!.bmi < 29.9) {
       color = AppColors.overweight;
       bmiName = 'Overweight';
     }
 
-    if (user.bmiid!.bmi >= 30.0 && user.bmiid!.bmi < 34.9) {
+    if (user.bmi!.bmi >= 30.0 && user.bmi!.bmi < 34.9) {
       color = AppColors.obesity;
       bmiName = 'Obesity';
     }
 
-    if (user.bmiid!.bmi >= 35.0 && user.bmiid!.bmi < 40.0) {
+    if (user.bmi!.bmi >= 35.0 && user.bmi!.bmi < 40.0) {
       color = AppColors.obesitysecond;
       bmiName = 'Obesity II';
     }

@@ -12,5 +12,4 @@ public interface BmiService {
     PersonHealModel updateData(PersonTargetGoalRequest req, int userId);
     PersonHealGoalModel saveGoal(PersonTargetGoalRequest req, int userId);
     PersonHealGoalModel updateGoal(PersonTargetGoalRequest req, int userId);
-    PersonHealGoalModel getGoalByUserId(int userId);
 }

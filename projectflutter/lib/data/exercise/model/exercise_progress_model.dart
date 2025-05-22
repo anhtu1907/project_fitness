@@ -25,7 +25,7 @@ class ExerciseProgressModel {
       'user': user,
       'exercises': exercise,
       'progress': progress,
-      'lastUpdated': lastUpdated,
+      'lastUpdated': lastUpdated?.toIso8601String(),
     };
   }
 

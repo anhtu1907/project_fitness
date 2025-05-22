@@ -20,8 +20,6 @@ class _ActivityStatusState extends State<ActivityStatus> {
   String selectedTime = 'Daily';
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -160,169 +158,163 @@ class _ActivityStatusState extends State<ActivityStatus> {
                             titlePositionPercentageOffset: 0.6,
                           );
                         }).toList();
-                  return Container(
-                    height: media.width * 0.95,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: AppColors.primaryColor2.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Column(
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 25, horizontal: 25),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      double chartHeight = constraints.maxWidth * 0.6;
+                      return Container(
+                        height: chartHeight + 200,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: AppColors.primaryColor2.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Column(
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 25, horizontal: 25),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      'Calories Burned',
-                                      style: TextStyle(
-                                          color: AppColors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Row(
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '${totalKcal.toStringAsFixed(0)} kcal',
+                                          'Calories Burned',
                                           style: TextStyle(
-                                              color: AppColors.primaryColor1,
+                                              color: AppColors.black,
                                               fontSize: 16,
                                               fontWeight: FontWeight.w700),
                                         ),
-                                        const SizedBox(
-                                          width: 7,
-                                        ),
-                                        Image.asset(
-                                          AppImages.fire,
-                                          width: 25,
-                                          height: 25,
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                PopupMenuButton<String>(
-                                  onSelected: (value) async {
-                                    // if (value == 'details') {
-                                    //   final result = await AppNavigator.pushFuture(
-                                    //       context, FoodInfoDetails(mealId: entity.meal.id));
-                                    //   if (result == true) {
-                                    //     Future.delayed(const Duration(milliseconds: 300), () {
-                                    //       if (context.mounted) {
-                                    //         context.read<UserMealCubit>().displayRecord();
-                                    //       }
-                                    //     });
-                                    //   }
-                                    // } else if (value == 'delete') {
-                                    //   final deleteUseCase = DeleteRecordMealUseCase();
-                                    //   await deleteUseCase.call(params: entity.id);
-
-                                    //   if (context.mounted) {
-                                    //     context.read<UserMealCubit>().displayRecord();
-                                    //   }
-                                    // }
-                                    setState(() {
-                                      selectedTime = value;
-                                    });
-                                  },
-                                  itemBuilder: (BuildContext context) =>
-                                      <PopupMenuEntry<String>>[
-                                    const PopupMenuItem<String>(
-                                      value: 'Year',
-                                      child: Text('Year'),
-                                    ),
-                                    const PopupMenuItem<String>(
-                                      value: 'Monthly',
-                                      child: Text('Monthly'),
-                                    ),
-                                    const PopupMenuItem<String>(
-                                      value: 'Weekly',
-                                      child: Text('Weekly'),
-                                    ),
-                                    const PopupMenuItem<String>(
-                                      value: 'Daily',
-                                      child: Text('Daily'),
-                                    ),
-                                  ],
-                                  child: Container(
-                                    width: 100,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        color: AppColors.primaryColor1,
-                                        borderRadius:
-                                            BorderRadius.circular(25)),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          selectedTime,
-                                          style: TextStyle(
-                                              color: AppColors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(
-                                          width: 4,
-                                        ),
-                                        Icon(
-                                          Icons.keyboard_arrow_down,
-                                          size: 16,
-                                          color: AppColors.white,
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${totalKcal.toStringAsFixed(0)} kcal',
+                                              style: TextStyle(
+                                                  color:
+                                                      AppColors.primaryColor1,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            const SizedBox(
+                                              width: 7,
+                                            ),
+                                            Image.asset(
+                                              AppImages.fire,
+                                              width: 25,
+                                              height: 25,
+                                            ),
+                                          ],
                                         )
                                       ],
                                     ),
-                                  ),
-                                )
-                              ],
-                            )),
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          height: 200,
-                          child: PieChart(
-                            PieChartData(
-                              sections: sections,
-                              centerSpaceRadius: 0,
-                              borderData: FlBorderData(show: false),
-                              sectionsSpace: 0,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 25),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: kcalByTimeOfDay.entries.map((entry) {
-                                return Row(
-                                  children: [
-                                    Container(
-                                      width: 20,
-                                      height: 20,
-                                      color: timeColors[entry.key],
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      entry.key,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
+                                    PopupMenuButton<String>(
+                                      onSelected: (value) async {
+                                        setState(() {
+                                          selectedTime = value;
+                                        });
+                                      },
+                                      itemBuilder: (BuildContext context) =>
+                                          <PopupMenuEntry<String>>[
+                                        const PopupMenuItem<String>(
+                                          value: 'Year',
+                                          child: Text('Year'),
+                                        ),
+                                        const PopupMenuItem<String>(
+                                          value: 'Monthly',
+                                          child: Text('Monthly'),
+                                        ),
+                                        const PopupMenuItem<String>(
+                                          value: 'Weekly',
+                                          child: Text('Weekly'),
+                                        ),
+                                        const PopupMenuItem<String>(
+                                          value: 'Daily',
+                                          child: Text('Daily'),
+                                        ),
+                                      ],
+                                      child: Container(
+                                        width: 100,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            color: AppColors.primaryColor1,
+                                            borderRadius:
+                                                BorderRadius.circular(25)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              selectedTime,
+                                              style: TextStyle(
+                                                  color: AppColors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            Icon(
+                                              Icons.keyboard_arrow_down,
+                                              size: 16,
+                                              color: AppColors.white,
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
+                                    )
                                   ],
-                                );
-                              }).toList(),
-                            ))
-                      ],
-                    ),
+                                )),
+                            const SizedBox(height: 10),
+                            SizedBox(
+                              height: 200,
+                              child: PieChart(
+                                PieChartData(
+                                  sections: sections,
+                                  centerSpaceRadius: 0,
+                                  borderData: FlBorderData(show: false),
+                                  sectionsSpace: 0,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children:
+                                      kcalByTimeOfDay.entries.map((entry) {
+                                    return Row(
+                                      children: [
+                                        Container(
+                                          width: 20,
+                                          height: 20,
+                                          color: timeColors[entry.key],
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          entry.key,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }).toList(),
+                                ))
+                          ],
+                        ),
+                      );
+                    },
                   );
                 }
                 return Container();

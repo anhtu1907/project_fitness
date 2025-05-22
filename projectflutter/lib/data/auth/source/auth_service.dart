@@ -7,6 +7,7 @@ import 'package:projectflutter/data/auth/request/register_request.dart';
 import 'package:projectflutter/data/auth/request/signin_request.dart';
 import 'package:http/http.dart' as http;
 import 'package:projectflutter/data/bmi/model/bmi.dart';
+import 'package:projectflutter/data/bmi/model/bmi_goal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthService {
@@ -30,7 +31,7 @@ class AuthServiceImpl extends AuthService {
               body:
                   json.encode({'email': user.email, 'password': user.password}))
           .timeout(Duration(seconds: 5), onTimeout: () {
-        throw Exception('Timeout kết nối');
+        throw Exception('Timeout');
       });
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
@@ -39,11 +40,19 @@ class AuthServiceImpl extends AuthService {
 
         final int userId = responseData['id'];
         final String firstname = responseData['firstname'];
-        if (responseData['bmiid'] != null) {
-          final BmiModel bmi = BmiModel.fromMap(responseData['bmiid']);
+        if (responseData['bmi'] != null) {
+          final BmiModel bmi = BmiModel.fromMap(responseData['bmi']);
           await prefs.setString('bmi_exist', bmi.toJson());
         } else {
           await prefs.remove('bmi_exist');
+        }
+
+        if (responseData['goal'] != null) {
+          final BmiGoalModel bmiGoal =
+              BmiGoalModel.fromMap(responseData['targetWeight']);
+          await prefs.setString('goal_exist', bmiGoal.toJson());
+        } else {
+          await prefs.remove('goal_exist');
         }
 
         await prefs.setString('token', token);
@@ -125,5 +134,7 @@ class AuthServiceImpl extends AuthService {
     await prefs.remove('userId');
     await prefs.remove('bmi_exist');
     await prefs.remove('bmi_latest');
+    await prefs.remove('goal_exist');
+    await prefs.remove('goal_latest');
   }
 }

@@ -22,7 +22,7 @@ class ExerciseScheduleModel {
       'id': id,
       'user': user,
       'subCategory': subCategory,
-      'scheduleTime': scheduleTime,
+      'scheduleTime': scheduleTime?.toIso8601String(),
     };
   }
 

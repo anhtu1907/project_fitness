@@ -1,7 +1,6 @@
 package com.example.Project4.services.bmi;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,6 @@ public class BmiServiceImpl implements BmiService {
     private PersonHealGoalRepository goalRepository;
     @Autowired
     private UserRepository userRepository;
-
 
     @Override
     public UserModel saveData(PersonHealDataRequest dto, int userId) {
@@ -55,7 +53,6 @@ public class BmiServiceImpl implements BmiService {
         PersonHealModel health = new PersonHealModel();
         health.setWeight(req.getTargetWeight());
         health.setUpdatedAt(LocalDateTime.now());
-        pRepository.save(health);
         return health;
     }
 
@@ -65,17 +62,19 @@ public class BmiServiceImpl implements BmiService {
         if (user == null) {
             throw new RuntimeException("User not found");
         }
-        Optional<PersonHealGoalModel> existingGoal = goalRepository.findByUser(user);
-        if (existingGoal.isPresent()) {
-        throw new RuntimeException("User already has a BMI Goal");
+        if (user.getGoal() == null) {
+            PersonHealGoalModel goal = new PersonHealGoalModel();
+            goal.setTargetWeight(req.getTargetWeight());
+            goal.setCreatedAt(LocalDateTime.now());
+            PersonHealGoalModel saveGoal = goalRepository.save(goal);
+            user.setGoal(saveGoal);
+            return goal;
+        } else {
+            throw new RuntimeException("User have already BMI Goal");
+        }
+
     }
-    PersonHealGoalModel goal = new PersonHealGoalModel();   
-        goal.setUser(user);
-        goal.setTargetWeight(req.getTargetWeight());
-        goal.setCreatedAt(LocalDateTime.now());
-        goalRepository.save(goal);
-        return goal;
-    }
+
     @Override
     public PersonHealGoalModel updateGoal(PersonTargetGoalRequest req, int userId) {
         UserModel user = userRepository.findById(userId).orElse(null);
@@ -89,12 +88,4 @@ public class BmiServiceImpl implements BmiService {
         return goal;
     }
 
-    @Override
-    public PersonHealGoalModel getGoalByUserId(int userId) {
-        UserModel user = userRepository.findById(userId).orElse(null);
-        if (user == null) {
-            throw new RuntimeException("User not found");
-        }
-        return goalRepository.findByUserId(user.getId());
-    }
 }

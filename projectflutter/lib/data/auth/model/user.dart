@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:projectflutter/data/bmi/model/bmi.dart';
+import 'package:projectflutter/data/bmi/model/bmi_goal.dart';
 import 'package:projectflutter/domain/auth/entity/user.dart';
 
 class UserModel {
@@ -18,7 +19,8 @@ class UserModel {
   final String pinCode;
   final bool status;
   final int roleid;
-  final BmiModel? bmiid;
+  final BmiModel? bmi;
+  final BmiGoalModel? goal;
   final DateTime? createdAt;
 
   UserModel(
@@ -35,7 +37,8 @@ class UserModel {
       required this.pinCode,
       required this.status,
       required this.roleid,
-      required this.bmiid,
+      required this.bmi,
+      required this.goal,
       required this.createdAt});
 
   Map<String, dynamic> toMap() {
@@ -53,8 +56,9 @@ class UserModel {
       'pinCode': pinCode,
       'status': status,
       'roleid': roleid,
-      'bmiid': bmiid,
-      'createdAt': createdAt
+      'bmi': bmi,
+      'goal': goal,
+      'createdAt': createdAt?.toIso8601String()
     };
   }
 
@@ -73,8 +77,11 @@ class UserModel {
         pinCode: map['pinCode'] ?? '',
         status: map['status'] as bool,
         roleid: map['roleid'] as int,
-        bmiid: map['bmiid'] != null
-            ? BmiModel.fromMap(map['bmiid'] as Map<String, dynamic>)
+        bmi: map['bmi'] != null
+            ? BmiModel.fromMap(map['bmi'] as Map<String, dynamic>)
+            : null,
+        goal: map['goal'] != null
+            ? BmiGoalModel.fromMap(map['goal'] as Map<String, dynamic>)
             : null,
         createdAt:
             map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null);
@@ -102,7 +109,8 @@ extension UserXModel on UserModel {
         pinCode: pinCode,
         status: status,
         roleid: roleid,
-        bmiid: bmiid,
+        bmi: bmi,
+        goal: goal,
         createdAt: createdAt!);
   }
 }

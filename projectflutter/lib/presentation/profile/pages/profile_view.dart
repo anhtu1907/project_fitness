@@ -16,7 +16,6 @@ import 'package:projectflutter/presentation/profile/pages/personal_data.dart';
 import 'package:projectflutter/presentation/profile/pages/privacy_policy.dart';
 import 'package:projectflutter/presentation/profile/pages/setting.dart';
 import 'package:projectflutter/presentation/profile/pages/workout_progress.dart';
-import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell_int.dart';
 import 'package:projectflutter/presentation/profile/pages/history.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -82,8 +81,8 @@ class ProfilePage extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: TitleSubtitleCellInt(
-                                value: state.user.bmiid!.height,
+                              child: TitleSubtitleCellDouble(
+                                value: state.user.bmi!.height,
                                 subtitle: "Height",
                                 unit: "cm",
                               ),
@@ -92,8 +91,8 @@ class ProfilePage extends StatelessWidget {
                               width: 15,
                             ),
                             Expanded(
-                              child: TitleSubtitleCellInt(
-                                value: state.user.bmiid!.weight,
+                              child: TitleSubtitleCellDouble(
+                                value: state.user.bmi!.weight,
                                 subtitle: "Weight",
                                 unit: "kg",
                               ),
@@ -103,7 +102,7 @@ class ProfilePage extends StatelessWidget {
                             ),
                             Expanded(
                               child: TitleSubtitleCellDouble(
-                                value: state.user.bmiid!.bmi,
+                                value: state.user.bmi!.bmi,
                                 subtitle: "BMI",
                                 unit: "kg/m²",
                               ),

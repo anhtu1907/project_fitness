@@ -4,8 +4,8 @@ import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/presentation/bmi/bloc/check_bmi_cubit.dart';
 import 'package:projectflutter/presentation/bmi/bloc/check_bmi_state.dart';
+import 'package:projectflutter/presentation/bmi/pages/check_bmi_goal.dart';
 import 'package:projectflutter/presentation/bmi/pages/height_weight.dart';
-import 'package:projectflutter/presentation/home/pages/tabs.dart';
 
 class CheckBmiPage extends StatelessWidget {
   const CheckBmiPage({super.key});
@@ -17,7 +17,7 @@ class CheckBmiPage extends StatelessWidget {
         child: BlocConsumer<CheckBmiCubit, CheckBmiState>(
           listener: (context, state) {
             if (state is BmiExists) {
-              AppNavigator.pushReplacement(context, const TabsPage());
+              AppNavigator.pushReplacement(context, const CheckBmiGoalPage());
             }
             if (state is BmiNotExists) {
               AppNavigator.pushReplacement(context, HeightWeightPage());

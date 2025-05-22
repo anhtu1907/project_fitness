@@ -18,9 +18,9 @@ export 'package:projectflutter/domain/bmi/usecase/check_bmi_usecase.dart';
 export 'package:projectflutter/domain/bmi/usecase/check_bmi_goal_usecase.dart';
 export 'package:projectflutter/domain/bmi/usecase/save_goal_usecase.dart';
 export 'package:projectflutter/domain/bmi/usecase/save_data_usecase.dart';
-export 'package:projectflutter/domain/bmi/usecase/get_target_goal_usecase.dart';
 
 // Exercise
+export 'package:projectflutter/presentation/home/bloc/exercise_schedule_cubit.dart';
 export 'package:projectflutter/data/exercise/repository/exercise_repository_impl.dart';
 export 'package:projectflutter/domain/exercise/repository/exercise_repository.dart';
 export 'package:projectflutter/data/exercise/service/exercise_service.dart';

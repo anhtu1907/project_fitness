@@ -2,6 +2,7 @@ package com.example.Project4.models.auth;
 
 import java.time.LocalDateTime;
 
+import com.example.Project4.models.bmi.PersonHealGoalModel;
 import com.example.Project4.models.bmi.PersonHealModel;
 
 import jakarta.persistence.*;
@@ -37,6 +38,9 @@ public class UserModel {
     @OneToOne
     @JoinColumn(name = "bmi_id", referencedColumnName = "id")
     private PersonHealModel bmi;
+    @OneToOne
+    @JoinColumn(name = "goal_id", referencedColumnName = "id")
+    private PersonHealGoalModel goal;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 }

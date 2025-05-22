@@ -3,8 +3,9 @@ import 'package:projectflutter/data/bmi/request/bmi_request.dart';
 
 abstract class BmiRepository {
   Future<Either> saveData(BmiRequest model);
-  Future<Either> updateData(int weight);
-  Future<Either> saveGoal(int targetWeight);
-  Future<Either> updateGoal(int targetWeight);
+  Future<Either> updateData(double weight);
+  Future<Either> saveGoal(double targetWeight);
+  Future<Either> updateGoal(double targetWeight);
   Future<bool> checkBmi();
+  Future<bool> checkBmiGoal();
 }

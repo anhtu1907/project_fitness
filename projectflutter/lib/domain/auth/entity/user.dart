@@ -1,4 +1,5 @@
 import 'package:projectflutter/data/bmi/model/bmi.dart';
+import 'package:projectflutter/data/bmi/model/bmi_goal.dart';
 
 class UserEntity {
   final int id;
@@ -14,7 +15,8 @@ class UserEntity {
   final String pinCode;
   final bool status;
   final int roleid;
-  final BmiModel? bmiid;
+  final BmiModel? bmi;
+  final BmiGoalModel? goal;
   final DateTime createdAt;
 
   UserEntity(
@@ -31,6 +33,7 @@ class UserEntity {
       required this.pinCode,
       required this.status,
       required this.roleid,
-      required this.bmiid,
+      required this.bmi,
+      required this.goal,
       required this.createdAt});
 }

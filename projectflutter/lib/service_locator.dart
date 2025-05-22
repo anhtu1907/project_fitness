@@ -1,53 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:projectflutter/data/auth/repository/auth_repository_impl.dart';
-import 'package:projectflutter/data/auth/source/auth_service.dart';
-import 'package:projectflutter/data/bmi/repository/bmi_repository_impl.dart';
-import 'package:projectflutter/data/bmi/source/bmi_service.dart';
-import 'package:projectflutter/data/exercise/repository/exercise_repository_impl.dart';
-import 'package:projectflutter/data/exercise/service/exercise_service.dart';
-import 'package:projectflutter/data/meal/repository/meal_repository_impl.dart';
-import 'package:projectflutter/data/meal/service/meal_service.dart';
-import 'package:projectflutter/data/run/repository/run_repository_impl.dart';
-import 'package:projectflutter/data/run/source/run_service.dart';
-import 'package:projectflutter/domain/auth/repository/auth_repository.dart';
-import 'package:projectflutter/domain/auth/usecase/forget_password_usecase.dart';
-import 'package:projectflutter/domain/auth/usecase/get_user_usecase.dart';
-import 'package:projectflutter/domain/auth/usecase/is_logged_usecase.dart';
-import 'package:projectflutter/domain/auth/usecase/logout_usecase.dart';
-import 'package:projectflutter/domain/auth/usecase/signin_usecase.dart';
-import 'package:projectflutter/domain/auth/usecase/signup_usecase.dart';
-import 'package:projectflutter/domain/auth/usecase/verify_usecase.dart';
-import 'package:projectflutter/domain/bmi/repository/bmi_repository.dart';
-import 'package:projectflutter/domain/bmi/usecase/check_bmi_usecase.dart';
-import 'package:projectflutter/domain/bmi/usecase/save_data_usecase.dart';
-import 'package:projectflutter/domain/exercise/repository/exercise_repository.dart';
-import 'package:projectflutter/domain/exercise/usecase/delete_all_schedule_by_time.dart';
-import 'package:projectflutter/domain/exercise/usecase/delete_schedule.dart';
-import 'package:projectflutter/domain/exercise/usecase/get_exercise_by_sub_category.dart';
-import 'package:projectflutter/domain/exercise/usecase/get_exercise_by_id.dart';
-import 'package:projectflutter/domain/exercise/usecase/get_exercise_category.dart';
-import 'package:projectflutter/domain/exercise/usecase/get_exercise_schedule.dart';
-import 'package:projectflutter/domain/exercise/usecase/get_exercise_sub_category.dart';
-import 'package:projectflutter/domain/exercise/usecase/get_exercise_progress.dart';
-import 'package:projectflutter/domain/exercise/usecase/get_exercise_result.dart';
-import 'package:projectflutter/domain/exercise/usecase/get_exercise_session.dart';
-import 'package:projectflutter/domain/exercise/usecase/get_exercises.dart';
-import 'package:projectflutter/domain/exercise/usecase/schedule_exercise.dart';
-import 'package:projectflutter/domain/exercise/usecase/start_exercise.dart';
-import 'package:projectflutter/domain/meal/repository/meal_repository.dart';
-import 'package:projectflutter/domain/meal/usecase/delete_all_record_meal.dart';
-import 'package:projectflutter/domain/meal/usecase/delete_record_meal.dart';
-import 'package:projectflutter/domain/meal/usecase/get_all_category.dart';
-import 'package:projectflutter/domain/meal/usecase/get_all_sub_category.dart';
-import 'package:projectflutter/domain/meal/usecase/get_meal_by_sub_category.dart';
-import 'package:projectflutter/domain/meal/usecase/get_meal_by_id.dart';
-import 'package:projectflutter/domain/meal/usecase/get_all_meal.dart';
-import 'package:projectflutter/domain/meal/usecase/get_all_record_meal.dart';
-import 'package:projectflutter/domain/meal/usecase/save_record_meal.dart';
-import 'package:projectflutter/domain/meal/usecase/search_by_meal_name.dart';
-import 'package:projectflutter/domain/run/repository/run_repository.dart';
-import 'package:projectflutter/domain/run/usecase/get_record_run_by_user.dart';
-import 'package:projectflutter/presentation/home/bloc/exercise_schedule_cubit.dart';
+
+import 'export.dart';
 
 final sl = GetIt.instance;
 Future<void> initializeDependencies() async {
@@ -75,8 +28,9 @@ Future<void> initializeDependencies() async {
 
   // BMI
   sl.registerSingleton<SaveDataUsecase>(SaveDataUsecase());
+  sl.registerSingleton<SaveGoalUsecase>(SaveGoalUsecase());
   sl.registerSingleton<CheckBmiUsecase>(CheckBmiUsecase());
-
+  sl.registerSingleton<CheckBmiGoalUsecase>(CheckBmiGoalUsecase());
   // Meal
   sl.registerSingleton<SaveRecordMealUseCase>(SaveRecordMealUseCase());
   sl.registerSingleton<DeleteRecordMealUseCase>(DeleteRecordMealUseCase());

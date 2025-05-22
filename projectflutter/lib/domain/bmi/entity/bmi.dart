@@ -1,7 +1,7 @@
 class BmiEntity {
   final int id;
-  final int height;
-  final int weight;
+  final double height;
+  final double weight;
   final double bmi;
   final DateTime? createdAt;
   final DateTime? updatedAt;
