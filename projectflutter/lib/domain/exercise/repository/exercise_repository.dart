@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:projectflutter/data/exercise/model/exercise_schedule_request.dart';
-import 'package:projectflutter/data/exercise/model/exercise_session_request.dart';
+import 'package:projectflutter/data/exercise/request/exercise_schedule_request.dart';
+import 'package:projectflutter/data/exercise/request/exercise_session_request.dart';
 
 abstract class ExerciseRepository {
   Future<Either> getExerciseBySubCategory(int subCategoryId);

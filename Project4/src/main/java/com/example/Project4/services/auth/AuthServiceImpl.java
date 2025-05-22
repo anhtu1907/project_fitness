@@ -10,11 +10,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.Project4.dto.auth.LoginRequest;
-import com.example.Project4.dto.auth.RegisterRequest;
+import com.example.Project4.payload.auth.LoginRequest;
+import com.example.Project4.payload.auth.RegisterRequest;
 import com.example.Project4.models.auth.UserModel;
 import com.example.Project4.repository.auth.UserRepository;
 import com.example.Project4.services.MailService;
+import com.example.Project4.utils.AccountDisabledException;
+import com.example.Project4.utils.EmailNotFoundException;
+import com.example.Project4.utils.IncorrectPasswordException;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -40,13 +43,13 @@ public class AuthServiceImpl implements AuthService {
         UserModel user = userRepository.findByEmail(loginRequest.getEmail());
         passwordEncoder = new BCryptPasswordEncoder();
         if (user == null) {
-            throw new RuntimeException("Email not found");
+            throw new EmailNotFoundException("Email not found");
         }
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Incorrect password");
+            throw new IncorrectPasswordException("Incorrect password");
         }
         if (!user.isStatus()) {
-            throw new RuntimeException("Account is disabled");
+            throw new AccountDisabledException("Account is disabled");
         }
         return user;
     }
@@ -75,7 +78,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPinCode(code.toString());
         user.setStatus(false);
         user.setRoleid(2);
-        user.setBmiid(null);
+        user.setBmi(null);
         user.setCreatedAt(LocalDateTime.now());
 
         var isSucess = userRepository.save(user);

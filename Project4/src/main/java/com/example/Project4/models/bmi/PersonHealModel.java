@@ -16,8 +16,8 @@ public class PersonHealModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int height;
-    private int weight;
+    private double height;
+    private double weight;
     private double bmi;
     @Column(name = "created_at")
     private LocalDateTime createdAt;

@@ -36,7 +36,7 @@ public class UserModel {
     private Integer roleid;
     @OneToOne
     @JoinColumn(name = "bmi_id", referencedColumnName = "id")
-    private PersonHealModel bmiid;
+    private PersonHealModel bmi;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 }

@@ -12,7 +12,7 @@ import 'package:projectflutter/presentation/splash/pages/splash.dart';
 import 'package:projectflutter/service_locator.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,11 +26,11 @@ Future<void> main() async {
   await notificationService.requestNotificationPermission();
   await notificationService.checkExactAlarmPermission();
 
-  // final prefs = await SharedPreferences.getInstance();
-  // await prefs.remove('token');
-  // await prefs.remove('userId');
-  // await prefs.remove('bmi_exist');
-  // await prefs.remove('onboarding_done');
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('token');
+  await prefs.remove('userId');
+  await prefs.remove('bmi_exist');
+  await prefs.remove('onboarding_done');
   // final bmiLatest = prefs.getString('bmi_latest');
   // if (bmiLatest != null && bmiLatest.isNotEmpty) {
   //   await prefs.remove('bmi_latest');

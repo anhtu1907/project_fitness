@@ -12,7 +12,7 @@ import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/common/widget/button/basic_reactive_button.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/icon/icon_custom.dart';
-import 'package:projectflutter/data/auth/model/register_request.dart';
+import 'package:projectflutter/data/auth/request/register_request.dart';
 import 'package:projectflutter/domain/auth/usecase/signup_usecase.dart';
 import 'package:projectflutter/presentation/auth/bloc/gender_selection_cubit.dart';
 import 'package:projectflutter/presentation/auth/pages/sent_email.dart';

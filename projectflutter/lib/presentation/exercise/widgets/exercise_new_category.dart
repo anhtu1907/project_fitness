@@ -21,8 +21,7 @@ class ExerciseNewCategory extends StatelessWidget {
     return InkWell(
       onTap: () {
         AppNavigator.push(
-            context,
-            ExerciseBySubCategoryView(name: name, subCategoryId: subCategoryId));
+            context, ExerciseBySubCategoryView(subCategoryId: subCategoryId));
       },
       child: Container(
         decoration: BoxDecoration(

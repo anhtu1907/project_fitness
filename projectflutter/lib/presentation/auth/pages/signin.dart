@@ -11,7 +11,7 @@ import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/common/widget/button/basic_reactive_button.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/icon/icon_custom.dart';
-import 'package:projectflutter/data/auth/model/signin_request.dart';
+import 'package:projectflutter/data/auth/request/signin_request.dart';
 import 'package:projectflutter/domain/auth/usecase/signin_usecase.dart';
 import 'package:projectflutter/presentation/auth/pages/forget_password.dart';
 import 'package:projectflutter/presentation/auth/pages/signup.dart';

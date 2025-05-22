@@ -22,7 +22,7 @@ public class PersonHealGoalModel {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserModel user;
     @Column(name = "target_weight")
-    private int targetWeight;
+    private double targetWeight;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "updated_at")

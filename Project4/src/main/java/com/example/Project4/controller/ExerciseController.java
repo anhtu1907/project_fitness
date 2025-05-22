@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.Project4.dto.exercise.ExerciseScheduleRequest;
-import com.example.Project4.dto.exercise.ExerciseSessionRequest;
-import com.example.Project4.dto.exercise.ExerciseUpdateScheduleRequest;
+import com.example.Project4.payload.exercise.ExerciseScheduleRequest;
+import com.example.Project4.payload.exercise.ExerciseSessionRequest;
+import com.example.Project4.payload.exercise.ExerciseUpdateScheduleRequest;
 import com.example.Project4.services.exercise.ExerciseService;
 
 @Controller

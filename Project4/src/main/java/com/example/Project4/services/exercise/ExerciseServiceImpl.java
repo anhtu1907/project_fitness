@@ -7,9 +7,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.Project4.dto.exercise.ExerciseScheduleRequest;
-import com.example.Project4.dto.exercise.ExerciseSessionRequest;
-import com.example.Project4.dto.exercise.ExerciseUpdateScheduleRequest;
+import com.example.Project4.payload.exercise.ExerciseScheduleRequest;
+import com.example.Project4.payload.exercise.ExerciseSessionRequest;
+import com.example.Project4.payload.exercise.ExerciseUpdateScheduleRequest;
 import com.example.Project4.models.auth.UserModel;
 import com.example.Project4.models.exercise.ExerciseCategoryModel;
 import com.example.Project4.models.exercise.ExerciseProgressModel;

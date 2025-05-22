@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.Project4.dto.meal.UserMealsRequest;
+import com.example.Project4.payload.meal.UserMealsRequest;
 import com.example.Project4.services.meal.MealService;
 
 @RestController

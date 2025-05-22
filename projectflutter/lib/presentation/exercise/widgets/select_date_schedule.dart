@@ -4,7 +4,7 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
-import 'package:projectflutter/data/exercise/model/exercise_schedule_request.dart';
+import 'package:projectflutter/data/exercise/request/exercise_schedule_request.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/domain/exercise/usecase/schedule_exercise.dart';
 import 'package:projectflutter/notification_service.dart';

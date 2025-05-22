@@ -1,11 +1,13 @@
 package com.example.Project4.services.bmi;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.Project4.dto.bmi.PersonHealDataRequest;
+import com.example.Project4.payload.bmi.PersonHealDataRequest;
+import com.example.Project4.payload.bmi.PersonTargetGoalRequest;
 import com.example.Project4.models.auth.UserModel;
 import com.example.Project4.models.bmi.PersonHealGoalModel;
 import com.example.Project4.models.bmi.PersonHealModel;
@@ -22,20 +24,21 @@ public class BmiServiceImpl implements BmiService {
     @Autowired
     private UserRepository userRepository;
 
+
     @Override
     public UserModel saveData(PersonHealDataRequest dto, int userId) {
         UserModel user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
-        if (user.getBmiid() == null) {
+        if (user.getBmi() == null) {
             PersonHealModel health = new PersonHealModel();
             health.setHeight(dto.getHeight());
             health.setWeight(dto.getWeight());
             health.setBmi((dto.getWeight() / Math.pow(dto.getHeight(), 2)) * 10000);
+            health.setCreatedAt(LocalDateTime.now());
             PersonHealModel savedHealth = pRepository.save(health);
-            user.setBmiid(savedHealth);
-            user.setCreatedAt(LocalDateTime.now());
+            user.setBmi(savedHealth);
             userRepository.save(user);
             return user;
         } else {
@@ -44,41 +47,54 @@ public class BmiServiceImpl implements BmiService {
     }
 
     @Override
-    public PersonHealModel updateData(int weight, int userId) {
+    public PersonHealModel updateData(PersonTargetGoalRequest req, int userId) {
         UserModel user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
         PersonHealModel health = new PersonHealModel();
-        health.setWeight(weight);
+        health.setWeight(req.getTargetWeight());
         health.setUpdatedAt(LocalDateTime.now());
         pRepository.save(health);
         return health;
     }
 
     @Override
-    public PersonHealGoalModel saveGoal(int targetWeight, int userId) {
+    public PersonHealGoalModel saveGoal(PersonTargetGoalRequest req, int userId) {
         UserModel user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
-        PersonHealGoalModel goal = new PersonHealGoalModel();
+        Optional<PersonHealGoalModel> existingGoal = goalRepository.findByUser(user);
+        if (existingGoal.isPresent()) {
+        throw new RuntimeException("User already has a BMI Goal");
+    }
+    PersonHealGoalModel goal = new PersonHealGoalModel();   
         goal.setUser(user);
-        goal.setTargetWeight(targetWeight);
+        goal.setTargetWeight(req.getTargetWeight());
         goal.setCreatedAt(LocalDateTime.now());
         goalRepository.save(goal);
         return goal;
     }
     @Override
-    public PersonHealGoalModel updateGoal(int targetWeight, int userId) {
+    public PersonHealGoalModel updateGoal(PersonTargetGoalRequest req, int userId) {
         UserModel user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             throw new RuntimeException("User not found");
         }
         PersonHealGoalModel goal = new PersonHealGoalModel();
-        goal.setTargetWeight(targetWeight);
+        goal.setTargetWeight(req.getTargetWeight());
         goal.setUpdatedAt(LocalDateTime.now());
         goalRepository.save(goal);
         return goal;
+    }
+
+    @Override
+    public PersonHealGoalModel getGoalByUserId(int userId) {
+        UserModel user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+        return goalRepository.findByUserId(user.getId());
     }
 }

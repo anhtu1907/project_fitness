@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:projectflutter/core/usecase/usecase.dart';
-import 'package:projectflutter/data/bmi/model/bmi_request.dart';
+import 'package:projectflutter/data/bmi/request/bmi_request.dart';
 import 'package:projectflutter/domain/bmi/repository/bmi_repository.dart';
 import 'package:projectflutter/service_locator.dart';
 

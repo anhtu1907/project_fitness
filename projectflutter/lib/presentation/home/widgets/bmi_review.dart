@@ -53,7 +53,7 @@ class BmiReview extends StatelessWidget {
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700),
                             ),
-                            if (state.user.bmiid!.bmi < 18.4)
+                            if (state.user.bmi!.bmi < 18.4)
                               Text(
                                 'You have a underweight',
                                 style: TextStyle(
@@ -61,8 +61,8 @@ class BmiReview extends StatelessWidget {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
                               ),
-                            if (state.user.bmiid!.bmi >= 18.5 &&
-                                state.user.bmiid!.bmi < 24.9)
+                            if (state.user.bmi!.bmi >= 18.5 &&
+                                state.user.bmi!.bmi < 24.9)
                               Text(
                                 'You have a normal weight',
                                 style: TextStyle(
@@ -70,8 +70,8 @@ class BmiReview extends StatelessWidget {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
                               ),
-                            if (state.user.bmiid!.bmi >= 25 &&
-                                state.user.bmiid!.bmi < 29.9)
+                            if (state.user.bmi!.bmi >= 25 &&
+                                state.user.bmi!.bmi < 29.9)
                               Text(
                                 'You have a overweight',
                                 style: TextStyle(
@@ -79,8 +79,8 @@ class BmiReview extends StatelessWidget {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
                               ),
-                            if (state.user.bmiid!.bmi >= 30.0 &&
-                                state.user.bmiid!.bmi < 34.9)
+                            if (state.user.bmi!.bmi >= 30.0 &&
+                                state.user.bmi!.bmi < 34.9)
                               Text(
                                 'You have a obesity',
                                 style: TextStyle(
@@ -88,8 +88,8 @@ class BmiReview extends StatelessWidget {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
                               ),
-                            if (state.user.bmiid!.bmi >= 35.0 &&
-                                state.user.bmiid!.bmi < 40.0)
+                            if (state.user.bmi!.bmi >= 35.0 &&
+                                state.user.bmi!.bmi < 40.0)
                               Text(
                                 'You have a obesity II',
                                 style: TextStyle(
@@ -116,7 +116,7 @@ class BmiReview extends StatelessWidget {
                           ],
                         ),
                         const Spacer(),
-                        _showBmi(state.user.bmiid!.bmi)
+                        _showBmi(state.user.bmi!.bmi)
                       ],
                     ),
                   )

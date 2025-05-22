@@ -4,8 +4,8 @@ import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:projectflutter/common/api/base_api.dart';
 import 'package:projectflutter/common/api/shared_preference_service.dart';
-import 'package:projectflutter/data/exercise/model/exercise_schedule_request.dart';
-import 'package:projectflutter/data/exercise/model/exercise_session_request.dart';
+import 'package:projectflutter/data/exercise/request/exercise_schedule_request.dart';
+import 'package:projectflutter/data/exercise/request/exercise_session_request.dart';
 
 abstract class ExerciseService {
   Future<Either> getExerciseBySubCategory(int subCategoryId);

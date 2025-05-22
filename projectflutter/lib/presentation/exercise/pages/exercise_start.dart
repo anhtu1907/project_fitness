@@ -6,7 +6,7 @@ import 'package:projectflutter/common/helper/dialog/show_dialog.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:projectflutter/data/exercise/model/exercise_session_request.dart';
+import 'package:projectflutter/data/exercise/request/exercise_session_request.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
 import 'package:projectflutter/domain/exercise/usecase/start_exercise.dart';
 import 'package:projectflutter/presentation/exercise/bloc/button_exercise_cubit.dart';

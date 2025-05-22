@@ -7,7 +7,7 @@ import 'package:projectflutter/presentation/exercise/pages/exercises_view.dart';
 import 'package:projectflutter/presentation/home/bloc/tab_display_cubit.dart';
 import 'package:projectflutter/presentation/home/pages/home_view.dart';
 import 'package:projectflutter/presentation/meal/pages/meals_view.dart';
-import 'package:projectflutter/presentation/personal/pages/personal.dart';
+import 'package:projectflutter/presentation/personal/pages/personal_view.dart';
 import 'package:projectflutter/presentation/profile/pages/profile_view.dart';
 
 class TabsPage extends StatelessWidget {

@@ -3,8 +3,8 @@ package com.example.Project4.services.auth;
 import java.util.List;
 import java.util.Map;
 
-import com.example.Project4.dto.auth.LoginRequest;
-import com.example.Project4.dto.auth.RegisterRequest;
+import com.example.Project4.payload.auth.LoginRequest;
+import com.example.Project4.payload.auth.RegisterRequest;
 import com.example.Project4.models.auth.UserModel;
 
 public interface AuthService {

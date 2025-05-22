@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:projectflutter/data/auth/model/register_request.dart';
-import 'package:projectflutter/data/auth/model/signin_request.dart';
+import 'package:projectflutter/data/auth/request/register_request.dart';
+import 'package:projectflutter/data/auth/request/signin_request.dart';
 
 abstract class AuthRepository {
   Future<Either> signin(SigninRequest user);

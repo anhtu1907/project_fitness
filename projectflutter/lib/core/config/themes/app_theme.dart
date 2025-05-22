@@ -34,7 +34,7 @@ class AppTheme {
       brightness: Brightness.light,
       textTheme: const TextTheme(
         labelSmall: TextStyle(color: Colors.black, fontSize: 16),
-        labelMedium: TextStyle(color: Colors.black, fontSize: 18),
+        labelMedium: TextStyle(color: Colors.blue, fontSize: 18),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
