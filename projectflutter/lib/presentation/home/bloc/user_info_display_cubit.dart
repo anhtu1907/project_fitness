@@ -10,7 +10,7 @@ class UserInfoDisplayCubit extends Cubit<UserInfoDisplayState> {
   void displayUserInfo() async {
     var response = await sl<GetUserUsecase>().call();
     response.fold((err) {
-      emit(LoadUserInfoFailure());
+      emit(LoadUserInfoFailure(errorMesssage: err));
     }, (data) {
       emit(UserInfoLoaded(user: data));
     });

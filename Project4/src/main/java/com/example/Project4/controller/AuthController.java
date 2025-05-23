@@ -1,8 +1,10 @@
 package com.example.Project4.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.Project4.payload.auth.LoginRequest;
 import com.example.Project4.payload.auth.RegisterRequest;
@@ -30,19 +32,27 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> checkLogin(@RequestBody LoginRequest loginRequest) {
-      var user = authService.login(loginRequest);
+        var user = authService.login(loginRequest);
         return ResponseEntity.ok(user);
 
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> regiser(@RequestBody RegisterRequest registerRequest) {
-        var user = authService.register(registerRequest);
-        return ResponseEntity.ok(user);
+        try {
+            UserModel user = authService.register(registerRequest);
+            return ResponseEntity.status(201).body(user);
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+        }
     }
 
     @PutMapping("/verify")
-    public ResponseEntity<?> verifyEmail(@RequestBody Map<String,String> payload) {
+    public ResponseEntity<?> verifyEmail(@RequestBody Map<String, String> payload) {
         var verify = authService.verifyEmail(payload);
         return ResponseEntity.ok(verify);
     }

@@ -151,6 +151,7 @@ class ExerciseSubCategoryDetails extends StatelessWidget {
                   ),
                   ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.only(bottom: 70.0),
                     shrinkWrap: true,
                     itemCount: exercises.length,
                     itemBuilder: (context, index) {

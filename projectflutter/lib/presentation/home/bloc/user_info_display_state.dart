@@ -9,4 +9,7 @@ class UserInfoLoaded extends UserInfoDisplayState {
   UserInfoLoaded({required this.user});
 }
 
-class LoadUserInfoFailure extends UserInfoDisplayState {}
+class LoadUserInfoFailure extends UserInfoDisplayState {
+  final String errorMesssage;
+  LoadUserInfoFailure({required this.errorMesssage});
+}

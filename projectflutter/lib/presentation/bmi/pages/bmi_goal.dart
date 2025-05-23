@@ -205,16 +205,17 @@ class BmiGoalPage extends StatelessWidget {
         return BasicReactiveButton(
             title: "Continue",
             onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                await context.read<BmiGoalCubit>().saveGoal();
-                final error = context.read<BmiGoalCubit>().state.error;
-                if (error == null) {
-                  if (context.mounted) {
-                    context.read<ButtonStateCubit>().execute(
-                        usecase: SaveGoalUsecase(),
-                        params: double.parse(_weightCon.text));
-                  }
-                }
+              final cubit = context.read<BmiGoalCubit>();
+              final errorMessage = await cubit.validateAll();
+              if (errorMessage != null) {
+                cubit.setError(errorMessage);
+                return;
+              } else {
+                if (!context.mounted) return;
+                context.read<ButtonStateCubit>().execute(
+                      usecase: SaveGoalUsecase(),
+                      params: double.parse(cubit.state.weight),
+                    );
               }
             });
       },

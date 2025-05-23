@@ -45,9 +45,13 @@ class _ExerciseStartsState extends State<ExerciseStart> {
     currentExercise = widget.exercises[widget.currentIndex];
     // _counter = currentExercise.duration;
     _counter = 10;
+
     _startTotalDurationTimer();
+    _showOverlay = widget.currentIndex == 0;
     if (_showOverlay) {
       _startCountdown();
+    } else {
+      _startExercise();
     }
   }
 
@@ -210,7 +214,7 @@ class _ExerciseStartsState extends State<ExerciseStart> {
                                       'Confirm',
                                       'Are you sure want to quit');
                                   if (result == true && context.mounted) {
-                                    Navigator.pop(context);
+                                    Navigator.pop(context, true);
                                   }
                                 },
                                 child: Container(

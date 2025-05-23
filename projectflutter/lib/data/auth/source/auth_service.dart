@@ -49,7 +49,7 @@ class AuthServiceImpl extends AuthService {
 
         if (responseData['goal'] != null) {
           final BmiGoalModel bmiGoal =
-              BmiGoalModel.fromMap(responseData['targetWeight']);
+              BmiGoalModel.fromMap(responseData['goal']);
           await prefs.setString('goal_exist', bmiGoal.toJson());
         } else {
           await prefs.remove('goal_exist');
@@ -59,7 +59,7 @@ class AuthServiceImpl extends AuthService {
         await prefs.setString('firstname', firstname);
         SharedPreferenceService.userId = userId;
         await Future.delayed(const Duration(milliseconds: 300));
-        return const Right('Sign in was successfully');
+        return Right(responseData);
       } else if (response.statusCode == 401) {
         return const Left('Email not found');
       } else if (response.statusCode == 400) {
@@ -87,7 +87,20 @@ class AuthServiceImpl extends AuthService {
             'phone': user.phone,
             'gender': user.gender
           }));
-      return Right(response.body);
+      if(response.statusCode == 400){
+        return Left(response.body);
+      }
+      else if(response.statusCode == 201){
+        return Right(response.body);
+      }
+      else if (response.statusCode == 409) {
+        return Left("Invalid request");
+      }
+      else if (response.statusCode == 500) {
+        return Left("Internal server error, please try again later");
+      }
+
+      return Left("Unknown error: ${response.statusCode}");
     } catch (err) {
       return Left('Error Message: $err');
     }

@@ -29,6 +29,7 @@ class MealsPage extends StatelessWidget {
         ),
         hideBack: true,
       ),
+      backgroundColor: AppColors.backgroundColor,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();

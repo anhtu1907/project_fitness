@@ -18,35 +18,47 @@ class BmiGoalCubit extends Cubit<BmiGoalState> {
   }
 
   Future<void> saveGoal() async {
-    final doubleWeight = double.tryParse(state.weight);
-    if (state.selectedOption == null) {
-      emit(state.copyWith(error: 'Please select your goal'));
+    final errorMessage = await validateAll();
+    if (errorMessage != null) {
+      emit(state.copyWith(error: errorMessage));
       return;
     }
+
+    final doubleWeight = double.parse(state.weight);
+    final result = await sl<SaveGoalUsecase>().call(params: doubleWeight);
+    result.fold(
+      (error) => emit(state.copyWith(error: error.toString())),
+      (success) {
+        emit(state.copyWith(error: null));
+      },
+    );
+  }
+
+  Future<String?> validateAll() async {
+    final doubleWeight = double.tryParse(state.weight);
+    if (state.selectedOption == null) {
+      return 'Please select your goal';
+    }
     if (doubleWeight == null) {
-      emit(state.copyWith(error: 'Please try input target weight of field'));
-      return;
+      return 'Please try input target weight of field';
     }
     final prefs = await SharedPreferences.getInstance();
     final bmiJson =
         prefs.getString('bmi_latest') ?? prefs.getString('bmi_exist');
     if (bmiJson == null) {
-      emit(state.copyWith(error: 'BMI data not found'));
-      return;
+      return 'BMI data not found';
     }
     final bmiData = jsonDecode(bmiJson);
     final dynamic bmi = bmiData['bmi'];
     if (bmi == null) {
-      emit(state.copyWith(error: 'Nou found BMI data'));
-      return;
+      return 'No found BMI data';
     }
     final weightValue = bmi['weight'];
     final currentWeight = weightValue is num
         ? weightValue.toDouble()
         : double.tryParse(weightValue.toString());
     if (currentWeight == null) {
-      emit(state.copyWith(error: 'Weight data not found'));
-      return;
+      return 'Weight data not found';
     }
 
     final option = state.selectedOption!;
@@ -64,16 +76,13 @@ class BmiGoalCubit extends Cubit<BmiGoalState> {
         'Maintance' => 'Target weight greater or equal than current weight',
         _ => 'Weight not is valid'
       };
-      emit(state.copyWith(error: message));
-      return;
+      return message;
     }
 
-    final result = await sl<SaveGoalUsecase>().call(params: doubleWeight);
-    result.fold(
-      (error) => emit(state.copyWith(error: error.toString())),
-      (success) {
-        emit(state.copyWith(error: null));
-      },
-    );
+    return null;
+  }
+
+  void setError(String? error) {
+    emit(state.copyWith(error: error));
   }
 }

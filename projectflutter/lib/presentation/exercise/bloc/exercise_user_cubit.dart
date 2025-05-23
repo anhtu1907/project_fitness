@@ -6,7 +6,7 @@ import 'package:projectflutter/service_locator.dart';
 class ExerciseUserCubit extends Cubit<ExerciseUserState> {
   ExerciseUserCubit() : super(ExerciseUserLoading());
 
-  void listExerciseUser() async {
+  void resultUser() async {
     final result = await sl<GetExerciseResultUseCase>().call();
     result.fold((err) {
       emit(LoadExerciseUserFailure(errorMessage: err));

@@ -4,6 +4,7 @@ import 'package:projectflutter/common/helper/dialog/show_dialog.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/common/widget/workout/workout_row.dart';
+import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/data/exercise_sub_category_image.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_progress_entity.dart';
 import 'package:projectflutter/presentation/exercise/bloc/button_exercise_cubit.dart';
@@ -27,6 +28,7 @@ class WorkoutProgressPage extends StatelessWidget {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
       ),
+      backgroundColor: AppColors.backgroundColor,
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -94,84 +96,87 @@ class WorkoutProgressPage extends StatelessWidget {
 
                     return SafeArea(
                       child: SingleChildScrollView(
-                        child: Column(
-                          children: sortedEntries.map((entry) {
-                            final list = entry.value;
-                            var duration =
-                                list.first.exercise!.exercise!.duration;
-                            var subCategoryImage = list.first.exercise!
-                                .exercise!.subCategory!.subCategoryImage;
-                            var subCategoryName = list.first.exercise!.exercise!
-                                .subCategory!.subCategoryName;
-                            var subCategoryId =
-                                list.first.exercise!.exercise!.subCategory!.id;
-                            var completed = list.length;
-                            var total =
-                                uniqueExercisesSubPerCategory[subCategoryName]
-                                        ?.length ??
-                                    0;
-                            var progressRatio =
-                                total > 0 ? completed / total : 0.0;
-                            var totalKcal = list.fold<double>(
-                                0,
-                                (sum, item) =>
-                                    sum + (item.exercise?.kcal ?? 0));
+                        child: Padding(
+                          padding:  const EdgeInsets.only(bottom: 8, left: 10, right: 10),
+                          child: Column(
+                            children: sortedEntries.map((entry) {
+                              final list = entry.value;
+                              var duration =
+                                  list.first.exercise!.exercise!.duration;
+                              var subCategoryImage = list.first.exercise!
+                                  .exercise!.subCategory!.subCategoryImage;
+                              var subCategoryName = list.first.exercise!.exercise!
+                                  .subCategory!.subCategoryName;
+                              var subCategoryId =
+                                  list.first.exercise!.exercise!.subCategory!.id;
+                              var completed = list.length;
+                              var total =
+                                  uniqueExercisesSubPerCategory[subCategoryName]
+                                          ?.length ??
+                                      0;
+                              var progressRatio =
+                                  total > 0 ? completed / total : 0.0;
+                              var totalKcal = list.fold<double>(
+                                  0,
+                                  (sum, item) =>
+                                      sum + (item.exercise?.kcal ?? 0));
 
-                            return Builder(builder: (context) {
-                              return WorkoutRow(
-                                  image: subCategoryImage == ''
-                                      ? exerciseSubCategory[subCategoryId]
-                                          .toString()
-                                      : subCategoryImage,
-                                  name: subCategoryName,
-                                  duration: duration,
-                                  progress: progressRatio,
-                                  kcal: totalKcal,
-                                  onPressed: () async {
-                                    if (progressRatio * 100 < 100) {
-                                      var shouldContinue =
-                                          await ShowDialog.shouldContinue(
+                              return Builder(builder: (context) {
+                                return WorkoutRow(
+                                    image: subCategoryImage == ''
+                                        ? exerciseSubCategory[subCategoryId]
+                                            .toString()
+                                        : subCategoryImage,
+                                    name: subCategoryName,
+                                    duration: duration,
+                                    progress: progressRatio,
+                                    kcal: totalKcal,
+                                    onPressed: () async {
+                                      if (progressRatio * 100 < 100) {
+                                        var shouldContinue =
+                                            await ShowDialog.shouldContinue(
+                                                context,
+                                                'Continue?',
+                                                'Are you sure want to continue?');
+                                        if (shouldContinue == true) {
+                                          final filteredExercises = exerciseList
+                                              .where((e) =>
+                                                  e.subCategory!.id ==
+                                                  subCategoryId)
+                                              .toList();
+                                          var currentIndex = await context
+                                              .read<ButtonExerciseCubit>()
+                                              .getNextExerciseIndex(
+                                                  filteredExercises);
+                                          if (context.mounted &&
+                                              currentIndex != null) {
+                                            AppNavigator.push(
                                               context,
-                                              'Continue?',
-                                              'Are you sure want to continue?');
-                                      if (shouldContinue == true) {
-                                        final filteredExercises = exerciseList
-                                            .where((e) =>
-                                                e.subCategory!.id ==
-                                                subCategoryId)
-                                            .toList();
-                                        var currentIndex = await context
-                                            .read<ButtonExerciseCubit>()
-                                            .getNextExerciseIndex(
-                                                filteredExercises);
-                                        if (context.mounted &&
-                                            currentIndex != null) {
-                                          AppNavigator.push(
-                                            context,
-                                            ExerciseStart(
-                                                exercises: filteredExercises,
-                                                currentIndex: currentIndex),
-                                          );
+                                              ExerciseStart(
+                                                  exercises: filteredExercises,
+                                                  currentIndex: currentIndex),
+                                            );
+                                          }
+                                        }
+                                      } else {
+                                        var shouldContinue =
+                                            await ShowDialog.shouldContinue(
+                                                context,
+                                                'Continue?',
+                                                'Are you sure want to move result?');
+                                        if (shouldContinue == true) {
+                                          if (context.mounted) {
+                                            AppNavigator.push(
+                                              context,
+                                              const ExerciseResultPage(),
+                                            );
+                                          }
                                         }
                                       }
-                                    } else {
-                                      var shouldContinue =
-                                          await ShowDialog.shouldContinue(
-                                              context,
-                                              'Continue?',
-                                              'Are you sure want to move result?');
-                                      if (shouldContinue == true) {
-                                        if (context.mounted) {
-                                          AppNavigator.push(
-                                            context,
-                                            const ExerciseResultPage(),
-                                          );
-                                        }
-                                      }
-                                    }
-                                  });
-                            });
-                          }).toList(),
+                                    });
+                              });
+                            }).toList(),
+                          ),
                         ),
                       ),
                     );

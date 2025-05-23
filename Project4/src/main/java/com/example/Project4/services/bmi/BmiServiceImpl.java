@@ -68,6 +68,7 @@ public class BmiServiceImpl implements BmiService {
             goal.setCreatedAt(LocalDateTime.now());
             PersonHealGoalModel saveGoal = goalRepository.save(goal);
             user.setGoal(saveGoal);
+            userRepository.save(user);
             return goal;
         } else {
             throw new RuntimeException("User have already BMI Goal");

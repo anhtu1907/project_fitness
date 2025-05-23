@@ -4,6 +4,7 @@ import 'package:projectflutter/common/helper/dialog/show_dialog.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/domain/meal/entity/user_meals.dart';
 import 'package:projectflutter/domain/meal/usecase/delete_all_record_meal.dart';
 import 'package:projectflutter/presentation/meal/bloc/user_meal_cubit.dart';
 import 'package:projectflutter/presentation/meal/bloc/user_meal_state.dart';
@@ -116,6 +117,12 @@ class MealSchedule extends StatelessWidget {
                           totalSugar = 16.0;
                         }
 
+                        Map<String,List<UserMealsEntity>> groupedByTime = {};
+                        for(var meal in state.entity){
+                          final timeOfDay = meal.meal.timeOfDay!.timeName;
+                          groupedByTime.putIfAbsent(timeOfDay, () => []).add(meal);
+                        }
+
                         return SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,7 +135,7 @@ class MealSchedule extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Meal',
+                                      'Meal Plan',
                                       style: TextStyle(
                                           color: AppColors.black,
                                           fontSize: 16,
@@ -166,14 +173,31 @@ class MealSchedule extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: state.entity.length,
-                                itemBuilder: (context, index) {
-                                  return MealScheduleRow(
-                                      entity: state.entity[index]);
-                                },
+                              SingleChildScrollView(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: groupedByTime.entries.map((entry) {
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(entry.key,
+                                              style: const TextStyle(
+                                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                                          ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: const NeverScrollableScrollPhysics(),
+                                            itemCount: entry.value.length,
+                                            itemBuilder: (context, index) {
+                                              return MealScheduleRow(entity: entry.value[index]);
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(

@@ -23,7 +23,7 @@ class _ActivityStatusState extends State<ActivityStatus> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ExerciseUserCubit()..listExerciseUser(),
+          create: (context) => ExerciseUserCubit()..resultUser(),
         ),
         BlocProvider(
           create: (context) => RunRecordCubit()..listRunByUserId(),
@@ -80,7 +80,7 @@ class _ActivityStatusState extends State<ActivityStatus> {
                   List<dynamic> filteredEntities = [];
                   if (selectedTime == "Daily") {
                     final formattedDate = DateFormat('dd/MM/yyyy').format(now);
-                    filteredEntities = mergeList.where((entity) {
+                    filteredEntities = listExerciseByUserId.where((entity) {
                       if (entity.createdAt == null) return false;
                       final createdDate =
                           DateFormat('dd/MM/yyyy').format(entity.createdAt!);
@@ -90,7 +90,7 @@ class _ActivityStatusState extends State<ActivityStatus> {
                     final startOfWeek =
                         now.subtract(Duration(days: now.weekday - 1));
                     final endOfWeek = startOfWeek.add(const Duration(days: 6));
-                    filteredEntities = mergeList.where((entity) {
+                    filteredEntities = listExerciseByUserId.where((entity) {
                       if (entity.createdAt == null) return false;
                       return entity.createdAt!.isAfter(
                               startOfWeek.subtract(const Duration(days: 1))) &&
@@ -98,13 +98,13 @@ class _ActivityStatusState extends State<ActivityStatus> {
                               .isBefore(endOfWeek.add(const Duration(days: 1)));
                     }).toList();
                   } else if (selectedTime == 'Monthly') {
-                    filteredEntities = mergeList.where((entity) {
+                    filteredEntities = listExerciseByUserId.where((entity) {
                       if (entity.createdAt == null) return false;
                       return entity.createdAt!.month == now.month &&
                           entity.createdAt!.year == now.year;
                     }).toList();
                   } else if (selectedTime == 'Year') {
-                    filteredEntities = mergeList.where((entity) {
+                    filteredEntities = listExerciseByUserId.where((entity) {
                       if (entity.createdAt == null) return false;
                       return entity.createdAt!.year == now.year;
                     }).toList();

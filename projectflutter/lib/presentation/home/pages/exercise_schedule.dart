@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
+import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/presentation/home/bloc/exercise_schedule_cubit.dart';
 import 'package:projectflutter/presentation/home/bloc/exercise_schedule_state.dart';
 import 'package:projectflutter/presentation/home/widgets/exercise_schedule_row.dart';
@@ -17,6 +18,7 @@ class ExerciseSchedulePage extends StatelessWidget {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
       ),
+      backgroundColor: AppColors.backgroundColor,
       body: BlocProvider(
         create: (context) =>
             ExerciseScheduleCubit()..loadScheduleandNotification(),

@@ -47,12 +47,12 @@ class AppBottomNavigator extends StatelessWidget {
               FaIcon(icon,
                   size: 24,
                   color: currentIndex == index
-                      ? AppColors.underweight
+                      ? AppColors.primaryColor1
                       : const Color(0xFF4C585B)),
               Text(label,
                   style: TextStyle(
                       color: currentIndex == index
-                          ? AppColors.underweight
+                          ? AppColors.primaryColor1
                           : const Color(0xFF4C585B),
                       fontSize: 12)),
             ],

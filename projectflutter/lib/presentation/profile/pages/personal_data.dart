@@ -6,8 +6,7 @@ import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/domain/auth/entity/user.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_cubit.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_state.dart';
-import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell_double.dart';
-import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell_int.dart';
+import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell.dart';
 
 class PersonalDataPage extends StatelessWidget {
   const PersonalDataPage({super.key});
@@ -48,7 +47,7 @@ class PersonalDataPage extends StatelessWidget {
                             Row(
                               children: [
                                 const Expanded(
-                                  child: TitleSubtitleCellDouble(
+                                  child: TitleSubtitleCell(
                                     value: 13.5,
                                     subtitle: "Distance",
                                     unit: "km",
@@ -58,7 +57,7 @@ class PersonalDataPage extends StatelessWidget {
                                   width: 15,
                                 ),
                                 const Expanded(
-                                  child: TitleSubtitleCellDouble(
+                                  child: TitleSubtitleCell(
                                     value: 330.0,
                                     subtitle: "Burned",
                                     unit: "kcal",
@@ -68,7 +67,7 @@ class PersonalDataPage extends StatelessWidget {
                                   width: 15,
                                 ),
                                 Expanded(
-                                  child: TitleSubtitleCellInt(
+                                  child: TitleSubtitleCell(
                                     value: age,
                                     subtitle: "Age",
                                     unit: "yrs",

@@ -34,6 +34,7 @@ class HomePage extends StatelessWidget {
         ),
         hideBack: true,
       ),
+      backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -64,10 +65,11 @@ class HomePage extends StatelessWidget {
                         AppNavigator.push(context, const WorkoutProgressPage());
                       },
                       child: Text(
-                        'See More',
+                        'View All',
                         style: TextStyle(
-                          color: AppColors.gray,
-                          fontSize: 14,
+                          color: AppColors.primaryColor1,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold
                         ),
                       ),
                     )
@@ -120,7 +122,7 @@ class HomePage extends StatelessWidget {
                               context, const ExerciseSchedulePage());
                         },
                         child: Text(
-                          'See All',
+                          'View All',
                           style: TextStyle(
                               color: AppColors.primaryColor1,
                               fontSize: 16,

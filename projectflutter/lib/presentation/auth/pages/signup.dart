@@ -17,9 +17,16 @@ import 'package:projectflutter/domain/auth/usecase/signup_usecase.dart';
 import 'package:projectflutter/presentation/auth/bloc/gender_selection_cubit.dart';
 import 'package:projectflutter/presentation/auth/pages/sent_email.dart';
 import 'package:projectflutter/presentation/auth/pages/signin.dart';
+import 'package:projectflutter/secure_storage.dart';
 
-class SignupPage extends StatelessWidget {
-  SignupPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
+
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _firstnameCon = TextEditingController();
   final TextEditingController _lastnameCon = TextEditingController();
@@ -27,6 +34,9 @@ class SignupPage extends StatelessWidget {
   final TextEditingController _passwordCon = TextEditingController();
   final TextEditingController _dobCon = TextEditingController();
   final TextEditingController _phoneCon = TextEditingController();
+  final SecureStorage secureStorage = SecureStorage();
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -38,6 +48,23 @@ class SignupPage extends StatelessWidget {
     if (pickedDate != null) {
       _dobCon.text = DateFormat('yyyy-MM-dd').format(pickedDate);
     }
+  }
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _firstnameCon.dispose();
+    _lastnameCon.dispose();
+    _emailCon.dispose();
+    _passwordCon.dispose();
+    _dobCon.dispose();
+    _phoneCon.dispose();
   }
 
   @override
@@ -70,93 +97,97 @@ class SignupPage extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
               }
               if (state is ButtonSuccessState) {
+
                 const snackbar = SnackBar(
                   content: Text("Sign up Successfully"),
                   behavior: SnackBarBehavior.floating,
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                AppNavigator.pushAndRemoveUntil(context, const SentEmailPage());
               }
             },
             child: SingleChildScrollView(
                 child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Hey there,',
-                        style: TextStyle(
-                            color:
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Form(
+                      key: _formKey,
+                      autovalidateMode: _autovalidateMode,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Hey there,',
+                            style: TextStyle(
+                                color:
                                 Theme.of(context).brightness == Brightness.light
                                     ? AppColors.black
                                     : AppColors.white,
-                            fontSize: 20),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Create an Account',
-                        style: TextStyle(
-                            color:
+                                fontSize: 20),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Create an Account',
+                            style: TextStyle(
+                                color:
                                 Theme.of(context).brightness == Brightness.light
                                     ? AppColors.black
                                     : AppColors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _firstnameField(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _lastnameField(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _emailField(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _passwordField(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _genders(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _dobField(context),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _phoneField(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _signupButton(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: _alreadyAccount(context),
+                          )
+                        ],
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _firstnameField(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _lastnameField(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _emailField(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _passwordField(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _genders(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _dobField(context),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _phoneField(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _signupButton(),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: _alreadyAccount(context),
-                      )
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            )),
+                )),
           ),
         ),
       ),
     );
-  }
+}
+
 
   Widget _firstnameField() {
     return MyTextField(
@@ -320,7 +351,13 @@ class SignupPage extends StatelessWidget {
       builder: (context) {
         return BasicReactiveButton(
             title: "Sign up",
-            onPressed: () {
+            onPressed: () async{
+              setState(() {
+                _autovalidateMode = AutovalidateMode.always;
+              });
+              await secureStorage.writeSecureData('email', _emailCon.text);
+              await secureStorage.writeSecureData(
+                  'password', _passwordCon.text);
               if (_formKey.currentState!.validate()) {
                 final genderIndex = context.read<GenderSelectionCubit>().state;
                 context.read<ButtonStateCubit>().execute(
@@ -333,7 +370,7 @@ class SignupPage extends StatelessWidget {
                         dob: DateFormat('yyyy-MM-dd').parse(_dobCon.text),
                         gender: genderIndex,
                         phone: _phoneCon.text));
-                AppNavigator.pushAndRemoveUntil(context, const SentEmailPage());
+
               }
             });
       },

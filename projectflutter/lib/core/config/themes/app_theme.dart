@@ -36,6 +36,7 @@ class AppTheme {
         labelSmall: TextStyle(color: Colors.black, fontSize: 16),
         labelMedium: TextStyle(color: Colors.blue, fontSize: 18),
       ),
+
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.lightGray,

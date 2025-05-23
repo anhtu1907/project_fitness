@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
+import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/common/widget/personal/setting_row.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -9,7 +10,7 @@ import 'package:projectflutter/domain/auth/entity/user.dart';
 import 'package:projectflutter/presentation/auth/pages/signin.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_cubit.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_state.dart';
-import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell_double.dart';
+import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell.dart';
 import 'package:projectflutter/presentation/profile/pages/achievement.dart';
 import 'package:projectflutter/presentation/profile/pages/contact_us.dart';
 import 'package:projectflutter/presentation/profile/pages/personal_data.dart';
@@ -23,112 +24,116 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => UserInfoDisplayCubit()..displayUserInfo(),
-        child: BlocBuilder<UserInfoDisplayCubit, UserInfoDisplayState>(
-          builder: (context, state) {
-            if (state is UserInfoLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (state is UserInfoLoaded) {
-              final formatedDate =
-                  DateFormat('dd/MM/yyyy').format(state.user.createdAt);
-              return SafeArea(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            _avatarProfile(state.user),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${state.user.firstname} ${state.user.lastname}',
-                                  style: TextStyle(
-                                      color: AppColors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+    return Scaffold(
+      backgroundColor: AppColors.backgroundColor,
+      body:  BlocProvider(
+          create: (context) => UserInfoDisplayCubit()..displayUserInfo(),
+          child: BlocBuilder<UserInfoDisplayCubit, UserInfoDisplayState>(
+            builder: (context, state) {
+              if (state is UserInfoLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is UserInfoLoaded) {
+                final formatedDate =
+                DateFormat('dd/MM/yyyy').format(state.user.createdAt);
+                return SafeArea(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              _avatarProfile(state.user),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${state.user.firstname} ${state.user.lastname}',
+                                    style: TextStyle(
+                                        color: AppColors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    'Joined on: $formatedDate',
+                                    style: TextStyle(
+                                        color: AppColors.gray,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          _logoutButton(),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TitleSubtitleCell(
+                                  value: state.user.bmi!.height.toStringAsFixed(0),
+                                  subtitle: "Height",
+                                  unit: "cm",
                                 ),
-                                Text(
-                                  'Joined on: $formatedDate',
-                                  style: TextStyle(
-                                      color: AppColors.gray,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.normal),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Expanded(
+                                child: TitleSubtitleCell(
+                                  value: state.user.bmi!.weight.toStringAsFixed(0),
+                                  subtitle: "Weight",
+                                  unit: "kg",
                                 ),
-                              ],
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        _logoutButton(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TitleSubtitleCellDouble(
-                                value: state.user.bmi!.height,
-                                subtitle: "Height",
-                                unit: "cm",
                               ),
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Expanded(
-                              child: TitleSubtitleCellDouble(
-                                value: state.user.bmi!.weight,
-                                subtitle: "Weight",
-                                unit: "kg",
+                              const SizedBox(
+                                width: 15,
                               ),
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Expanded(
-                              child: TitleSubtitleCellDouble(
-                                value: state.user.bmi!.bmi,
-                                subtitle: "BMI",
-                                unit: "kg/m²",
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        accountSetting(context),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        otherSetting(context),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
+                              Expanded(
+                                child: TitleSubtitleCell(
+                                  value: state.user.bmi!.bmi.toStringAsFixed(1),
+                                  subtitle: "BMI",
+                                  unit: "kg/m²",
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          accountSetting(context),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          otherSetting(context),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            }
-            return Container();
-          },
-        ));
+                );
+              }
+              return Container();
+            },
+          )),
+    );
+
   }
 
   Widget _avatarProfile(UserEntity user) {
