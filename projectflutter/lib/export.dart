@@ -18,6 +18,8 @@ export 'package:projectflutter/domain/bmi/usecase/check_bmi_usecase.dart';
 export 'package:projectflutter/domain/bmi/usecase/check_bmi_goal_usecase.dart';
 export 'package:projectflutter/domain/bmi/usecase/save_goal_usecase.dart';
 export 'package:projectflutter/domain/bmi/usecase/save_data_usecase.dart';
+export 'package:projectflutter/domain/bmi/usecase/get_all_data_by_user.dart';
+export 'package:projectflutter/domain/bmi/usecase/get_all_goal_by_user.dart';
 
 // Exercise
 export 'package:projectflutter/presentation/home/bloc/exercise_schedule_cubit.dart';

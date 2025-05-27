@@ -12,8 +12,11 @@ class MealSearchList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppBar(
-        title: Text('Search Results'),
+      appBar: BasicAppBar(
+        title: const Text('Search Results'),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
       ),
       body: BlocProvider(
         create: (context) => MealBySearchCubit()..listMealBySearch(mealName),

@@ -17,7 +17,11 @@ class ForgetPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppBar(),
+      appBar:  BasicAppBar(
+        onPressed: (){
+          Navigator.of(context).pop();
+        },
+      ),
       body: BlocProvider(
         create: (context) => ButtonStateCubit(),
         child: BlocListener<ButtonStateCubit, ButtonState>(

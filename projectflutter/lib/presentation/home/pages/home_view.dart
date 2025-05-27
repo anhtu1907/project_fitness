@@ -11,8 +11,14 @@ import 'package:projectflutter/presentation/home/widgets/header.dart';
 import 'package:projectflutter/presentation/home/widgets/latest_workout.dart';
 import 'package:projectflutter/presentation/profile/pages/workout_progress.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomPage extends StatefulWidget {
+  const HomPage({super.key});
+
+  @override
+  State<HomPage> createState() => _HomPageState();
+}
+
+class _HomPageState extends State<HomPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +73,7 @@ class HomePage extends StatelessWidget {
                       child: Text(
                         'View All',
                         style: TextStyle(
-                          color: AppColors.primaryColor1,
+                            color: AppColors.primaryColor1,
                             fontSize: 16,
                             fontWeight: FontWeight.bold
                         ),
@@ -93,16 +99,6 @@ class HomePage extends StatelessWidget {
                   height: media.width * 0.05,
                 ),
                 const ActivityStatus(),
-                SizedBox(
-                  height: media.width * 0.02,
-                ),
-                Text(
-                  'Meals Plan',
-                  style: TextStyle(
-                      color: AppColors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
-                ),
                 SizedBox(
                   height: media.width * 0.02,
                 ),
@@ -142,3 +138,4 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+

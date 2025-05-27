@@ -28,6 +28,9 @@ class MealSubCategoryListPage extends StatelessWidget {
           style: TextStyle(
               color: AppColors.gray, fontSize: 14, fontWeight: FontWeight.w500),
         ),
+        onPressed: (){
+          Navigator.of(context).pop();
+        },
       ),
       body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),

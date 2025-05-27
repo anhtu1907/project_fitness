@@ -14,12 +14,15 @@ class PersonalDataPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BasicAppBar(
+        appBar:  BasicAppBar(
           hideBack: false,
-          title: Text(
+          title: const Text(
             "Personal Data",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
         ),
         body: BlocProvider(
             create: (context) => UserInfoDisplayCubit()..displayUserInfo(),

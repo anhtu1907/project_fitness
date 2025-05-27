@@ -6,8 +6,6 @@ import 'package:projectflutter/common/api/shared_preference_service.dart';
 import 'package:projectflutter/data/auth/request/register_request.dart';
 import 'package:projectflutter/data/auth/request/signin_request.dart';
 import 'package:http/http.dart' as http;
-import 'package:projectflutter/data/bmi/model/bmi.dart';
-import 'package:projectflutter/data/bmi/model/bmi_goal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthService {
@@ -40,27 +38,13 @@ class AuthServiceImpl extends AuthService {
 
         final int userId = responseData['id'];
         final String firstname = responseData['firstname'];
-        if (responseData['bmi'] != null) {
-          final BmiModel bmi = BmiModel.fromMap(responseData['bmi']);
-          await prefs.setString('bmi_exist', bmi.toJson());
-        } else {
-          await prefs.remove('bmi_exist');
-        }
-
-        if (responseData['goal'] != null) {
-          final BmiGoalModel bmiGoal =
-              BmiGoalModel.fromMap(responseData['goal']);
-          await prefs.setString('goal_exist', bmiGoal.toJson());
-        } else {
-          await prefs.remove('goal_exist');
-        }
 
         await prefs.setString('token', token);
         await prefs.setString('firstname', firstname);
         SharedPreferenceService.userId = userId;
         await Future.delayed(const Duration(milliseconds: 300));
         return Right(responseData);
-      } else if (response.statusCode == 401) {
+      } else if (response.statusCode == 404) {
         return const Left('Email not found');
       } else if (response.statusCode == 400) {
         return const Left('Email or Password is wrong');

@@ -89,8 +89,7 @@ class LatestWorkout extends StatelessWidget {
                       child: Column(
                         children: sortedEntries.take(2).map((entry) {
                           final list = entry.value;
-                          var duration =
-                              list.first.exercise!.exercise!.duration;
+                          var duration = (list.fold(0, (sum,item) => sum += item.exercise!.exercise!.duration) / 60).floor();
                           var subCategoryImage = list.first.exercise!.exercise!
                               .subCategory!.subCategoryImage;
                           var subCategoryName = list.first.exercise!.exercise!

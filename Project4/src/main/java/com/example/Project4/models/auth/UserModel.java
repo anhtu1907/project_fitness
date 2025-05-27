@@ -2,8 +2,6 @@ package com.example.Project4.models.auth;
 
 import java.time.LocalDateTime;
 
-import com.example.Project4.models.bmi.PersonHealGoalModel;
-import com.example.Project4.models.bmi.PersonHealModel;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,12 +33,6 @@ public class UserModel {
     private boolean status;
     @Column(name = "role_id")
     private Integer roleid;
-    @OneToOne
-    @JoinColumn(name = "bmi_id", referencedColumnName = "id")
-    private PersonHealModel bmi;
-    @OneToOne
-    @JoinColumn(name = "goal_id", referencedColumnName = "id")
-    private PersonHealGoalModel goal;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 }

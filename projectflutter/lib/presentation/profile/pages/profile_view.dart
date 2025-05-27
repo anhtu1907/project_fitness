@@ -8,6 +8,8 @@ import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/domain/auth/entity/user.dart';
 import 'package:projectflutter/presentation/auth/pages/signin.dart';
+import 'package:projectflutter/presentation/bmi/bloc/health_cubit.dart';
+import 'package:projectflutter/presentation/bmi/bloc/health_state.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_cubit.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_state.dart';
 import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell.dart';
@@ -26,8 +28,12 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body:  BlocProvider(
-          create: (context) => UserInfoDisplayCubit()..displayUserInfo(),
+      body:  MultiBlocProvider(providers: [
+          BlocProvider(
+          create: (context) => UserInfoDisplayCubit()..displayUserInfo()),
+    BlocProvider(
+    create: (context) => HealthCubit()..getDataHealth()),
+      ],
           child: BlocBuilder<UserInfoDisplayCubit, UserInfoDisplayState>(
             builder: (context, state) {
               if (state is UserInfoLoading) {
@@ -36,98 +42,116 @@ class ProfilePage extends StatelessWidget {
                 );
               }
               if (state is UserInfoLoaded) {
+                final user = state.user;
                 final formatedDate =
                 DateFormat('dd/MM/yyyy').format(state.user.createdAt);
-                return SafeArea(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                return BlocBuilder<HealthCubit,HealthState>(builder: (context, state) {
+                  if (state is LoadedHealthFailure) {
+                    return Center(
+                      child: Text(state.errorMessage),
+                    );
+                  }
+                  if (state is HealthLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if(state is HealthLoaded){
+                    final health = state.bmi;
+                    return SafeArea(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              _avatarProfile(state.user),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    '${state.user.firstname} ${state.user.lastname}',
-                                    style: TextStyle(
-                                        color: AppColors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
+                                  _avatarProfile(user),
+                                  const SizedBox(
+                                    width: 10,
                                   ),
-                                  Text(
-                                    'Joined on: $formatedDate',
-                                    style: TextStyle(
-                                        color: AppColors.gray,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal),
-                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${user.firstname} ${user.lastname}',
+                                        style: TextStyle(
+                                            color: AppColors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        'Joined on: $formatedDate',
+                                        style: TextStyle(
+                                            color: AppColors.gray,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                    ],
+                                  )
                                 ],
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          _logoutButton(),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: TitleSubtitleCell(
-                                  value: state.user.bmi!.height.toStringAsFixed(0),
-                                  subtitle: "Height",
-                                  unit: "cm",
-                                ),
                               ),
                               const SizedBox(
-                                width: 15,
+                                height: 10,
                               ),
-                              Expanded(
-                                child: TitleSubtitleCell(
-                                  value: state.user.bmi!.weight.toStringAsFixed(0),
-                                  subtitle: "Weight",
-                                  unit: "kg",
-                                ),
+                              _logoutButton(),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TitleSubtitleCell(
+                                      value: health.last.height.toStringAsFixed(0),
+                                      subtitle: "Height",
+                                      unit: "cm",
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Expanded(
+                                    child: TitleSubtitleCell(
+                                      value: health.last.weight.toStringAsFixed(0),
+                                      subtitle: "Weight",
+                                      unit: "kg",
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Expanded(
+                                    child: TitleSubtitleCell(
+                                      value: health.last.bmi.toStringAsFixed(1),
+                                      subtitle: "BMI",
+                                      unit: "kg/m²",
+                                    ),
+                                  )
+                                ],
                               ),
                               const SizedBox(
-                                width: 15,
+                                height: 20,
                               ),
-                              Expanded(
-                                child: TitleSubtitleCell(
-                                  value: state.user.bmi!.bmi.toStringAsFixed(1),
-                                  subtitle: "BMI",
-                                  unit: "kg/m²",
-                                ),
-                              )
+                              accountSetting(context),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              otherSetting(context),
+                              const SizedBox(
+                                height: 20,
+                              ),
                             ],
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          accountSetting(context),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          otherSetting(context),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                );
+                    );
+                  }
+                  return Container();
+                },);
+
               }
               return Container();
             },
@@ -276,6 +300,10 @@ class ProfilePage extends StatelessWidget {
             context.read<UserInfoDisplayCubit>().logout();
             AppNavigator.pushAndRemoveUntil(context, SigninPage());
           },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,
+            side: BorderSide.none
+          ),
           label: const Text('Logout'),
           icon: const Icon(Icons.logout),
         );

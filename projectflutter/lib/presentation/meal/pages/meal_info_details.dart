@@ -249,7 +249,7 @@ class MealInfoDetails extends StatelessWidget {
                             children: [
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
+                                    const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
                                 child: RoundButton(
                                     title: "Add to calculate",
                                     onPressed: () {

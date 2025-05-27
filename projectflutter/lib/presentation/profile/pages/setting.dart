@@ -7,12 +7,15 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppBar(
+      appBar:  BasicAppBar(
         hideBack: false,
-        title: Text(
+        title: const Text(
           "Settings",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
+        onPressed: (){
+          Navigator.of(context).pop();
+        },
       ),
       body: ListView(
         shrinkWrap: true,

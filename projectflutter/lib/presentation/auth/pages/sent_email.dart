@@ -11,7 +11,10 @@ class SentEmailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppBar(hideBack: true,),
+      appBar: BasicAppBar(hideBack: true,
+        onPressed: (){
+          Navigator.of(context).pop();
+        },),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

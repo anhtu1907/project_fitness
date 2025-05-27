@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/presentation/personal/widget/data_bar_chart_calories_absorption.dart';
 import 'package:projectflutter/presentation/personal/widget/data_bar_chart_calories.dart';
 import 'package:projectflutter/presentation/personal/widget/data_bar_chart_duration.dart';
 import 'package:projectflutter/presentation/personal/widget/data_line_chart.dart';
+import 'package:projectflutter/presentation/personal/widget/data_progress_calories_absorption.dart';
 
 class PersonalPage extends StatelessWidget {
   const PersonalPage({super.key});
@@ -36,15 +38,28 @@ class PersonalPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('Weight', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                  // DataLineChart(),
+                  SizedBox(height: 20,),
+                  DataLineChart(),
                    SizedBox(height: 20,),
                   Text('This Week', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                   SizedBox(height: 10,),
-                  Row(
+                  Column(
                     children: [
-                      Expanded(child: DataBarChartDuration()),
-                      SizedBox(width: 10,),
-                      Expanded(child: DataBarChartCalories())
+                      Row(
+                        children: [
+                          Expanded(child: DataBarChartDuration()),
+                          SizedBox(width: 10,),
+                          Expanded(child: DataBarChartCalories())
+                        ],
+                      ),
+                      const SizedBox(height: 20,),
+                      Row(
+                        children: [
+                          Expanded(child: DataBarChartCalorieAbsorption()),
+                          SizedBox(width: 10,),
+                          Expanded(child: DataProgressCaloriesAbsorption())
+                        ],
+                      ),
                     ],
                   )
                 ],

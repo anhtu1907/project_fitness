@@ -7,18 +7,20 @@ class ContactUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppBar(
+      appBar: BasicAppBar(
         hideBack: false,
-        title: Text(
+        title: const Text(
           "Contact Us",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
+        onPressed: (){
+          Navigator.of(context).pop();
+        },
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(16),
           children: const [
             ListTile(

@@ -15,12 +15,15 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BasicAppBar(
+        appBar:  BasicAppBar(
           hideBack: false,
-          title: Text(
+          title: const Text(
             "Activity History",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
         ),
         body: BlocProvider(
             create: (context) => HistoryCubit()..displayHistory(),

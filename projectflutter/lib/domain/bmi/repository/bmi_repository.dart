@@ -6,6 +6,8 @@ abstract class BmiRepository {
   Future<Either> updateData(double weight);
   Future<Either> saveGoal(double targetWeight);
   Future<Either> updateGoal(double targetWeight);
+  Future<Either> getAllDataByUserId();
+  Future<Either> getAllGoalByUserId();
   Future<bool> checkBmi();
   Future<bool> checkBmiGoal();
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:projectflutter/common/api/shared_preference_service.dart';
@@ -16,6 +17,10 @@ import 'package:timezone/data/latest_all.dart' as tz;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   await SharedPreferenceService.init();
   await initializeDependencies();
   tz.initializeTimeZones();
@@ -70,6 +75,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => ButtonExerciseCubit(),
           ),
+
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme,

@@ -21,12 +21,15 @@ class WorkoutProgressPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppBar(
+      appBar:  BasicAppBar(
         hideBack: false,
-        title: Text(
+        title: const Text(
           "Latest Workout",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
+        onPressed: (){
+          Navigator.of(context).pop();
+        },
       ),
       backgroundColor: AppColors.backgroundColor,
       body: MultiBlocProvider(
@@ -101,8 +104,7 @@ class WorkoutProgressPage extends StatelessWidget {
                           child: Column(
                             children: sortedEntries.map((entry) {
                               final list = entry.value;
-                              var duration =
-                                  list.first.exercise!.exercise!.duration;
+                              var duration = (list.fold(0, (sum,item) => sum += item.exercise!.exercise!.duration) / 60).floor();
                               var subCategoryImage = list.first.exercise!
                                   .exercise!.subCategory!.subCategoryImage;
                               var subCategoryName = list.first.exercise!.exercise!

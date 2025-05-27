@@ -9,12 +9,23 @@ class CheckBmiGoalCubit extends Cubit<CheckBmiGoalState> {
   void checkBmiGoal() async {
     emit(BmiGoalLoading());
     try {
-      final goalExist = await sl<CheckBmiGoalUsecase>().call();
-      if (goalExist) {
-        emit(BmiGoalExists());
-      } else {
-        emit(BmiGoalNotExists());
-      }
+      final getData = await sl<GetAllGoalByUserUseCase>().call();
+
+      getData.fold(
+            (l) {
+          print('Get Data Left: $l');
+          emit(BmiGoalNotExists());
+        },
+            (r) {
+          if (r.isEmpty) {
+            print('Get Data: empty list');
+            emit(BmiGoalNotExists());
+          } else {
+            print('Get Data: has data');
+            emit(BmiGoalExists());
+          }
+        },
+      );
     } catch (error) {
       emit(BmiGoalError(errorMessage: error.toString()));
     }

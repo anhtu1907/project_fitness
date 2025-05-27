@@ -6,6 +6,8 @@ import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/domain/meal/entity/user_meals.dart';
 import 'package:projectflutter/domain/meal/usecase/delete_all_record_meal.dart';
+import 'package:projectflutter/presentation/bmi/bloc/health_cubit.dart';
+import 'package:projectflutter/presentation/bmi/bloc/health_state.dart';
 import 'package:projectflutter/presentation/meal/bloc/user_meal_cubit.dart';
 import 'package:projectflutter/presentation/meal/bloc/user_meal_state.dart';
 import 'package:projectflutter/presentation/meal/widgets/meal_nutritions_row.dart';
@@ -18,11 +20,21 @@ class MealSchedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BasicAppBar(
-          title: Text('Meal Schedule'),
+        appBar: BasicAppBar(
+          title: const Text('Meal Schedule'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
-        body: BlocProvider(
-            create: (context) => UserMealCubit()..displayRecord(),
+        body: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => UserMealCubit()..displayRecord(),
+              ),
+              BlocProvider(
+                create: (context) => HealthCubit()..getDataHealth(),
+              )
+            ],
             child: SingleChildScrollView(
                 child: Column(
               children: [
@@ -36,35 +48,46 @@ class MealSchedule extends StatelessWidget {
                       );
                     })),
                 BlocBuilder<UserMealCubit, UserMealState>(
-                  builder: (context, state) {
-                    if (state is UserMealLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (state is LoadUserMealFailure) {
-                      return Center(
-                        child: Text(state.errorMessage),
-                      );
-                    }
+                    builder: (context, state) {
+                  if (state is UserMealLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (state is LoadUserMealFailure) {
+                    return Center(
+                      child: Text(state.errorMessage),
+                    );
+                  }
 
-                    if (state is UserMealLoaded) {
-                      if (state.entity.isEmpty) {
-                        return const Center(
-                          child: Text('No meals for selected date'),
+                  if (state is UserMealLoaded) {
+                    final listUserMeal = state.entity;
+                    return BlocBuilder<HealthCubit, HealthState>(
+                        builder: (context, state) {
+                      if (state is LoadedHealthFailure) {
+                        return Center(
+                          child: Text(state.errorMessage),
                         );
-                      } else {
-                        final kcal = state.entity.fold<double>(
+                      }
+                      if (state is HealthLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (state is HealthLoaded) {
+                        final health = state.bmi;
+
+                        final kcal = listUserMeal.fold<double>(
                             0, (sum, item) => sum += item.meal.kcal);
-                        final protein = state.entity.fold<double>(
+                        final protein = listUserMeal.fold<double>(
                             0, (sum, item) => sum += item.meal.protein);
-                        final fat = state.entity.fold<double>(
+                        final fat = listUserMeal.fold<double>(
                             0, (sum, item) => sum += item.meal.fat);
-                        final carbo = state.entity.fold<double>(
+                        final carbo = listUserMeal.fold<double>(
                             0, (sum, item) => sum += item.meal.carbonhydrate);
-                        final fiber = state.entity.fold<double>(
+                        final fiber = listUserMeal.fold<double>(
                             0, (sum, item) => sum += item.meal.fiber);
-                        final sugar = state.entity.fold<double>(
+                        final sugar = listUserMeal.fold<double>(
                             0, (sum, item) => sum += item.meal.sugar);
 
                         var totalKcal;
@@ -73,7 +96,7 @@ class MealSchedule extends StatelessWidget {
                         var totalCarbo;
                         var totalFiber;
                         var totalSugar;
-                        if (state.entity[0].user.bmi!.bmi < 18.5) {
+                        if (health.last.bmi < 18.5) {
                           totalKcal = 2800.0;
                           totalProtein = 80.0;
                           totalFat = 90.0;
@@ -81,8 +104,7 @@ class MealSchedule extends StatelessWidget {
                           totalFiber = 28.0;
                           totalSugar = 70.0;
                         }
-                        if (state.entity[0].user.bmi!.bmi >= 18.5 &&
-                            state.entity[0].user.bmi!.bmi < 24.9) {
+                        if (health.last.bmi >= 18.5 && health.last.bmi < 24.9) {
                           totalKcal = 2400.0;
                           totalProtein = 70.0;
                           totalFat = 80.0;
@@ -90,8 +112,7 @@ class MealSchedule extends StatelessWidget {
                           totalFiber = 32.0;
                           totalSugar = 50.0;
                         }
-                        if (state.entity[0].user.bmi!.bmi >= 25 &&
-                            state.entity[0].user.bmi!.bmi < 29.9) {
+                        if (health.last.bmi >= 25 && health.last.bmi < 29.9) {
                           totalKcal = 1800.0;
                           totalProtein = 90.0;
                           totalFat = 80.0;
@@ -99,8 +120,7 @@ class MealSchedule extends StatelessWidget {
                           totalFiber = 35.0;
                           totalSugar = 25.0;
                         }
-                        if (state.entity[0].user.bmi!.bmi >= 30 &&
-                            state.entity[0].user.bmi!.bmi < 34.9) {
+                        if (health.last.bmi >= 30 && health.last.bmi < 34.9) {
                           totalKcal = 1500.0;
                           totalProtein = 100.0;
                           totalFat = 55.0;
@@ -108,7 +128,7 @@ class MealSchedule extends StatelessWidget {
                           totalFiber = 40.0;
                           totalSugar = 20.0;
                         }
-                        if (state.entity[0].user.bmi!.bmi >= 35) {
+                        if (health.last.bmi >= 35) {
                           totalKcal = 1300.0;
                           totalProtein = 120.0;
                           totalFat = 40.0;
@@ -117,10 +137,12 @@ class MealSchedule extends StatelessWidget {
                           totalSugar = 16.0;
                         }
 
-                        Map<String,List<UserMealsEntity>> groupedByTime = {};
-                        for(var meal in state.entity){
+                        Map<String, List<UserMealsEntity>> groupedByTime = {};
+                        for (var meal in listUserMeal) {
                           final timeOfDay = meal.meal.timeOfDay!.timeName;
-                          groupedByTime.putIfAbsent(timeOfDay, () => []).add(meal);
+                          groupedByTime
+                              .putIfAbsent(timeOfDay, () => [])
+                              .add(meal);
                         }
 
                         return SingleChildScrollView(
@@ -173,32 +195,51 @@ class MealSchedule extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SingleChildScrollView(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: groupedByTime.entries.map((entry) {
-                                      return Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(entry.key,
-                                              style: const TextStyle(
-                                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                                          ListView.builder(
-                                            shrinkWrap: true,
-                                            physics: const NeverScrollableScrollPhysics(),
-                                            itemCount: entry.value.length,
-                                            itemBuilder: (context, index) {
-                                              return MealScheduleRow(entity: entry.value[index]);
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                              ),
+                              listUserMeal.isNotEmpty
+                                  ? SingleChildScrollView(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: groupedByTime.entries
+                                              .map((entry) {
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(entry.key,
+                                                    style: const TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                                ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  itemCount: entry.value.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return MealScheduleRow(
+                                                        entity:
+                                                            entry.value[index]);
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                    )
+                                  : const Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15),
+                                      child: Center(
+                                        child:
+                                            Text('No meals for selected date'),
+                                      ),
+                                    ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 10),
@@ -264,10 +305,12 @@ class MealSchedule extends StatelessWidget {
                           ),
                         );
                       }
-                    }
-                    return Container();
-                  },
-                )
+
+                      return Container();
+                    });
+                  }
+                  return Container();
+                })
               ],
             ))));
   }

@@ -19,8 +19,6 @@ class UserModel {
   final String pinCode;
   final bool status;
   final int roleid;
-  final BmiModel? bmi;
-  final BmiGoalModel? goal;
   final DateTime? createdAt;
 
   UserModel(
@@ -37,8 +35,6 @@ class UserModel {
       required this.pinCode,
       required this.status,
       required this.roleid,
-      required this.bmi,
-      required this.goal,
       required this.createdAt});
 
   Map<String, dynamic> toMap() {
@@ -56,8 +52,6 @@ class UserModel {
       'pinCode': pinCode,
       'status': status,
       'roleid': roleid,
-      'bmi': bmi,
-      'goal': goal,
       'createdAt': createdAt?.toIso8601String()
     };
   }
@@ -77,12 +71,6 @@ class UserModel {
         pinCode: map['pinCode'] ?? '',
         status: map['status'] as bool,
         roleid: map['roleid'] as int,
-        bmi: map['bmi'] != null
-            ? BmiModel.fromMap(map['bmi'] as Map<String, dynamic>)
-            : null,
-        goal: map['goal'] != null
-            ? BmiGoalModel.fromMap(map['goal'] as Map<String, dynamic>)
-            : null,
         createdAt:
             map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null);
   }
@@ -109,8 +97,6 @@ extension UserXModel on UserModel {
         pinCode: pinCode,
         status: status,
         roleid: roleid,
-        bmi: bmi,
-        goal: goal,
         createdAt: createdAt!);
   }
 }

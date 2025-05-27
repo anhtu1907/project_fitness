@@ -18,6 +18,9 @@ class MealBySubCategory extends StatelessWidget {
     return Scaffold(
       appBar: BasicAppBar(
         title: Text(categoryName),
+        onPressed: (){
+          Navigator.of(context).pop();
+        },
       ),
       backgroundColor: AppColors.backgroundColor,
       body: BlocProvider(

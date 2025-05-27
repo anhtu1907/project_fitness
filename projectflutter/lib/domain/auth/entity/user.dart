@@ -15,8 +15,6 @@ class UserEntity {
   final String pinCode;
   final bool status;
   final int roleid;
-  final BmiModel? bmi;
-  final BmiGoalModel? goal;
   final DateTime createdAt;
 
   UserEntity(
@@ -33,7 +31,5 @@ class UserEntity {
       required this.pinCode,
       required this.status,
       required this.roleid,
-      required this.bmi,
-      required this.goal,
       required this.createdAt});
 }

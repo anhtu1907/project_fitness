@@ -15,7 +15,11 @@ class ExerciseDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: const BasicAppBar(),
+        appBar: BasicAppBar(
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
+        ),
         backgroundColor: AppColors.white,
         body: SingleChildScrollView(
             child: Container(

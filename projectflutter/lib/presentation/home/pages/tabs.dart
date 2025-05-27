@@ -16,7 +16,7 @@ class TabsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const List<Widget> _screens = [
-      HomePage(),
+      HomPage(),
       MealsPage(),
       PersonalPage(),
       ExercisesPage(),

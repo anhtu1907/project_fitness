@@ -49,18 +49,20 @@ class BmiGoalCubit extends Cubit<BmiGoalState> {
       return 'BMI data not found';
     }
     final bmiData = jsonDecode(bmiJson);
-    final dynamic bmi = bmiData['bmi'];
-    if (bmi == null) {
-      return 'No found BMI data';
+
+    // Kiểm tra kiểu của bmi
+    double? currentWeight;
+    if (bmiData is Map && bmiData.containsKey('weight')) {
+      currentWeight = (bmiData['weight'] as num).toDouble();
+    } else if (bmiData is num) {
+      currentWeight = bmiData.toDouble();
+    } else {
+      return 'BMI data format is not recognized';
     }
-    final weightValue = bmi['weight'];
-    final currentWeight = weightValue is num
-        ? weightValue.toDouble()
-        : double.tryParse(weightValue.toString());
     if (currentWeight == null) {
       return 'Weight data not found';
     }
-
+    print('Current Weight : $currentWeight');
     final option = state.selectedOption!;
     final bool isValid = switch (option) {
       'Muscle Gain' => doubleWeight > currentWeight,

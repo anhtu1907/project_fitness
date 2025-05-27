@@ -4,6 +4,8 @@ import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/round_button.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/presentation/bmi/bloc/health_cubit.dart';
+import 'package:projectflutter/presentation/bmi/bloc/health_state.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_cubit.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_state.dart';
 import 'package:projectflutter/presentation/home/pages/bmi_details.dart';
@@ -15,15 +17,23 @@ class BmiReview extends StatelessWidget {
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
     return BlocProvider(
-      create: (context) => UserInfoDisplayCubit()..displayUserInfo(),
-      child: BlocBuilder<UserInfoDisplayCubit, UserInfoDisplayState>(
+      create: (context) => HealthCubit()..getDataHealth(),
+      child: BlocBuilder<HealthCubit, HealthState>(
         builder: (context, state) {
-          if (state is UserInfoLoading) {
+          if (state is HealthLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-          if (state is UserInfoLoaded) {
+
+          if (state is LoadedHealthFailure) {
+            return Center(
+              child: Text(state.errorMessage),
+            );
+          }
+          
+          if (state is HealthLoaded) {
+            final health = state.bmi;
             return Container(
               height: media.width * 0.4,
               decoration: BoxDecoration(
@@ -53,7 +63,7 @@ class BmiReview extends StatelessWidget {
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700),
                             ),
-                            if (state.user.bmi!.bmi < 18.4)
+                            if (health.last.bmi < 18.4)
                               Text(
                                 'You have a underweight',
                                 style: TextStyle(
@@ -61,8 +71,8 @@ class BmiReview extends StatelessWidget {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
                               ),
-                            if (state.user.bmi!.bmi >= 18.5 &&
-                                state.user.bmi!.bmi < 24.9)
+                            if (health.last.bmi >= 18.5 &&
+                                health.last.bmi < 24.9)
                               Text(
                                 'You have a normal weight',
                                 style: TextStyle(
@@ -70,8 +80,8 @@ class BmiReview extends StatelessWidget {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
                               ),
-                            if (state.user.bmi!.bmi >= 25 &&
-                                state.user.bmi!.bmi < 29.9)
+                            if (health.last.bmi >= 25 &&
+                                health.last.bmi < 29.9)
                               Text(
                                 'You have a overweight',
                                 style: TextStyle(
@@ -79,8 +89,8 @@ class BmiReview extends StatelessWidget {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
                               ),
-                            if (state.user.bmi!.bmi >= 30.0 &&
-                                state.user.bmi!.bmi < 34.9)
+                            if (health.last.bmi >= 30.0 &&
+                                health.last.bmi < 34.9)
                               Text(
                                 'You have a obesity',
                                 style: TextStyle(
@@ -88,8 +98,8 @@ class BmiReview extends StatelessWidget {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
                               ),
-                            if (state.user.bmi!.bmi >= 35.0 &&
-                                state.user.bmi!.bmi < 40.0)
+                            if (health.last.bmi >= 35.0 &&
+                                health.last.bmi < 40.0)
                               Text(
                                 'You have a obesity II',
                                 style: TextStyle(
@@ -119,7 +129,7 @@ class BmiReview extends StatelessWidget {
                           child: LayoutBuilder(
                             builder: (context, constraints) {
                               var size = constraints.maxWidth * 0.6;
-                              return _showBmi(state.user.bmi!.bmi, size);
+                              return _showBmi(health.last.bmi, size);
                             },
                           ),
                         ),

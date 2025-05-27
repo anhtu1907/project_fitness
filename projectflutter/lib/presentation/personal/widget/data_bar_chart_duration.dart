@@ -1,10 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_user_entity.dart';
 import 'package:projectflutter/presentation/exercise/bloc/exercise_user_cubit.dart';
 import 'package:projectflutter/presentation/exercise/bloc/exercise_user_state.dart';
+import 'package:projectflutter/presentation/personal/pages/figure_duration_view.dart';
 
 class DataBarChartDuration extends StatefulWidget {
   const DataBarChartDuration({super.key});
@@ -15,7 +17,7 @@ class DataBarChartDuration extends StatefulWidget {
 
 class _DataBarChartDurationState extends State<DataBarChartDuration> {
   final todayIndex = DateTime.now().weekday - 1;
-
+  bool _isPressed = false;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -34,75 +36,119 @@ class _DataBarChartDurationState extends State<DataBarChartDuration> {
           }
           if (state is ExerciseUserLoaded) {
             final listResult = state.entity;
-            final durationSeconds = listResult.fold(0, (sum,item) => sum += item.session!.duration);
+            final now = DateTime.now();
+            final beginingOfWeek = DateTime(now.year, now.month, now.day)
+                .subtract(Duration(days: now.weekday - 1));
+            final endOfWeek = beginingOfWeek.add(const Duration(days: 6));
+            final filteredList = listResult.where((item) {
+              final createdAt = item.createdAt;
+              if (createdAt == null) return false;
+              return createdAt.isAfter(
+                      beginingOfWeek.subtract(const Duration(seconds: 1))) &&
+                  createdAt.isBefore(endOfWeek.add(const Duration(days: 1)));
+            }).toList();
+
+            final durationSeconds = filteredList.fold(
+                0.0, (sum, item) => sum + item.session!.duration);
             int durationInMinutes = (durationSeconds / 60).floor();
             return SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.white, width: 1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Duration',
-                          style: TextStyle(
-                              color: AppColors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              durationInMinutes.toString(),
-                              style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              'min',
-                              style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      height: 85,
-                      width: MediaQuery.of(context).size.width,
-                      child: BarChart(BarChartData(
-                          barGroups: _getBarGroups(listResult),
-                          titlesData: FlTitlesData(
-                              leftTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false)),
-                              topTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false)),
-                              rightTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false)),
-                              bottomTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                      showTitles: true,
-                                      reservedSize: 35,
-                                      getTitlesWidget: _getBottomTitles))),
-                          borderData: FlBorderData(show: false),
-                          gridData: FlGridData(show: false))),
-                    )
-                  ],
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isPressed = !_isPressed;
+                  });
+                  Future.delayed(const Duration(milliseconds: 200), () {
+                    setState(() {
+                      _isPressed = false;
+                    });
+                  });
+                  AppNavigator.push(context, FigureDurationView());
+
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.white, width: 1),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: _isPressed
+                          ? [
+                             const BoxShadow(
+                                  color: Colors.black26,
+                                  offset: Offset(0, 4),
+                                  blurRadius: 6)
+                            ]
+                          : []),
+                  child: Column(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Duration',
+                                style: TextStyle(
+                                    color: AppColors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_right,
+                                color: AppColors.gray,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                durationInMinutes.toString(),
+                                style: TextStyle(
+                                    color: AppColors.black,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                'min',
+                                style: TextStyle(
+                                    color: AppColors.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        height: 85,
+                        width: MediaQuery.of(context).size.width,
+                        child: BarChart(BarChartData(
+                            barGroups: _getBarGroups(listResult),
+                            titlesData: FlTitlesData(
+                                leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false)),
+                                topTitles: AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false)),
+                                rightTitles: AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false)),
+                                bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                        showTitles: true,
+                                        reservedSize: 35,
+                                        getTitlesWidget: _getBottomTitles))),
+                            borderData: FlBorderData(show: false),
+                            gridData: FlGridData(show: false))),
+                      )
+                    ],
+                  ),
                 ),
               ),
             );
@@ -115,21 +161,23 @@ class _DataBarChartDurationState extends State<DataBarChartDuration> {
 
   List<BarChartGroupData> _getBarGroups(List<ExerciseUserEntity> listResult) {
     final now = DateTime.now();
-    final beginingOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    final beginingOfWeek = DateTime(now.year, now.month, now.day)
+        .subtract(Duration(days: now.weekday - 1));
     final endOfWeek = beginingOfWeek.add(const Duration(days: 6));
     final filteredList = listResult.where((reuslt) {
       final createdAt = reuslt.createdAt;
       if (createdAt == null) return false;
-      return createdAt
-          .isAfter(beginingOfWeek.subtract(const Duration(seconds: 1))) && // 00:00:00
-          createdAt.isBefore(endOfWeek.add(const Duration(days: 1))); // 23:59:59
+      final createdDate =
+          DateTime(createdAt.year, createdAt.month, createdAt.day);
+      return !createdDate.isBefore(beginingOfWeek) &&
+          !createdDate.isAfter(endOfWeek);
     }).toList();
 
     Map<int, double> minDay = {for (int i = 1; i <= 7; i++) i: 0};
-
     for (var item in filteredList) {
       if (item.createdAt != null) {
         int weekDay = item.createdAt!.weekday;
+
         minDay[weekDay] = minDay[weekDay]! + item.session!.duration;
       }
     }
@@ -159,20 +207,24 @@ class _DataBarChartDurationState extends State<DataBarChartDuration> {
     const defaultStyle = TextStyle(color: Colors.black, fontSize: 12);
     final highlightStyle = TextStyle(
         color: AppColors.durationBottomTitle,
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: FontWeight.bold);
     final labels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
     final label = labels[value.toInt()];
     final isToday = value.toInt() == todayIndex;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Stack(
+      alignment: Alignment.topCenter,
       children: [
         Text(
           label,
           style: isToday ? highlightStyle : defaultStyle,
         ),
         if (isToday)
-          Icon(Icons.arrow_drop_up, color: AppColors.durationBottomTitle, size: 18),
+          Positioned(
+            top: 13,
+            child: Icon(Icons.arrow_drop_up,
+                color: AppColors.durationBottomTitle, size: 18),
+          )
       ],
     );
   }

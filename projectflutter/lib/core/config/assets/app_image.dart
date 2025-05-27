@@ -6,6 +6,7 @@ class AppImages {
   static const jpg = ".jpg";
 
   // Workout
+  static const cup = "${basePath}cup$png";
   static const workout1 = "${basePath}Workout1$png";
   static const workout2 = "${basePath}Workout2$png";
   static const workout3 = "${basePath}Workout3$png";

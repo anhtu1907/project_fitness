@@ -78,7 +78,6 @@ public class AuthServiceImpl implements AuthService {
         user.setPinCode(code.toString());
         user.setStatus(false);
         user.setRoleid(2);
-        user.setBmi(null);
         user.setCreatedAt(LocalDateTime.now());
 
         var isSucess = userRepository.save(user);

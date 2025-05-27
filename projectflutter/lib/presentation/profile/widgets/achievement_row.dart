@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
-import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
 
-class WorkoutRow extends StatelessWidget {
+class AchievementRow extends StatelessWidget {
   final String image;
   final String name;
-  final int duration;
   final double kcal;
-  final double progress;
-  final VoidCallback onPressed;
+  final double percent;
+  final int totalExercise;
 
-  const WorkoutRow(
+  const AchievementRow(
       {super.key,
       required this.image,
       required this.name,
-      required this.duration,
       required this.kcal,
-      this.progress = 0.0,
-      required this.onPressed});
+      required this.percent,
+      required this.totalExercise});
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -42,7 +39,7 @@ class WorkoutRow extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            width: 15,
+            width: 10,
           ),
           Expanded(
               child: Column(
@@ -56,37 +53,27 @@ class WorkoutRow extends StatelessWidget {
                     fontWeight: FontWeight.w700),
               ),
               Text(
-                '${kcal.toStringAsFixed(0)} Calories Burn | $duration mins',
+                '$totalExercise Exercises | ${kcal.toStringAsFixed(0)} Calories Burn',
                 style: TextStyle(color: AppColors.gray, fontSize: 12),
               ),
               const SizedBox(
                 height: 4,
               ),
-              SimpleAnimationProgressBar(
-                height: 15,
-                width: media.width * 0.5,
-                backgroundColor: Colors.grey.shade300,
-                foregrondColor: Colors.purple,
-                ratio: progress,
-                direction: Axis.horizontal,
-                curve: Curves.fastLinearToSlowEaseIn,
-                duration: const Duration(seconds: 3),
-                borderRadius: BorderRadius.circular(7.5),
-                gradientColor: LinearGradient(
-                    colors: AppColors.primaryG,
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight),
-              ),
             ],
           )),
-          IconButton(
-            onPressed: onPressed,
-            icon: Image.asset(
-              AppImages.nextIcon,
+          CircularPercentIndicator(
+            radius: 35,
+            lineWidth: 10,
+            percent: percent,
+            center: Image.asset(
+              AppImages.cup,
               width: 30,
               height: 30,
               fit: BoxFit.cover,
             ),
+            progressColor: const Color(0xFF90C67C),
+            backgroundColor: Colors.grey[200]!,
+            circularStrokeCap: CircularStrokeCap.round,
           )
         ],
       ),

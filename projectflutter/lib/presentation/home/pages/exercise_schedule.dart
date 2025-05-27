@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/presentation/home/bloc/exercise_schedule_cubit.dart';
 import 'package:projectflutter/presentation/home/bloc/exercise_schedule_state.dart';
+import 'package:projectflutter/presentation/home/pages/tabs.dart';
 import 'package:projectflutter/presentation/home/widgets/exercise_schedule_row.dart';
 
 class ExerciseSchedulePage extends StatelessWidget {
@@ -12,11 +14,14 @@ class ExerciseSchedulePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppBar(
-        title: Text(
+      appBar: BasicAppBar(
+        title: const Text(
           "All Schedule",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
+        onPressed: (){
+          AppNavigator.pushAndRemoveUntil(context, const TabsPage());
+        },
       ),
       backgroundColor: AppColors.backgroundColor,
       body: BlocProvider(
