@@ -37,14 +37,14 @@ class _DataBarChartDurationState extends State<DataBarChartDuration> {
           if (state is ExerciseUserLoaded) {
             final listResult = state.entity;
             final now = DateTime.now();
-            final beginingOfWeek = DateTime(now.year, now.month, now.day)
+            final beginningOfWeek = DateTime(now.year, now.month, now.day)
                 .subtract(Duration(days: now.weekday - 1));
-            final endOfWeek = beginingOfWeek.add(const Duration(days: 6));
+            final endOfWeek = beginningOfWeek.add(const Duration(days: 6));
             final filteredList = listResult.where((item) {
               final createdAt = item.createdAt;
               if (createdAt == null) return false;
               return createdAt.isAfter(
-                      beginingOfWeek.subtract(const Duration(seconds: 1))) &&
+                  beginningOfWeek.subtract(const Duration(seconds: 1))) &&
                   createdAt.isBefore(endOfWeek.add(const Duration(days: 1)));
             }).toList();
 
@@ -131,7 +131,7 @@ class _DataBarChartDurationState extends State<DataBarChartDuration> {
                         height: 85,
                         width: MediaQuery.of(context).size.width,
                         child: BarChart(BarChartData(
-                            barGroups: _getBarGroups(listResult),
+                            barGroups: _getBarGroups(filteredList),
                             titlesData: FlTitlesData(
                                 leftTitles: AxisTitles(
                                     sideTitles: SideTitles(showTitles: false)),
@@ -159,25 +159,11 @@ class _DataBarChartDurationState extends State<DataBarChartDuration> {
     );
   }
 
-  List<BarChartGroupData> _getBarGroups(List<ExerciseUserEntity> listResult) {
-    final now = DateTime.now();
-    final beginingOfWeek = DateTime(now.year, now.month, now.day)
-        .subtract(Duration(days: now.weekday - 1));
-    final endOfWeek = beginingOfWeek.add(const Duration(days: 6));
-    final filteredList = listResult.where((reuslt) {
-      final createdAt = reuslt.createdAt;
-      if (createdAt == null) return false;
-      final createdDate =
-          DateTime(createdAt.year, createdAt.month, createdAt.day);
-      return !createdDate.isBefore(beginingOfWeek) &&
-          !createdDate.isAfter(endOfWeek);
-    }).toList();
-
+  List<BarChartGroupData> _getBarGroups(List<ExerciseUserEntity> filteredList) {
     Map<int, double> minDay = {for (int i = 1; i <= 7; i++) i: 0};
     for (var item in filteredList) {
       if (item.createdAt != null) {
         int weekDay = item.createdAt!.weekday;
-
         minDay[weekDay] = minDay[weekDay]! + item.session!.duration;
       }
     }

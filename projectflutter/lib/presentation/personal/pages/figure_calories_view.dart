@@ -1,43 +1,50 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
+import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/presentation/personal/widget/data_bar_chart_figure_calories.dart';
+import 'package:projectflutter/presentation/personal/widget/data_line_chart_calories.dart';
 
-class FigureCaloriesView extends StatefulWidget {
+class FigureCaloriesView extends StatelessWidget {
   const FigureCaloriesView({super.key});
 
   @override
-  State<FigureCaloriesView> createState() => _FigureCaloriesViewState();
-}
-
-class _FigureCaloriesViewState extends State<FigureCaloriesView> {
-  @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    String monthName = DateFormat.MMM().format(now);
+    final formattedDate = '$monthName ${now.year}';
     return Scaffold(
       appBar: BasicAppBar(
-        title: const Text('Figures',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
-        onPressed: (){
+        title: const Text('Figures Calories'),
+        onPressed: () {
           Navigator.of(context).pop();
         },
       ),
-        body: Padding(
+      backgroundColor: AppColors.backgroundColor,
+      body: SingleChildScrollView(
+        child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Center(
-                  child: Text('Figure Chart'),
-                ),
-                Center(
-                  child: Text('Figure Calories'),
-                ),
-                Center(
-                  child: Text('Figure Details'),
-                )
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const DataLineChartCalories(),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                formattedDate,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const DataBarChartFigureCalories()
+            ],
           ),
-        )
+        ),
+      ),
     );
   }
 }

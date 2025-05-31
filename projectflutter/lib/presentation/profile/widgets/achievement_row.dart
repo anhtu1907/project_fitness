@@ -67,8 +67,8 @@ class AchievementRow extends StatelessWidget {
             percent: percent,
             center: Image.asset(
               AppImages.cup,
-              width: 30,
-              height: 30,
+              width: 25,
+              height: 25,
               fit: BoxFit.cover,
             ),
             progressColor: const Color(0xFF90C67C),

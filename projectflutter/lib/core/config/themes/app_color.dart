@@ -16,6 +16,8 @@ class AppColors {
   static Color get durationBottomTitle => const Color(0xff92A3FD);
   static Color get caloriesChart => const Color(0xffFE7743);
   static Color get caloriesBottomTitle => const Color(0xffFE7743);
+  static Color get absorptionChart => const Color(0xFF90C67C);
+  static Color get absorptionBottomTitle => const Color(0xFF90C67C);
   static List<Color> get dotGradient => [contentColorCyan, contentColorBlue];
 
   static const Color contentColorBlack = Colors.black;

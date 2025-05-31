@@ -330,11 +330,16 @@ class _DataLineChartState extends State<DataLineChart> {
           ),
           lineBarsData: [
             LineChartBarData(
-              spots: health.map((item) {
-                double x = item.createdAt!.day.toDouble();
-                double y = item.weight;
-                return FlSpot(x, y);
-              }).toList(),
+              spots: [
+                for (var day in health.map((e) => e.createdAt!.day).toSet()) // toSet loại bỏ trùng lắp
+                  FlSpot(
+                      day.toDouble(),
+                      health
+                          .where((e) => e.createdAt!.day == day)
+                          .reduce((a, b) => a.createdAt!.isAfter(b.createdAt!) ? a : b)
+                          .weight
+                  )
+              ]..sort((a, b) => a.x.compareTo(b.x)),
               isCurved: true,
               gradient: const LinearGradient(colors: [
                 AppColors.contentColorBlue,

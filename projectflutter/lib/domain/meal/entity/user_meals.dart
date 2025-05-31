@@ -5,7 +5,7 @@ class UserMealsEntity {
   final int id;
   final UserModel user;
   final MealsModel meal;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   UserMealsEntity(
       {required this.id,

@@ -38,14 +38,14 @@ class _DataBarChartCaloriesState extends State<DataBarChartCalories> {
           if (state is ExerciseUserLoaded) {
             final listResult = state.entity;
             final now = DateTime.now();
-            final beginingOfWeek = DateTime(now.year, now.month, now.day)
+            final beginningOfWeek = DateTime(now.year, now.month, now.day)
                 .subtract(Duration(days: now.weekday - 1));
-            final endOfWeek = beginingOfWeek.add(const Duration(days: 6));
+            final endOfWeek = beginningOfWeek.add(const Duration(days: 6));
             final filteredList = listResult.where((item) {
               final createdAt = item.createdAt;
               if (createdAt == null) return false;
               return createdAt.isAfter(
-                      beginingOfWeek.subtract(const Duration(seconds: 1))) &&
+                  beginningOfWeek.subtract(const Duration(seconds: 1))) &&
                   createdAt.isBefore(endOfWeek.add(const Duration(days: 1)));
             }).toList();
             final calories = filteredList.fold<double>(
@@ -129,7 +129,7 @@ class _DataBarChartCaloriesState extends State<DataBarChartCalories> {
                       height: 80,
                       width: MediaQuery.of(context).size.width,
                       child: BarChart(BarChartData(
-                          barGroups: _getBarGroups(listResult),
+                          barGroups: _getBarGroups(filteredList),
                           titlesData: FlTitlesData(
                               leftTitles: AxisTitles(
                                   sideTitles: SideTitles(showTitles: false)),
@@ -156,20 +156,7 @@ class _DataBarChartCaloriesState extends State<DataBarChartCalories> {
     );
   }
 
-  List<BarChartGroupData> _getBarGroups(List<ExerciseUserEntity> listResult) {
-    final now = DateTime.now();
-    final beginningOfWeek = DateTime(now.year, now.month, now.day)
-        .subtract(Duration(days: now.weekday - 1)); // now.weekday = 1,2,3,4,5,6,7(T2,T3,T4,T5,T6,T7,CN)
-    final endOfWeek = beginningOfWeek.add(const Duration(days: 6)); // T2 + 6 day => CN
-    final filteredList = listResult.where((reuslt) {
-      final createdAt = reuslt.createdAt;
-      if (createdAt == null) return false;
-      final createdDate =
-          DateTime(createdAt.year, createdAt.month, createdAt.day);
-      return !createdDate.isBefore(beginningOfWeek) &&
-          !createdDate
-              .isAfter(endOfWeek); // End of Week: 2025-05-26 09:56:55.559172
-    }).toList();
+  List<BarChartGroupData> _getBarGroups(List<ExerciseUserEntity> filteredList) {
     // Day of week
     Map<int, double> caloriesDay = {for (int i = 1; i <= 7; i++) i: 0};
 

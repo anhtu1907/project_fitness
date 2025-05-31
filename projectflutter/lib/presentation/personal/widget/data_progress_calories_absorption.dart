@@ -76,9 +76,9 @@ class _DataProgressCaloriesAbsorptionState
                             totalKcal = 1300;
                           }
                           final todayCalories = userMeal.where((calo) {
-                            return now.year == calo.createdAt.year &&
-                                now.month == calo.createdAt.month &&
-                                now.day == calo.createdAt.day;
+                            return now.year == calo.createdAt!.year &&
+                                now.month == calo.createdAt!.month &&
+                                now.day == calo.createdAt!.day;
                           }).toList();
                           final caloOfDay = todayCalories.fold<double>(
                               0, (sum, item) => sum += item.meal.kcal);

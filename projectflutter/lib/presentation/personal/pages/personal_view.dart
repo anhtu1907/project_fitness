@@ -52,7 +52,7 @@ class PersonalPage extends StatelessWidget {
                           Expanded(child: DataBarChartCalories())
                         ],
                       ),
-                      const SizedBox(height: 20,),
+                      SizedBox(height: 20,),
                       Row(
                         children: [
                           Expanded(child: DataBarChartCalorieAbsorption()),

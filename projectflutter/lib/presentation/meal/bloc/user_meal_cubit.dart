@@ -18,11 +18,20 @@ class UserMealCubit extends Cubit<UserMealState> {
     });
   }
 
+  void listRecord() async {
+    var result = await sl<GetAllRecordMealUseCase>().call();
+    result.fold((err) {
+      emit(LoadUserMealFailure(errorMessage: err));
+    }, (data) {
+      emit(UserMealLoaded(entity: data));
+    });
+  }
+
   void filterMealsByDate(DateTime selectedDate) {
     final filteredMeals = _allMeals.where((meal) {
-      return meal.createdAt.year == selectedDate.year &&
-          meal.createdAt.month == selectedDate.month &&
-          meal.createdAt.day == selectedDate.day;
+      return meal.createdAt!.year == selectedDate.year &&
+          meal.createdAt!.month == selectedDate.month &&
+          meal.createdAt!.day == selectedDate.day;
     }).toList();
     emit(UserMealLoaded(entity: filteredMeals));
   }
