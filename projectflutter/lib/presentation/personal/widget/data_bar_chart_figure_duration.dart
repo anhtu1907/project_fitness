@@ -45,156 +45,181 @@ class _DataBarChartFigureDurationState
                 final dateB = DateFormat('MMM d').parse(b.key.split(' - ')[0]);
                 return dateB.compareTo(dateA);
               });
+            final Set<String> displayedMonths = {};
             return SingleChildScrollView(
                 child: Column(
-                    children: sortedEntries.map((entry){
-                      final weekday = entry.key;
-                      final weekList = entry.value;
-                      final totalDuration = weekList.fold(0.0, (sum, item) => sum + item.session!.duration);
-                      final totalMinutes = (totalDuration / 60).floor();
-                      final averageMinutes = totalMinutes/ 7;
-                      return  Container(
-                        padding: const EdgeInsets.all(16),
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.white, width: 1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                        children: sortedEntries.map((entry){
+                          final weekday = entry.key;
+                          final weekList = entry.value;
+                          final totalDuration = weekList.fold(0.0, (sum, item) => sum + item.session!.duration);
+                          final totalMinutes = (totalDuration / 60).floor();
+                          final averageMinutes = totalMinutes/ 7;
+                          final firstDate = weekList.first.createdAt;
+                          String monthName = DateFormat('MMM').format(firstDate!);
+                          final formattedDate = '$monthName ${firstDate.year}';
+                          final shouldDisplayMonth = !displayedMonths.contains(monthName);
+                          if(shouldDisplayMonth){
+                            displayedMonths.add(monthName);
+                          }
+                          return  Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (shouldDisplayMonth)
+                                Text(
+                                  formattedDate,
+                                  style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                margin: const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(color: Colors.white, width: 1),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Column(
                                   children: [
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          weekday,
-                                          style: TextStyle(
-                                              color: AppColors.black,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          '$year',
-                                          style: TextStyle(color: AppColors.gray),
-                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  weekday,
+                                                  style: TextStyle(
+                                                      color: AppColors.black,
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  '$year',
+                                                  style: TextStyle(color: AppColors.gray),
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  averageMinutes.toStringAsFixed(0),
+                                                  style: TextStyle(
+                                                      color: AppColors.black,
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  'Average (mins)',
+                                                  style: TextStyle(color: AppColors.gray),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        )
                                       ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    SizedBox(
+                                      height: 85,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: BarChart(BarChartData(
+                                          barGroups: _getBarGroups(weekList),
+                                          titlesData: FlTitlesData(
+                                              leftTitles: AxisTitles(
+                                                  sideTitles: SideTitles(showTitles: false)),
+                                              topTitles: AxisTitles(
+                                                  sideTitles: SideTitles(showTitles: false)),
+                                              rightTitles: AxisTitles(
+                                                  sideTitles: SideTitles(showTitles: false)),
+                                              bottomTitles: AxisTitles(
+                                                  sideTitles: SideTitles(
+                                                      showTitles: true,
+                                                      reservedSize: 35,
+                                                      getTitlesWidget: _getBottomTitles))),
+                                          borderData: FlBorderData(show: false),
+                                          gridData: FlGridData(show: false))),
                                     ),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
-                                        Text(
-                                          averageMinutes.toStringAsFixed(0),
-                                          style: TextStyle(
-                                              color: AppColors.black,
-                                              fontWeight: FontWeight.bold),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Total',
+                                              style: TextStyle(
+                                                  color: AppColors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13),
+                                            ),
+                                            Text(
+                                              '${totalMinutes.toStringAsFixed(0)} mins',
+                                              style: TextStyle(
+                                                  color: AppColors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          'Average (mins)',
-                                          style: TextStyle(color: AppColors.gray),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            SizedBox(
-                              height: 85,
-                              width: MediaQuery.of(context).size.width,
-                              child: BarChart(BarChartData(
-                                  barGroups: _getBarGroups(weekList),
-                                  titlesData: FlTitlesData(
-                                      leftTitles: AxisTitles(
-                                          sideTitles: SideTitles(showTitles: false)),
-                                      topTitles: AxisTitles(
-                                          sideTitles: SideTitles(showTitles: false)),
-                                      rightTitles: AxisTitles(
-                                          sideTitles: SideTitles(showTitles: false)),
-                                      bottomTitles: AxisTitles(
-                                          sideTitles: SideTitles(
-                                              showTitles: true,
-                                              reservedSize: 35,
-                                              getTitlesWidget: _getBottomTitles))),
-                                  borderData: FlBorderData(show: false),
-                                  gridData: FlGridData(show: false))),
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Total',
-                                      style: TextStyle(
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13),
-                                    ),
-                                    Text(
-                                      '${totalMinutes.toStringAsFixed(0)} mins',
-                                      style: TextStyle(
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 8,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: 10,
-                                          height: 10,
-                                          decoration: BoxDecoration(
-                                              color: AppColors.durationChart,
-                                              shape: BoxShape.circle
-                                          ),
-                                        ),
-                                        const SizedBox(width: 5,),
-                                        Text(
-                                          'Workout',
-                                          style: TextStyle(
-                                              color: AppColors.black,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 13),
+                                        const SizedBox(height: 8,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  width: 10,
+                                                  height: 10,
+                                                  decoration: BoxDecoration(
+                                                      color: AppColors.durationChart,
+                                                      shape: BoxShape.circle
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 5,),
+                                                Text(
+                                                  'Workout',
+                                                  style: TextStyle(
+                                                      color: AppColors.black,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 13),
+                                                ),
+                                              ],
+                                            ),
+                                            Text(
+                                              '${totalMinutes.toStringAsFixed(0)} mins',
+                                              style: TextStyle(
+                                                  color: AppColors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                    Text(
-                                      '${totalMinutes.toStringAsFixed(0)} mins',
-                                      style: TextStyle(
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13),
-                                    ),
                                   ],
+
                                 ),
-                              ],
-                            ),
-                          ],
+                              ),
+                            ],
+                          );
 
-                        ),
-                      );
+                        }).toList()
 
-                    }).toList()
-
+                    ),
+                  ],
                 )
             );
           }

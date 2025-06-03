@@ -11,9 +11,6 @@ class FigureCaloriesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    String monthName = DateFormat.MMM().format(now);
-    final formattedDate = '$monthName ${now.year}';
     return Scaffold(
       appBar: BasicAppBar(
         title: const Text('Figures Calories'),
@@ -22,25 +19,18 @@ class FigureCaloriesView extends StatelessWidget {
         },
       ),
       backgroundColor: AppColors.backgroundColor,
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding:  EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const DataLineChartCalories(),
-              const SizedBox(
+               DataLineChartCalories(),
+               SizedBox(
                 height: 20,
               ),
-              Text(
-                formattedDate,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const DataBarChartFigureCalories()
+               DataBarChartFigureCalories()
             ],
           ),
         ),

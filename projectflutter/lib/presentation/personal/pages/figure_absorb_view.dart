@@ -10,9 +10,6 @@ class FigureAbsorbView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    String monthName = DateFormat.MMM().format(now);
-    final formattedDate = '$monthName ${now.year}';
     return Scaffold(
       appBar: BasicAppBar(
         title: const Text('Figures Absorption'),
@@ -21,25 +18,18 @@ class FigureAbsorbView extends StatelessWidget {
         },
       ),
       backgroundColor: AppColors.backgroundColor,
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const DataLineChartAbsorption(),
-              const SizedBox(
+              DataLineChartAbsorption(),
+              SizedBox(
                 height: 20,
               ),
-              Text(
-                formattedDate,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const DataBarChartFigureAbsorption()
+              DataBarChartFigureAbsorption()
             ],
           ),
         ),

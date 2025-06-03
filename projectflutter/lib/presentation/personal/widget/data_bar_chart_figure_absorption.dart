@@ -46,14 +46,35 @@ class _DataBarChartFigureAbsorptionState
                 final dateB = DateFormat('MMM d').parse(b.key.split(' - ')[0]);
                 return dateB.compareTo(dateA);
               });
+            final Set<String> displayedMonths = {};
             return SingleChildScrollView(
-                child: Column(
-                    children: sortedEntries.map((entry){
-                      final weekday = entry.key;
-                      final weekList = entry.value;
-                      final totalAbsorb = weekList.fold(0.0, (sum, item) => sum + item.meal.kcal);
-                      final averageAbsorb = totalAbsorb/ 7;
-                      return  Container(
+                child:
+                Column(
+                    children: sortedEntries.map((entry) {
+                  final weekday = entry.key;
+                  final weekList = entry.value;
+                  final totalAbsorb =
+                      weekList.fold(0.0, (sum, item) => sum + item.meal.kcal);
+                  final averageAbsorb = totalAbsorb / 7;
+                  final firstDate = weekList.first.createdAt;
+                  String monthName = DateFormat('MMM').format(firstDate!);
+                  final formattedDate = '$monthName $year';
+                  final shouldDisplayMonth = !displayedMonths.contains(monthName);
+                  if(shouldDisplayMonth){
+                    displayedMonths.add(monthName);
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (shouldDisplayMonth)
+                        Text(
+                          formattedDate,
+                          style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      Container(
                         padding: const EdgeInsets.all(16),
                         margin: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
@@ -119,11 +140,14 @@ class _DataBarChartFigureAbsorptionState
                                   barGroups: _getBarGroups(weekList),
                                   titlesData: FlTitlesData(
                                       leftTitles: AxisTitles(
-                                          sideTitles: SideTitles(showTitles: false)),
+                                          sideTitles:
+                                              SideTitles(showTitles: false)),
                                       topTitles: AxisTitles(
-                                          sideTitles: SideTitles(showTitles: false)),
+                                          sideTitles:
+                                              SideTitles(showTitles: false)),
                                       rightTitles: AxisTitles(
-                                          sideTitles: SideTitles(showTitles: false)),
+                                          sideTitles:
+                                              SideTitles(showTitles: false)),
                                       bottomTitles: AxisTitles(
                                           sideTitles: SideTitles(
                                               showTitles: true,
@@ -153,7 +177,9 @@ class _DataBarChartFigureAbsorptionState
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 8,),
+                                const SizedBox(
+                                  height: 8,
+                                ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -164,10 +190,11 @@ class _DataBarChartFigureAbsorptionState
                                           height: 10,
                                           decoration: BoxDecoration(
                                               color: AppColors.absorptionChart,
-                                              shape: BoxShape.circle
-                                          ),
+                                              shape: BoxShape.circle),
                                         ),
-                                        const SizedBox(width: 5,),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
                                         Text(
                                           'Meal',
                                           style: TextStyle(
@@ -189,13 +216,11 @@ class _DataBarChartFigureAbsorptionState
                               ],
                             ),
                           ],
-
                         ),
-                      );
-
-                    }).toList()
-
-                )
+                      ),
+                    ],
+                  );
+                }).toList()),
             );
           }
           return Container();
@@ -214,7 +239,7 @@ class _DataBarChartFigureAbsorptionState
       }
     }
     final maxKcal =
-    caloriesDay.values.reduce((a, b) => a > b ? a : b); // Return max
+        caloriesDay.values.reduce((a, b) => a > b ? a : b); // Return max
     final maxY = maxKcal == 0 ? 1.0 : maxKcal;
 
     return List.generate(7, (index) {
@@ -223,7 +248,9 @@ class _DataBarChartFigureAbsorptionState
       return BarChartGroupData(x: index, barRods: [
         BarChartRodData(
             toY: toY,
-            color: kcal > 0 ? AppColors.absorptionChart : AppColors.gray.withOpacity(0.5),
+            color: kcal > 0
+                ? AppColors.absorptionChart
+                : AppColors.gray.withOpacity(0.5),
             width: 12,
             borderRadius: BorderRadius.circular(4),
             backDrawRodData: BackgroundBarChartRodData(
@@ -243,10 +270,10 @@ class _DataBarChartFigureAbsorptionState
     );
   }
 
-  Map<String,List<UserMealsEntity>> groupByWeek(List<UserMealsEntity> list){
-    Map<String,List<UserMealsEntity>> grouped = {};
-    for(var item in list){
-      if(item.createdAt != null){
+  Map<String, List<UserMealsEntity>> groupByWeek(List<UserMealsEntity> list) {
+    Map<String, List<UserMealsEntity>> grouped = {};
+    for (var item in list) {
+      if (item.createdAt != null) {
         final date = item.createdAt!;
         final beginningOfWeek = DateTime(date.year, date.month, date.day)
             .subtract(Duration(days: date.weekday - 1));
@@ -255,7 +282,7 @@ class _DataBarChartFigureAbsorptionState
         final formattedEnd = DateFormat('MMM d').format(endOfWeek);
 
         final key = '$formattedStart - $formattedEnd';
-        if(!grouped.containsKey(key)){
+        if (!grouped.containsKey(key)) {
           grouped[key] = [];
         }
         grouped[key]!.add(item);
