@@ -1,6 +1,6 @@
 package com.example.Project4.services.meal;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +18,6 @@ import com.example.Project4.repository.meal.MealsRepository;
 import com.example.Project4.repository.meal.MealSubCategoryRepository;
 import com.example.Project4.repository.meal.UserMealsRepository;
 
-import jakarta.transaction.Transactional;
 
 @Service
 public class MealServiceImpl implements MealService {
@@ -81,7 +80,7 @@ public class MealServiceImpl implements MealService {
             UserMealsModel usermeals = new UserMealsModel();
             usermeals.setUser(user);
             usermeals.setMeal(meal);
-            usermeals.setCreatedAt(LocalDateTime.now());
+            usermeals.setCreatedAt(request.getCreated());
             saveRecords.add(uMealsRepository.save(usermeals));
         }
 
@@ -94,9 +93,8 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    @Transactional
-    public void deleteAllRecordMeal(int userId) {
-        uMealsRepository.deleteAllByUserId(userId);
+    public void deleteAllRecordMeal(int userId, LocalDate targetDate) {
+        uMealsRepository.deleteAllByUserIdAndCreatedAtDate(userId,targetDate);
     }
 
     @Override

@@ -15,4 +15,13 @@ class SharedPreferenceService {
       _prefs?.remove('userId');
     }
   }
+
+  static List<String>? get favoriteIds => _prefs?.getStringList('favoriteIds');
+  static set favoriteIds(List<String>? value) {
+    if (value != null) {
+      _prefs?.setStringList('favoriteIds', value);
+    } else {
+      _prefs?.remove('favoriteIds');
+    }
+  }
 }

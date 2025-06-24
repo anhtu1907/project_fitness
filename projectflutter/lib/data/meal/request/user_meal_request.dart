@@ -1,5 +1,6 @@
 class UserMealRequest {
   final int user;
-  final int meal;
-  UserMealRequest({required this.user, required this.meal});
+  final List<int> meal;
+  final DateTime created;
+  UserMealRequest({required this.user, required this.meal, required this.created});
 }

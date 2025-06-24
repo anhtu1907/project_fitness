@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/data/meal/request/user_meal_request.dart';
 import 'package:projectflutter/domain/meal/usecase/get_meal_by_id.dart';
 import 'package:projectflutter/domain/meal/usecase/save_record_meal.dart';
 import 'package:projectflutter/presentation/meal/bloc/meal_by_id_state.dart';
@@ -16,7 +17,7 @@ class MealByIdCubit extends Cubit<MealByIdState> {
     });
   }
 
-  void saveRecordMeal(List<int> mealId) async {
-    await sl<SaveRecordMealUseCase>().call(params: mealId);
+  void saveRecordMeal(UserMealRequest req) async {
+    await sl<SaveRecordMealUseCase>().call(params: req);
   }
 }

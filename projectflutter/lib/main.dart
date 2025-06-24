@@ -2,15 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:projectflutter/common/api/shared_preference_service.dart';
-import 'package:projectflutter/core/config/themes/app_theme.dart';
-import 'package:projectflutter/domain/exercise/usecase/schedule_exercise.dart';
-import 'package:projectflutter/notification_service.dart';
-import 'package:projectflutter/presentation/exercise/bloc/button_exercise_cubit.dart';
-import 'package:projectflutter/presentation/home/bloc/exercise_schedule_cubit.dart';
-import 'package:projectflutter/presentation/splash/bloc/splash_cubit.dart';
-import 'package:projectflutter/presentation/splash/pages/splash.dart';
-import 'package:projectflutter/service_locator.dart';
+import 'export.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -34,6 +26,8 @@ Future<void> main() async {
   if (!hasExactAlarmPermission) {
     await notificationService.requestExactAlarmPermission();
   }
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
   // await prefs.remove('onboarding_done');
 
   // final prefs = await SharedPreferences.getInstance();

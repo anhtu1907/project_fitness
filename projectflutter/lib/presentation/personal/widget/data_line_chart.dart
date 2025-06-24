@@ -110,80 +110,79 @@ class _DataLineChartState extends State<DataLineChart> {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10)),
-                    child: Row(
+                    child: Column(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.only(top: 34),
-                          width: 40,
-                          // height: 100,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(yTitles.length * 2, (index) {
-                              if (index.isEven) {
-                                double value = yTitles[index ~/ 2];
-                                return Text(
-                                  value.toStringAsFixed(0),
-                                  style: TextStyle(fontSize: 10),
-                                );
-                              } else {
-                                // index lẻ => là khoảng cách
-                                return const SizedBox(height: 8); // khoảng cách giữa các dòng
-                              }
-                            }),
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              _showAndEditWeight(health, goal),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                height: 150,
-                                child: ListView.builder(
-                                  controller: _scrollController,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: months.length,
-                                  itemBuilder: (context, index) {
-                                    int month = months[index];
-                                    List<BmiEntity> monthData = health
-                                        .where((e) =>
-                                            e.createdAt != null &&
-                                            e.createdAt!.month == month &&
-                                            e.createdAt!.year == now.year)
-                                        .toList();
-
-                                    int daysInMonth =
-                                        DateTime(now.year, month + 1, 0).day;
-
-                                    final formattedDate = DateFormat('MMM')
-                                        .format(DateTime(now.year, month));
-                                    return Container(
-                                      width: 300,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          LineChartItem(
-                                              maxY: maxY,
-                                              minY: minY,
-                                              targetWeight: targetWeight,
-                                              monthData: monthData,
-                                              daysInMonth: daysInMonth,
-                                              month: month,
-                                              formattedDate: formattedDate),
-                                        ],
-                                      ),
+                        _showAndEditWeight(health, goal),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 40,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: List.generate(yTitles.length * 2, (index) {
+                                  if (index.isEven) {
+                                    double value = yTitles[index ~/ 2];
+                                    return Text(
+                                      value.toStringAsFixed(0),
+                                      style: TextStyle(fontSize: 10),
                                     );
-                                  },
-                                ),
+                                  } else {
+                                    return const SizedBox(height: 8);
+                                  }
+                                }),
                               ),
-                              _bottomLineChart(bmi, avgWeight, lastWeight)
-                            ],
-                          ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 150,
+                                    child: ListView.builder(
+                                      controller: _scrollController,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: months.length,
+                                      itemBuilder: (context, index) {
+                                        int month = months[index];
+                                        List<BmiEntity> monthData = health
+                                            .where((e) =>
+                                                e.createdAt != null &&
+                                                e.createdAt!.month == month &&
+                                                e.createdAt!.year == now.year)
+                                            .toList();
+
+                                        int daysInMonth =
+                                            DateTime(now.year, month + 1, 0).day;
+
+                                        final formattedDate = DateFormat('MMM')
+                                            .format(DateTime(now.year, month));
+                                        return Container(
+                                          width: 300,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              LineChartItem(
+                                                  maxY: maxY,
+                                                  minY: minY,
+                                                  targetWeight: targetWeight,
+                                                  monthData: monthData,
+                                                  daysInMonth: daysInMonth,
+                                                  month: month,
+                                                  formattedDate: formattedDate),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
+                        _bottomLineChart(bmi, avgWeight, lastWeight)
+
                       ],
                     ),
                   );

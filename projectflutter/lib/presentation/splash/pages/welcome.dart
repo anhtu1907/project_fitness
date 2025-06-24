@@ -69,7 +69,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 child: BasicButton(
                     title: "Go To Home",
                     onPressed: () {
-                      AppNavigator.pushReplacement(
+                      AppNavigator.pushAndRemoveUntil(
                           context, const CheckBmiPage());
                     }),
               ),

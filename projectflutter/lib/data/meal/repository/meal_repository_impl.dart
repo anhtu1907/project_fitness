@@ -3,6 +3,7 @@ import 'package:projectflutter/data/meal/model/meal_category.dart';
 import 'package:projectflutter/data/meal/model/meal_sub_category.dart';
 import 'package:projectflutter/data/meal/model/meals.dart';
 import 'package:projectflutter/data/meal/model/user_meal_record.dart';
+import 'package:projectflutter/data/meal/request/user_meal_request.dart';
 import 'package:projectflutter/data/meal/service/meal_service.dart';
 import 'package:projectflutter/domain/meal/entity/meal_category.dart';
 import 'package:projectflutter/domain/meal/entity/meal_sub_category.dart';
@@ -84,8 +85,8 @@ class MealRepositoryImpl extends MealRepository {
   }
 
   @override
-  Future<Either> saveRecordMeal(List<int> mealId) async {
-    return await sl<MealService>().saveRecordMeal(mealId);
+  Future<Either> saveRecordMeal(UserMealRequest req) async {
+    return await sl<MealService>().saveRecordMeal(req);
   }
 
   @override
@@ -94,8 +95,8 @@ class MealRepositoryImpl extends MealRepository {
   }
 
   @override
-  Future<void> deteleAllRecordMeal() async {
-    return await sl<MealService>().deteleAllRecordMeal();
+  Future<void> deteleAllRecordMeal(DateTime targetDate) async {
+    return await sl<MealService>().deteleAllRecordMeal(targetDate);
   }
 
   @override

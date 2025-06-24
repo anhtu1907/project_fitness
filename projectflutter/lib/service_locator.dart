@@ -73,4 +73,13 @@ Future<void> initializeDependencies() async {
 
   sl.registerLazySingleton<ExerciseScheduleCubit>(
       () => ExerciseScheduleCubit());
+
+  // Exercise Favorite
+  sl.registerSingleton<GetFavoritesUseCase>(GetFavoritesUseCase());
+  sl.registerSingleton<GetExerciseFavoriteUseCase>(GetExerciseFavoriteUseCase());
+  sl.registerSingleton<AddFavoriteUsecase>(AddFavoriteUsecase());
+  sl.registerSingleton<AddExerciseFavoriteUseCase>(
+      AddExerciseFavoriteUseCase());
+  sl.registerSingleton<RemoveFavoriteUseCase>(RemoveFavoriteUseCase());
+  sl.registerSingleton<RemoveExerciseFavoriteUseCase>(RemoveExerciseFavoriteUseCase());
 }

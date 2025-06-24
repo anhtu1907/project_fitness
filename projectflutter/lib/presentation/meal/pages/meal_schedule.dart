@@ -14,9 +14,15 @@ import 'package:projectflutter/presentation/meal/widgets/meal_nutritions_row.dar
 import 'package:projectflutter/presentation/meal/widgets/meal_schedule_row.dart';
 import 'package:projectflutter/presentation/profile/widgets/calendar_custom.dart';
 
-class MealSchedule extends StatelessWidget {
+class MealSchedule extends StatefulWidget {
   const MealSchedule({super.key});
 
+  @override
+  State<MealSchedule> createState() => _MealScheduleState();
+}
+
+class _MealScheduleState extends State<MealSchedule> {
+  DateTime date = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,11 +47,14 @@ class MealSchedule extends StatelessWidget {
                 SizedBox(
                     height: 150,
                     child: Builder(builder: (context) {
-                      return CalendarCustom(
-                        onDateSelected: (selectedDate) => context
+                      return CalendarCustom(onDateSelected: (selectedDate) {
+                        setState(() {
+                          date = selectedDate;
+                        });
+                        context
                             .read<UserMealCubit>()
-                            .filterMealsByDate(selectedDate),
-                      );
+                            .filterMealsByDate(selectedDate);
+                      });
                     })),
                 BlocBuilder<UserMealCubit, UserMealState>(
                     builder: (context, state) {
@@ -172,7 +181,7 @@ class MealSchedule extends StatelessWidget {
                                                   'Are you sure want to clear?');
                                           if (shouldConfirm == true) {
                                             await DeleteAllRecordMealUseCase()
-                                                .call();
+                                                .call(params: date);
                                             Future.delayed(
                                                 const Duration(
                                                     milliseconds: 300),
@@ -233,7 +242,7 @@ class MealSchedule extends StatelessWidget {
                                       ),
                                     )
                                   : const Padding(
-                                      padding: const EdgeInsets.symmetric(
+                                      padding:  EdgeInsets.symmetric(
                                           vertical: 15),
                                       child: Center(
                                         child:

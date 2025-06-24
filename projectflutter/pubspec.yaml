@@ -120,6 +120,7 @@ flutter:
     - assets/images/p_privacy.png
     - assets/images/p_workout.png
     - assets/images/p_next.png
+    - assets/images/signin-logo.png
 
     # Meal
     - assets/images/snack.png

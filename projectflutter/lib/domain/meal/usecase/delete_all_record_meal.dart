@@ -4,9 +4,9 @@ import 'package:projectflutter/service_locator.dart';
 
 class NoParamsRecord {}
 
-class DeleteAllRecordMealUseCase extends UseCase<void, NoParamsRecord> {
+class DeleteAllRecordMealUseCase extends UseCase<void, DateTime> {
   @override
-  Future<void> call({void params}) async {
-    return await sl<MealRepository>().deteleAllRecordMeal();
+  Future<void> call({DateTime ? params}) async {
+    return await sl<MealRepository>().deteleAllRecordMeal(params!);
   }
 }

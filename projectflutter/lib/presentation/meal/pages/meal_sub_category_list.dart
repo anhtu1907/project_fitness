@@ -44,8 +44,7 @@ class MealSubCategoryListPage extends StatelessWidget {
                     subCategoryName: total[index].subCategoryName,
                     description: total[index].description,
                     kcal: kcal[total[index].subCategoryName] ?? 0,
-                    totalFood: totalFood[total[index].subCategoryName] ?? 0,
-                    onPressed: () {}),
+                    totalFood: totalFood[total[index].subCategoryName] ?? 0),
               );
             },
           )),

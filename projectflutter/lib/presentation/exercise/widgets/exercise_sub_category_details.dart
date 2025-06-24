@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/api/shared_preference_service.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/data/exercise_sub_category_image.dart';
 import 'package:projectflutter/core/data/exercises_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
+import 'package:projectflutter/domain/exercise/usecase/get_exercise_favorite.dart';
+import 'package:projectflutter/domain/exercise/usecase/remove_exercise_favorite.dart';
 import 'package:projectflutter/presentation/exercise/pages/exercise_details.dart';
 import 'package:projectflutter/presentation/exercise/widgets/exercises_row.dart';
 import 'package:projectflutter/presentation/exercise/widgets/select_date_schedule.dart';
+import 'package:projectflutter/presentation/exercise/widgets/show_dialog_list_favorite.dart';
 import 'package:projectflutter/presentation/exercise/widgets/title_sub_title_cell_kcal.dart';
 import 'package:projectflutter/presentation/exercise/widgets/title_sub_title_cell_time.dart';
 import 'package:projectflutter/presentation/exercise/widgets/title_subtitle_cell_level.dart';
 import 'package:readmore/readmore.dart';
+import 'package:projectflutter/service_locator.dart';
 
-class ExerciseSubCategoryDetails extends StatelessWidget {
+class ExerciseSubCategoryDetails extends StatefulWidget {
   final int subCategoryId;
   final String subCategoryName;
   final String description;
@@ -34,8 +39,57 @@ class ExerciseSubCategoryDetails extends StatelessWidget {
       required this.totalExercise});
 
   @override
+  State<ExerciseSubCategoryDetails> createState() =>
+      _ExerciseSubCategoryDetailsState();
+}
+
+class _ExerciseSubCategoryDetailsState
+    extends State<ExerciseSubCategoryDetails> {
+  bool _isSaveFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfFavorite();
+  }
+
+  void _checkIfFavorite() async {
+    final favoriteIdStrings = SharedPreferenceService.favoriteIds;
+    final favoriteIds = favoriteIdStrings!
+        .map((e) => int.tryParse(e))
+        .where((e) => e != null)
+        .map((e) => e!)
+        .toList();
+    final results = await Future.wait(
+      favoriteIds.map((id) => sl<GetExerciseFavoriteUseCase>().call(params: id)),
+    );
+
+
+    bool found = false;
+
+    for (final eitherResult in results) {
+      eitherResult.fold(
+            (failure) => null,
+            (list) {
+          if (list.any((e) => e.subCategory?.id == widget.subCategoryId)) {
+            found = true;
+          }
+        },
+      );
+      if (found) break;
+    }
+
+    if (mounted) {
+      setState(() {
+        _isSaveFavorite = found;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
+
     return NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
@@ -49,7 +103,7 @@ class ExerciseSubCategoryDetails extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   Image.asset(
-                    exerciseSubCategory[subCategoryId].toString(),
+                    exerciseSubCategory[widget.subCategoryId].toString(),
                     fit: BoxFit.cover,
                   ),
                   Positioned(
@@ -91,31 +145,59 @@ class ExerciseSubCategoryDetails extends StatelessWidget {
                 children: [
                   Padding(
                       padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: Text(
-                        subCategoryName,
-                        style: TextStyle(
-                            color: AppColors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            widget.subCategoryName,
+                            style: TextStyle(
+                                color: AppColors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              if (!_isSaveFavorite) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return ShowDialogListFavorite(subCategoryId: widget.subCategoryId);
+                                  },
+                                ).then((result) {
+                                  if (mounted && result == true) {
+                                    setState(() {
+                                      _isSaveFavorite = true;
+                                    });
+                                  }
+                                });
+                              } else {
+                                _removeFavorite();
+                              }
+                            },
+                            icon: _isSaveFavorite
+                                ? const Icon(Icons.star, color: Colors.orange, size: 35)
+                                : const Icon(Icons.star_border_outlined, size: 35),
+                          )
+                        ],
                       )),
                   SizedBox(
                     height: media.width * 0.01,
                   ),
-                  _subTitle(level, totalDuration, kcal),
+                  _subTitle(widget.level, widget.totalDuration, widget.kcal),
                   SizedBox(
                     height: media.width * 0.05,
                   ),
                   SelectDateSchedule(
                     icon: "assets/images/time.png",
                     title: "Schedule Workout",
-                    subCategoryId: subCategoryId,
+                    subCategoryId: widget.subCategoryId,
                     color: AppColors.primaryColor2,
                   ),
                   SizedBox(
                     height: media.width * 0.05,
                   ),
                   ReadMoreText(
-                    description,
+                    widget.description,
                     trimLines: 4,
                     colorClickableText: AppColors.black,
                     trimMode: TrimMode.Line,
@@ -144,7 +226,7 @@ class ExerciseSubCategoryDetails extends StatelessWidget {
                         width: 8,
                       ),
                       Text(
-                        '( ${totalExercise.toString()} )',
+                        '( ${widget.totalExercise.toString()} )',
                         style: TextStyle(color: AppColors.gray, fontSize: 12),
                       )
                     ],
@@ -153,18 +235,18 @@ class ExerciseSubCategoryDetails extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.only(bottom: 70.0),
                     shrinkWrap: true,
-                    itemCount: exercises.length,
+                    itemCount: widget.exercises.length,
                     itemBuilder: (context, index) {
                       return ExercisesRow(
-                          image:
-                              exerciseImageMap[exercises[index].id].toString(),
-                          name: exercises[index].exerciseName,
-                          duration: exercises[index].duration,
+                          image: exerciseImageMap[widget.exercises[index].id]
+                              .toString(),
+                          name: widget.exercises[index].exerciseName,
+                          duration: widget.exercises[index].duration,
                           onPressed: () {
                             AppNavigator.push(
                                 context,
                                 ExerciseDetailsPage(
-                                    exercises: exercises[index]));
+                                    exercises: widget.exercises[index]));
                           });
                     },
                   )
@@ -199,5 +281,17 @@ class ExerciseSubCategoryDetails extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _removeFavorite() async {
+      sl<RemoveExerciseFavoriteUseCase>().call(params: widget.subCategoryId);
+      print('SubCategory ID: ${widget.subCategoryId}');
+      setState(() {
+        _isSaveFavorite = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Exercise removed from your favorites")),
+      );
+
   }
 }

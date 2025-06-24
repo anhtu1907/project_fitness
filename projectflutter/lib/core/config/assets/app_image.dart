@@ -20,6 +20,7 @@ class AppImages {
   // Welcome & Splash
   static const welcome = "${basePath}welcome$png";
   static const imgSplash = "${basePath}fitness-logo$png";
+  static const signinLogo = "${basePath}signin-logo$png";
   static const nextIcon = "${basePath}next_icon$png";
   static const moreV = "${basePath}More_V$png";
   // Auth

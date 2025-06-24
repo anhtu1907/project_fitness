@@ -25,7 +25,7 @@ export 'package:projectflutter/domain/bmi/usecase/get_all_goal_by_user.dart';
 export 'package:projectflutter/presentation/home/bloc/exercise_schedule_cubit.dart';
 export 'package:projectflutter/data/exercise/repository/exercise_repository_impl.dart';
 export 'package:projectflutter/domain/exercise/repository/exercise_repository.dart';
-export 'package:projectflutter/data/exercise/service/exercise_service.dart';
+export 'package:projectflutter/data/exercise/source/exercise_service.dart';
 export 'package:projectflutter/domain/exercise/usecase/delete_all_schedule_by_time.dart';
 export 'package:projectflutter/domain/exercise/usecase/delete_schedule.dart';
 export 'package:projectflutter/domain/exercise/usecase/get_exercise_by_sub_category.dart';
@@ -39,6 +39,13 @@ export 'package:projectflutter/domain/exercise/usecase/get_exercise_session.dart
 export 'package:projectflutter/domain/exercise/usecase/get_exercises.dart';
 export 'package:projectflutter/domain/exercise/usecase/schedule_exercise.dart';
 export 'package:projectflutter/domain/exercise/usecase/start_exercise.dart';
+
+export 'package:projectflutter/domain/exercise/usecase/get_favorites.dart';
+export 'package:projectflutter/domain/exercise/usecase/get_exercise_favorite.dart';
+export 'package:projectflutter/domain/exercise/usecase/add_favorite.dart';
+export 'package:projectflutter/domain/exercise/usecase/add_exercise_favorite.dart';
+export 'package:projectflutter/domain/exercise/usecase/remove_favorite.dart';
+export 'package:projectflutter/domain/exercise/usecase/remove_exercise_favorite.dart';
 
 // Meal
 export 'package:projectflutter/data/meal/repository/meal_repository_impl.dart';
@@ -60,3 +67,13 @@ export 'package:projectflutter/domain/run/repository/run_repository.dart';
 export 'package:projectflutter/data/run/repository/run_repository_impl.dart';
 export 'package:projectflutter/domain/run/usecase/get_record_run_by_user.dart';
 export 'package:projectflutter/data/run/source/run_service.dart';
+
+// Main
+export 'package:projectflutter/common/api/shared_preference_service.dart';
+export 'package:projectflutter/core/config/themes/app_theme.dart';
+export 'package:projectflutter/notification_service.dart';
+export 'package:projectflutter/presentation/exercise/bloc/button_exercise_cubit.dart';
+export 'package:projectflutter/presentation/splash/bloc/splash_cubit.dart';
+export 'package:projectflutter/presentation/splash/pages/splash.dart';
+export 'package:projectflutter/service_locator.dart';
+

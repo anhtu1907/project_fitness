@@ -9,12 +9,14 @@ class ShowOverlay extends StatefulWidget {
       required this.currentStep,
       required this.totalSteps,
       required this.startExercise,
+      required this.onPressed,
       required this.showOverlay,
       required this.countDown});
   final List<ExercisesEntity> exercises;
   final int currentStep;
   final int totalSteps;
   final VoidCallback startExercise;
+  final VoidCallback onPressed;
   bool showOverlay;
   final int countDown;
   @override
@@ -75,12 +77,7 @@ class _ShowOverlayState extends State<ShowOverlay> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
                 ),
-                onPressed: () {
-                  setState(() {
-                    widget.showOverlay = false;
-                  });
-                  widget.startExercise();
-                },
+                onPressed: widget.onPressed,
                 child: const Text('Start'),
               ),
             ),

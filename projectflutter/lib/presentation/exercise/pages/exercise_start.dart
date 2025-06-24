@@ -13,6 +13,7 @@ import 'package:projectflutter/presentation/exercise/bloc/button_exercise_cubit.
 import 'package:projectflutter/presentation/exercise/pages/exercise_result.dart';
 import 'package:projectflutter/presentation/exercise/widgets/exercise_rest.dart';
 import 'package:projectflutter/presentation/exercise/widgets/show_overlay.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ExerciseStart extends StatefulWidget {
   final List<ExercisesEntity> exercises;
@@ -44,11 +45,20 @@ class _ExerciseStartsState extends State<ExerciseStart> {
   void initState() {
     super.initState();
     currentExercise = widget.exercises[widget.currentIndex];
-    // _counter = currentExercise.duration;
-    _counter = 10;
+    _initPreferencesAndStart();
 
+  }
+
+  void _initPreferencesAndStart() async{
+    final prefs = await SharedPreferences.getInstance();
+    final overlayPref =  prefs.getBool('overlay');
+    setState(() {
+      _showOverlay = widget.currentIndex == 0 || overlayPref!;
+      // _counter = currentExercise.duration;
+      _counter = 10;
+    });
     _startTotalDurationTimer();
-    _showOverlay = widget.currentIndex == 0;
+
     if (_showOverlay) {
       _startCountdown();
     } else {
@@ -324,72 +334,13 @@ class _ExerciseStartsState extends State<ExerciseStart> {
               totalSteps: totalSteps,
               startExercise: _startExercise,
               showOverlay: _showOverlay,
+              onPressed: () {
+                  setState(() {
+                    _showOverlay = false;
+                  });
+                  _startExercise();
+                },
               countDown: _countdown)
-        // Container(
-        //   color: Colors.black.withOpacity(0.7),
-        //   width: double.infinity,
-        //   height: double.infinity,
-        //   child: Stack(
-        //     children: [
-        //       Center(
-        //         child: Column(
-        //           mainAxisSize: MainAxisSize.min,
-        //           children: [
-        //             const Text(
-        //               'READY TO GO?',
-        //               style: TextStyle(
-        //                   color: Colors.white,
-        //                   fontSize: 26,
-        //                   fontWeight: FontWeight.bold),
-        //             ),
-        //             const SizedBox(height: 20),
-        //             Text(
-        //               'Exercise : ${currentStep + 1}/$totalSteps',
-        //               style:
-        //                   const TextStyle(color: Colors.white, fontSize: 18),
-        //             ),
-        //             const SizedBox(height: 20),
-        //             Text(
-        //               _countdown.toString(),
-        //               style: const TextStyle(
-        //                 color: Colors.white,
-        //                 fontSize: 60,
-        //                 fontWeight: FontWeight.bold,
-        //               ),
-        //             ),
-        //             const SizedBox(height: 20),
-        //             Text(
-        //               widget.exercises[currentStep].exerciseName,
-        //               style: TextStyle(
-        //                   color: AppColors.primaryColor1, fontSize: 20),
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //       Align(
-        //         alignment: Alignment.bottomCenter,
-        //         child: Padding(
-        //           padding: const EdgeInsets.only(bottom: 40),
-        //           child: ElevatedButton(
-        //             style: ElevatedButton.styleFrom(
-        //               backgroundColor: Colors.white,
-        //               foregroundColor: Colors.black,
-        //               padding: const EdgeInsets.symmetric(
-        //                   horizontal: 60, vertical: 20),
-        //             ),
-        //             onPressed: () {
-        //               setState(() {
-        //                 _showOverlay = false;
-        //               });
-        //               _startExercise();
-        //             },
-        //             child: const Text('Start'),
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // )
       ]),
     );
   }

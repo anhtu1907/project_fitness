@@ -14,7 +14,6 @@ class MealSubCategoryCard extends StatelessWidget {
   final String description;
   final double kcal;
   final int totalFood;
-  final VoidCallback onPressed;
 
   const MealSubCategoryCard(
       {super.key,
@@ -22,8 +21,7 @@ class MealSubCategoryCard extends StatelessWidget {
       required this.subCategoryName,
       required this.description,
       required this.kcal,
-      required this.totalFood,
-      required this.onPressed});
+      required this.totalFood});
 
   @override
   Widget build(BuildContext context) {
@@ -92,46 +90,6 @@ class MealSubCategoryCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                            width: 100,
-                            height: 25,
-                            child: RoundButton(
-                              title: "Add Plan",
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                              onPressed: () async {
-                                final getMeals = GetMealBySubCategoryUseCase();
-                                final result =
-                                    await getMeals.call(params: subCategoryId);
-                                result.fold((err) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text('Error: $err')));
-                                }, (data) async {
-                                  final List<MealsEntity> meals =
-                                      List<MealsEntity>.from(data);
-                                  List<int> mealIds =
-                                      meals.map((meal) => meal.id).toList();
-                                  final saveListRecord =
-                                      SaveRecordMealUseCase();
-                                  await saveListRecord.call(params: mealIds);
-                                  if (context.mounted) {
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              'Plan has been added to the meal schedule ')),
-                                    );
-                                  }
-                                });
-                              },
-                            )),
-                      ],
-                    )
                   ]),
             )
           ],

@@ -135,7 +135,7 @@ class ExerciseResultPage extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        AppNavigator.pushReplacement(context, const TabsPage());
+                        AppNavigator.pushAndRemoveUntil(context, const TabsPage());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor1,

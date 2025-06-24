@@ -9,6 +9,7 @@ import 'package:projectflutter/common/components/fields/my_text_field.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/common/widget/button/basic_reactive_button.dart';
+import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/icon/icon_custom.dart';
 import 'package:projectflutter/data/auth/request/signin_request.dart';
@@ -31,7 +32,7 @@ class _SigninPageState extends State<SigninPage> {
   final TextEditingController _passwordCon = TextEditingController();
 
   final SecureStorage secureStorage = SecureStorage();
-   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   @override
   void initState() {
     super.initState();
@@ -62,7 +63,6 @@ class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BasicAppBar(hideBack: true),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         behavior: HitTestBehavior.translucent,
@@ -71,78 +71,148 @@ class _SigninPageState extends State<SigninPage> {
           child: BlocListener<ButtonStateCubit, ButtonState>(
             listener: (context, state) async {
               if (state is ButtonFailureState) {
-                final snackbar = SnackBar(
-                  content: Text(state.errorMessage),
-                  behavior: SnackBarBehavior.floating,
+                showDialog(
+                  context: context,
+                  builder: (context) => _alertDialog(state.errorMessage,
+                      'Login Failed', Colors.red, Icons.close),
                 );
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(snackbar);
               }
               if (state is ButtonSuccessState) {
                 await secureStorage.writeSecureData('email', _emailCon.text);
                 await secureStorage.writeSecureData(
                     'password', _passwordCon.text);
 
-                const snackbar = SnackBar(
-                  content: Text("Login Successfully"),
-                  behavior: SnackBarBehavior.floating,
+                showDialog(
+                  context: context,
+                  builder: (context) => _alertDialog('Successful',
+                      'Login Successfully', Colors.green, Icons.check),
                 );
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                await Future.delayed(const Duration(seconds: 1));
                 AppNavigator.pushReplacement(context, const WelcomePage());
               }
             },
-            child: SingleChildScrollView(
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Form(
-                    key: _formKey,
-                    autovalidateMode: _autovalidateMode,
-                    child: Column(
-                      children: [
-                        Text(
-                          'Hey there,',
-                          style: TextStyle(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.light
-                                  ? AppColors.black
-                                  : AppColors.white,
-                              fontSize: 20),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Welcome Back',
-                          style: TextStyle(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.light
-                                  ? AppColors.black
-                                  : AppColors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30),
-                        ),
-                        const SizedBox(height: 20),
-                        _emailField(),
-                        const SizedBox(height: 20),
-                        _passwordField(),
-                        const SizedBox(height: 20),
-                        Align(
-                            alignment: Alignment.centerRight,
-                            child: _forgetPassword(context)),
-                        const SizedBox(height: 20),
-                        _signinButton(),
-                        const SizedBox(height: 20),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: _createAccount(context)),
-                      ],
-                    ),
+            child: SafeArea(
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: _autovalidateMode,
+                  child: Column(
+                    children: [
+                      Container(
+                          height: 300,
+                          decoration: BoxDecoration(
+                              gradient:
+                                  LinearGradient(colors: AppColors.primaryG)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 50, bottom: 30, left: 15, right: 15),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Image.asset(
+                                    AppImages.signinLogo,
+                                    width: double.infinity,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                                const SizedBox(height: 25,),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Login',
+                                        style: TextStyle(
+                                            color: AppColors.white,
+                                            fontSize: 40,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      Text(
+                                        'Please sign in to continue',
+                                        style: TextStyle(color: AppColors.white, fontSize: 16),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Expanded(
+                          child: SingleChildScrollView(
+                            child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  children: [
+                                    _emailField(),
+                                    const SizedBox(height: 20),
+                                    _passwordField(),
+                                    const SizedBox(height: 20),
+                                    Align(
+                                        alignment: Alignment.centerRight,
+                                        child: _forgetPassword(context)),
+                                    const SizedBox(height: 20),
+                                    _signinButton(),
+                                    const SizedBox(height: 20),
+                                    Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: _createAccount(context)),
+                                  ],
+                                )),
+                          ),
+
+                      )
+                    ],
                   ),
                 ),
               ),
             ),
           ),
         ),
+      );
+  }
+
+  Widget _alertDialog(
+      String content, String status, Color color, IconData icon) {
+    return AlertDialog(
+      titlePadding: const EdgeInsets.all(0),
+      backgroundColor: Colors.white,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 80,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                border: Border.all(color: color)),
+            padding: const EdgeInsets.all(8),
+            child: Icon(
+              icon,
+              color: color,
+              size: 40,
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Text(
+            status,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Text(
+            content,
+            style: const TextStyle(fontSize: 16),
+          )
+        ],
       ),
     );
   }
@@ -156,6 +226,9 @@ class _SigninPageState extends State<SigninPage> {
       prefixIcon: const IconCustom(icon: Icons.email),
       validator: (value) {
         if (value == null || value.isEmpty) return 'Email is required';
+        if (!RegExp(r"^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(value)) {
+          return 'Invalid email format';
+        }
         return null;
       },
     );

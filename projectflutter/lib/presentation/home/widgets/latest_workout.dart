@@ -12,6 +12,7 @@ import 'package:projectflutter/presentation/exercise/pages/exercise_result.dart'
 import 'package:projectflutter/presentation/exercise/pages/exercise_start.dart';
 import 'package:projectflutter/presentation/profile/bloc/workout_progress_cubit.dart';
 import 'package:projectflutter/presentation/profile/bloc/workout_progress_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LatestWorkout extends StatelessWidget {
   const LatestWorkout({super.key});
@@ -125,6 +126,8 @@ class LatestWorkout extends StatelessWidget {
                                             'Are you sure want to continue?');
                                     print('Progress: ${progressRatio * 100}');
                                     if (shouldContinue == true) {
+                                      final prefs = await SharedPreferences.getInstance();
+                                      prefs.setBool('overlay', true);
                                       final filteredExercises = exerciseList
                                           .where((e) =>
                                               e.subCategory!.id ==

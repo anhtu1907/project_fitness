@@ -22,10 +22,10 @@ class SelectDateSchedule extends StatefulWidget {
       required this.subCategoryId});
 
   @override
-  State<SelectDateSchedule> createState() => _IconTitleRowState();
+  State<SelectDateSchedule> createState() => _SelectDateScheduleState();
 }
 
-class _IconTitleRowState extends State<SelectDateSchedule> {
+class _SelectDateScheduleState extends State<SelectDateSchedule> {
   String selectedDateTime = 'Select Date';
 
   void _pickDateTime(BuildContext context) async {

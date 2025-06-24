@@ -39,7 +39,7 @@ class AppTheme {
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.lightGray,
+        fillColor: AppColors.white,
         hintStyle: const TextStyle(
             color: Color(0xffA7A7A7), fontWeight: FontWeight.w500),
         contentPadding: const EdgeInsets.all(15),
@@ -48,7 +48,7 @@ class AppTheme {
             borderSide: BorderSide.none),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4),
-            borderSide: BorderSide(color: AppColors.black)),
+            borderSide: BorderSide(color: AppColors.gray.withOpacity(0.2))),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4),
           borderSide: const BorderSide(color: Colors.blue, width: 3),

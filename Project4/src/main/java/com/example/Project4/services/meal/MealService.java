@@ -1,5 +1,6 @@
 package com.example.Project4.services.meal;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.example.Project4.payload.meal.UserMealsRequest;
@@ -18,5 +19,5 @@ public interface MealService {
     List<UserMealsModel> saveRecordMeal(UserMealsRequest request);
     List<UserMealsModel> getRecordMeal(int userId);
     void deleteRecordMeal(int recordId);
-    void deleteAllRecordMeal(int userId);
+    void deleteAllRecordMeal(int userId, LocalDate date);
 }

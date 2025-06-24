@@ -1,26 +1,33 @@
 import 'package:dartz/dartz.dart';
 import 'package:projectflutter/data/exercise/model/exercise_category_model.dart';
+import 'package:projectflutter/data/exercise/model/exercise_favorite_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_progress_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_schedule_model.dart';
+import 'package:projectflutter/data/exercise/model/favorites_model.dart';
+import 'package:projectflutter/data/exercise/request/exercise_favorite_request.dart';
 import 'package:projectflutter/data/exercise/request/exercise_schedule_request.dart';
 import 'package:projectflutter/data/exercise/model/exercise_session_model.dart';
 import 'package:projectflutter/data/exercise/request/exercise_session_request.dart';
 import 'package:projectflutter/data/exercise/model/exercise_sub_category_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_user_model.dart';
 import 'package:projectflutter/data/exercise/model/exercises_model.dart';
-import 'package:projectflutter/data/exercise/service/exercise_service.dart';
+import 'package:projectflutter/data/exercise/source/exercise_service.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_category_entity.dart';
+import 'package:projectflutter/domain/exercise/entity/exercise_favorite_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_progress_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_schedule_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_session_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_sub_category_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_user_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
+import 'package:projectflutter/domain/exercise/entity/favorites_entity.dart';
 import 'package:projectflutter/domain/exercise/repository/exercise_repository.dart';
 import 'package:projectflutter/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExerciseRepositoryImpl extends ExerciseRepository {
+
+  // Exercise
   @override
   Future<Either> getAllSubCategory() async {
     var subCategory = await sl<ExerciseService>().getAllSubCategory();
@@ -61,6 +68,39 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
       return Right(ExercisesModel.fromJson(data).toEntity());
     });
   }
+
+
+  @override
+  Future<Either> getAllExercise() async {
+    var exercises = await sl<ExerciseService>().getAllExercise();
+    return exercises.fold((err) {
+      return Left(err);
+    }, (data) {
+      List<ExercisesModel> models =
+      (data as List).map((e) => ExercisesModel.fromMap(e)).toList();
+      List<ExercisesEntity> entities = models.map((m) => m.toEntity()).toList();
+
+      return Right(entities);
+    });
+  }
+
+  @override
+  Future<Either> getAllCategory() async {
+    var exerciseCategory = await sl<ExerciseService>().getAllCategory();
+    return exerciseCategory.fold((err) {
+      return Left(err);
+    }, (data) {
+      List<ExerciseCategoryModel> models =
+      (data as List).map((e) => ExerciseCategoryModel.fromMap(e)).toList();
+      List<ExerciseCategoryEntity> entities =
+      models.map((m) => m.toEntity()).toList();
+
+      return Right(entities);
+    });
+  }
+
+
+  // Result
 
   @override
   Future<Either> getAllExerciseProgressByUserId() async {
@@ -133,34 +173,7 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
     return await sl<ExerciseService>().startExercise(req);
   }
 
-  @override
-  Future<Either> getAllExercise() async {
-    var exercises = await sl<ExerciseService>().getAllExercise();
-    return exercises.fold((err) {
-      return Left(err);
-    }, (data) {
-      List<ExercisesModel> models =
-          (data as List).map((e) => ExercisesModel.fromMap(e)).toList();
-      List<ExercisesEntity> entities = models.map((m) => m.toEntity()).toList();
-
-      return Right(entities);
-    });
-  }
-
-  @override
-  Future<Either> getAllCategory() async {
-    var exerciseCategory = await sl<ExerciseService>().getAllCategory();
-    return exerciseCategory.fold((err) {
-      return Left(err);
-    }, (data) {
-      List<ExerciseCategoryModel> models =
-          (data as List).map((e) => ExerciseCategoryModel.fromMap(e)).toList();
-      List<ExerciseCategoryEntity> entities =
-          models.map((m) => m.toEntity()).toList();
-
-      return Right(entities);
-    });
-  }
+  // Schedule
 
   @override
   Future<Either> getAllExerciseScheduleByUserId() async {
@@ -190,5 +203,51 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
   @override
   Future<void> deleteAllExerciseScheduleByTime() async {
     return await sl<ExerciseService>().deleteAllExerciseScheduleByTime();
+  }
+
+  // Favorite
+
+@override
+  Future<Either> getAllFavorite() async {
+    var favorites = await sl<ExerciseService>().getAllFavorite();
+    return favorites.fold((err){
+      return Left(err);
+    }, (data){
+      List<FavoritesModel> models = (data as List).map((e) => FavoritesModel.fromMap(e)).toList();
+      List<FavoritesEntity> entities = models.map((m) => m.toEntity()).toList();
+      return Right(entities);
+    });
+  }
+
+  @override
+  Future<Either> addNewFavoriteByUserId(String favoriteName) async{
+    return await sl<ExerciseService>().addNewFavoriteByUserId(favoriteName);
+  }
+
+  @override
+  Future<Either> addExerciseFavoriteByUserId(ExerciseFavoriteRequest req) async {
+    return await sl<ExerciseService>().addExerciseFavoriteByUserId(req);
+  }
+
+  @override
+  Future<void> removeFavorite(int favoriteId) async {
+    return await sl<ExerciseService>().removeFavorite(favoriteId);
+  }
+
+  @override
+  Future<void> removeExerciseFavorite(int subCategoryId) async {
+    return await sl<ExerciseService>().removeExerciseFavorite(subCategoryId);
+  }
+
+  @override
+  Future<Either> getAllExerciseFavorite(int favoriteId) async {
+    var favorites = await sl<ExerciseService>().getAllExerciseFavorite(favoriteId);
+    return favorites.fold((err){
+      return Left(err);
+    }, (data){
+      List<ExerciseFavoriteModel> models = (data as List).map((e) => ExerciseFavoriteModel.fromMap(e)).toList();
+      List<ExerciseFavoriteEntity> entities = models.map((m) => m.toEntity()).toList();
+      return Right(entities);
+    });
   }
 }

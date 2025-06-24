@@ -7,25 +7,32 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.Project4.payload.exercise.ExerciseFavoriteRequest;
 import com.example.Project4.payload.exercise.ExerciseScheduleRequest;
 import com.example.Project4.payload.exercise.ExerciseSessionRequest;
 import com.example.Project4.payload.exercise.ExerciseUpdateScheduleRequest;
 import com.example.Project4.models.auth.UserModel;
 import com.example.Project4.models.exercise.ExerciseCategoryModel;
+import com.example.Project4.models.exercise.ExerciseFavoriteModel;
 import com.example.Project4.models.exercise.ExerciseProgressModel;
 import com.example.Project4.models.exercise.ExerciseScheduleModel;
 import com.example.Project4.models.exercise.ExerciseSessionModel;
 import com.example.Project4.models.exercise.ExerciseSubCategoyrModel;
 import com.example.Project4.models.exercise.ExerciseUserModel;
 import com.example.Project4.models.exercise.ExercisesModel;
+import com.example.Project4.models.exercise.FavoritesModel;
 import com.example.Project4.repository.auth.UserRepository;
 import com.example.Project4.repository.exercise.ExerciseCategoryRepository;
+import com.example.Project4.repository.exercise.ExerciseFavoriteRepository;
 import com.example.Project4.repository.exercise.ExerciseProgressRepository;
 import com.example.Project4.repository.exercise.ExerciseScheduleRepository;
 import com.example.Project4.repository.exercise.ExerciseSessionRepository;
 import com.example.Project4.repository.exercise.ExerciseSubCategoryRepository;
 import com.example.Project4.repository.exercise.ExerciseUserRepository;
 import com.example.Project4.repository.exercise.ExercisesRepository;
+import com.example.Project4.repository.exercise.FavoritesRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
@@ -43,6 +50,11 @@ public class ExerciseServiceImpl implements ExerciseService {
     private ExerciseSessionRepository exerciseSessionRepository;
     @Autowired
     private ExerciseScheduleRepository exerciseScheduleRepository;
+    @Autowired
+    private ExerciseFavoriteRepository exerciseFavoriteRepository;
+    @Autowired
+    private FavoritesRepository favoritesRepository;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -194,5 +206,66 @@ public class ExerciseServiceImpl implements ExerciseService {
             exerciseScheduleRepository.delete(schedule);
 
         }
+    }
+
+    // Favorite
+    @Override
+    public List<FavoritesModel> getAllFavoriteByUserId(int userId) {
+        UserModel user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return favoritesRepository.findAllFavoriteByUserId(user.getId());
+    }
+    @Override
+    public List<ExerciseFavoriteModel> getAllExerciseFavoriteByUserId(
+            int userId,int favoriteId) {
+         UserModel user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+                FavoritesModel favorite = favoritesRepository.findById(favoriteId)
+                .orElseThrow(() -> new RuntimeException("Favorite not found"));
+        return exerciseFavoriteRepository.findAllByUserIdAndFavoriteId(user.getId(), favorite.getId());
+    }
+
+    @Override
+    public FavoritesModel addNewFavoriteByUserId(int userId, String favoriteName) {
+        UserModel user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        FavoritesModel newFavorite = new FavoritesModel();
+        newFavorite.setUser(user);
+        newFavorite.setFavoriteName(favoriteName);
+        favoritesRepository.save(newFavorite);
+        return newFavorite;
+    }
+
+    @Override
+    public ExerciseFavoriteModel addExerciseFavoriteByUserId(ExerciseFavoriteRequest req, int userId) {
+        UserModel user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        ExerciseSubCategoyrModel subCategory = exerciseSubCategoryRepository.findById(req.getSubCategory())
+                .orElseThrow(() -> new RuntimeException("Sub Category not found"));
+                 FavoritesModel favorite = favoritesRepository.findById(req.getFavorite())
+                .orElseThrow(() -> new RuntimeException("Favorite not found"));
+        ExerciseFavoriteModel newExercise = new ExerciseFavoriteModel();
+        newExercise.setFavorite(favorite);
+        newExercise.setSubCategory(subCategory);
+        newExercise.setUser(user);
+        exerciseFavoriteRepository.save(newExercise);
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public void removeExerciseFavorite(int subCategoryId) {
+        ExerciseSubCategoyrModel subCategory = exerciseSubCategoryRepository.findById(subCategoryId)
+                .orElseThrow(() -> new RuntimeException("Sub Category not found"));
+
+        exerciseFavoriteRepository.deleteBySubCategoryId(subCategory.getId());
+    }
+
+    @Override
+    @Transactional
+    public void removeFavorite(int favoriteId) {
+        FavoritesModel favorite = favoritesRepository.findById(favoriteId)
+                .orElseThrow(() -> new RuntimeException("Favorite Not Found"));
+        favoritesRepository.delete(favorite);
     }
 }

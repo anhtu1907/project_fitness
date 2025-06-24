@@ -1,6 +1,7 @@
 package com.example.Project4.payload.meal;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Getter;
@@ -11,4 +12,5 @@ import lombok.Setter;
 public class UserMealsRequest {
     private int user;
     private List<Integer> meal;
+    private LocalDateTime created;
 }

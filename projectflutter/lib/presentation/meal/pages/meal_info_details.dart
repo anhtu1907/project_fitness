@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/common/api/shared_preference_service.dart';
 import 'package:projectflutter/common/widget/button/round_button.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/data/meal/request/user_meal_request.dart';
 import 'package:projectflutter/presentation/meal/bloc/meal_by_id_cubit.dart';
 import 'package:projectflutter/presentation/meal/bloc/meal_by_id_state.dart';
 import 'package:readmore/readmore.dart';
@@ -248,22 +250,54 @@ class MealInfoDetails extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 15),
                                 child: RoundButton(
                                     title: "Add to calculate",
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (context.mounted) {
-                                        context
-                                            .read<MealByIdCubit>()
-                                            .saveRecordMeal([state.entity.id]);
-                                        Navigator.pop(context, true);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  '1 item has been added to the meal schedule ')),
+                                        DateTime now = DateTime.now();
+                                        DateTime today = DateTime(
+                                            now.year, now.month, now.day);
+
+                                        DateTime? pickedDate =
+                                            await showDatePicker(
+                                          context: context,
+                                          initialDate: today,
+                                          firstDate: today,
+                                          lastDate: DateTime(2100),
                                         );
+
+                                        if (pickedDate != null) {
+                                          final created = DateTime(
+                                            pickedDate.year,
+                                            pickedDate.month,
+                                            pickedDate.day,
+                                            now.hour,
+                                            now.minute,
+                                            now.second,
+                                          );
+                                          final req = UserMealRequest(
+                                            user:
+                                                SharedPreferenceService.userId!,
+                                            meal: [state.entity.id],
+                                            created: created,
+                                          );
+
+                                          context
+                                              .read<MealByIdCubit>()
+                                              .saveRecordMeal(req);
+
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'Meal plan scheduled successfully.'),
+                                              ),
+                                            );
+                                          }
+                                        }
                                       }
                                     }),
                               ),

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/presentation/exercise/widgets/exercise_category_list.dart';
+import 'package:projectflutter/presentation/exercise/widgets/favorites.dart';
 import 'package:projectflutter/presentation/exercise/widgets/exercise_list_category_popular.dart';
 import 'package:projectflutter/presentation/exercise/widgets/exercise_sections.dart';
 
@@ -55,7 +56,11 @@ class ExercisesPage extends StatelessWidget {
               SizedBox(
                 height: media.width * 0.05,
               ),
-              const ExerciseSections()
+              const Favorites(),
+              SizedBox(
+                height: media.width * 0.05,
+              ),
+              const ExerciseSections(),
             ],
           ),
         ),

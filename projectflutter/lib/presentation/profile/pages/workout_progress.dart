@@ -14,6 +14,7 @@ import 'package:projectflutter/presentation/exercise/pages/exercise_result.dart'
 import 'package:projectflutter/presentation/exercise/pages/exercise_start.dart';
 import 'package:projectflutter/presentation/profile/bloc/workout_progress_cubit.dart';
 import 'package:projectflutter/presentation/profile/bloc/workout_progress_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WorkoutProgressPage extends StatelessWidget {
   const WorkoutProgressPage({super.key});
@@ -135,6 +136,8 @@ class WorkoutProgressPage extends StatelessWidget {
                                     kcal: totalKcal,
                                     onPressed: () async {
                                       if (progressRatio * 100 < 100) {
+                                        final prefs = await SharedPreferences.getInstance();
+                                        prefs.setBool('overlay', true);
                                         var shouldContinue =
                                             await ShowDialog.shouldContinue(
                                                 context,

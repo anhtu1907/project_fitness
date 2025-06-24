@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:projectflutter/common/api/base_api.dart';
 import 'package:projectflutter/common/api/shared_preference_service.dart';
+import 'package:projectflutter/data/meal/request/user_meal_request.dart';
 
 abstract class MealService {
   Future<Either> getAllMeal();
@@ -12,9 +13,9 @@ abstract class MealService {
   Future<Either> getAllRecordMeal();
   Future<Either> getMealBySubCategory(int subCategoryId);
   Future<Either> getMealById(int mealId);
-  Future<Either> saveRecordMeal(List<int> mealId);
+  Future<Either> saveRecordMeal(UserMealRequest req);
   Future<void> deteleRecordMeal(int recordId);
-  Future<void> deteleAllRecordMeal();
+  Future<void> deteleAllRecordMeal(DateTime targetDate);
   Future<Either> searchByMealName(String mealName);
 }
 
@@ -112,13 +113,17 @@ class MealServiceImpl extends MealService {
   }
 
   @override
-  Future<Either> saveRecordMeal(List<int> mealId) async {
+  Future<Either> saveRecordMeal(UserMealRequest req) async {
     try {
       final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse("$baseAPI/api/meal/save/record");
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
-          body: json.encode({'user': userId, 'meal': mealId}));
+          body: json.encode({
+            'user': userId,
+            'meal': req.meal,
+            'created': req.created.toIso8601String()
+          }));
       return Right(response.body);
     } catch (err) {
       return Left('Error Message: $err');
@@ -137,9 +142,11 @@ class MealServiceImpl extends MealService {
   }
 
   @override
-  Future<void> deteleAllRecordMeal() async {
+  Future<void> deteleAllRecordMeal(DateTime targetDate) async {
     final userId = SharedPreferenceService.userId;
-    Uri url = Uri.parse("$baseAPI/api/meal/record/$userId/all");
+    final formattedDate = targetDate.toIso8601String().split('T').first;
+    print('Formatted Date: $formattedDate');
+    Uri url = Uri.parse("$baseAPI/api/meal/record/$userId/all/$formattedDate");
     final response = await http.delete(url);
     if (response.statusCode == 204) {
       print("Record deleted successfully.");

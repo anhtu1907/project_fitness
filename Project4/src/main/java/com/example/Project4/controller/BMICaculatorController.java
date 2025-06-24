@@ -20,7 +20,7 @@ public class BMICaculatorController {
     @Autowired
     private BmiService bmiService;
 
-    @GetMapping("health/{userId}")
+    @GetMapping("/health/{userId}")
     public ResponseEntity<?> getDataByUserId(@PathVariable int userId) {
         try {
             return ResponseEntity.status(200).body(bmiService.getDataByUserId(userId));
@@ -31,7 +31,7 @@ public class BMICaculatorController {
         }
     }
 
-    @GetMapping("goal/{userId}")
+    @GetMapping("/goal/{userId}")
     public ResponseEntity<?> getGoalByUserId(@PathVariable int userId) {
         try {
             return ResponseEntity.status(200).body(bmiService.getGoalByUserId(userId));

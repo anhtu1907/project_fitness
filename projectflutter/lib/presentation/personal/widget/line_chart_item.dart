@@ -23,7 +23,6 @@ class LineChartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool showLeftTitles = month == 1;
     List<FlSpot> spots = monthData.isNotEmpty
         ? ([
             for (var day in monthData.map((e) => e.createdAt!.day).toSet())
@@ -94,7 +93,7 @@ class LineChartItem extends StatelessWidget {
             leftTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: false,
-                reservedSize: 30,
+                reservedSize: 2,
                 interval: 5,
                 getTitlesWidget: (value, meta) {
                   return Text('${value.toInt()}',
@@ -124,12 +123,15 @@ class LineChartItem extends StatelessWidget {
               showTitles: true,
               getTitlesWidget: (value, meta) {
                 if (value == 1) {
-                  return Text(
-                    formattedDate,
-                    style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold),
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Text(
+                      formattedDate,
+                      style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold),
+                    ),
                   );
                 }
                 return SizedBox.shrink();
@@ -160,8 +162,8 @@ class LineChartItem extends StatelessWidget {
                 show: true,
                 gradient: LinearGradient(
                   colors: [
+                    AppColors.contentColorBlue.withOpacity(0.8),
                     AppColors.contentColorBlue.withOpacity(0.2),
-                    AppColors.contentColorBlue.withOpacity(0.0),
                   ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
