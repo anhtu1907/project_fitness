@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/round_button.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/core/data/meal_sub_category.dart';
 import 'package:projectflutter/data/meal/request/user_meal_request.dart';
 import 'package:projectflutter/domain/meal/entity/meals.dart';
@@ -27,6 +28,7 @@ class MealSubCategoryCardPlan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
         AppNavigator.push(
@@ -37,9 +39,9 @@ class MealSubCategoryCardPlan extends StatelessWidget {
             ));
       },
       child: Container(
-        height: 200,
+        height: media.width * 0.55,
         decoration: BoxDecoration(
-            color: AppColors.gray, borderRadius: BorderRadius.circular(10)),
+            color: AppColors.gray, borderRadius: BorderRadius.circular(30)),
         clipBehavior: Clip.antiAlias,
         child: Stack(
           children: [
@@ -64,44 +66,59 @@ class MealSubCategoryCardPlan extends StatelessWidget {
                       subCategoryName,
                       style: TextStyle(
                           color: AppColors.primaryColor1,
-                          fontSize: 14,
+                          fontSize: AppFontSize.caption(context),
                           fontWeight: FontWeight.w500),
                     ),
                     Text(
                       description,
                       style: TextStyle(
                           color: AppColors.white,
-                          fontSize: 20,
+                          fontSize: AppFontSize.descriptionText(context),
                           fontWeight: FontWeight.w700),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          '${kcal.toStringAsFixed(0)} Kcal | ',
-                          style: TextStyle(
-                              color: AppColors.primaryColor1,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold),
+                    SizedBox(height: media.height * 0.01,),
+                    IntrinsicWidth(
+                      child: Container(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        Text(
-                          '$totalFood foods',
-                          style:
-                              TextStyle(color: AppColors.white, fontSize: 14),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min, // RẤT QUAN TRỌNG
+                          children: [
+                            Text(
+                              '${kcal.toStringAsFixed(0)} Kcal | ',
+                              style: TextStyle(
+                                color: AppColors.kcalColor,
+                                fontSize: AppFontSize.caption(context),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              '$totalFood foods',
+                              style: TextStyle(
+                                color: AppColors.white,
+                                fontSize: AppFontSize.caption(context),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                     const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         SizedBox(
-                            width: 100,
-                            height: 25,
+                            width: media.width * 0.3,
+                            height: media.height * 0.05,
                             child: RoundButton(
                               title: "Add Plan",
-                              fontSize: 14,
+                              fontSize: AppFontSize.caption(context),
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
                               onPressed: () async {

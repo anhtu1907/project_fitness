@@ -29,6 +29,16 @@ abstract class ExerciseService {
   Future<Either> addExerciseFavoriteByUserId(ExerciseFavoriteRequest req);
   Future<void> removeFavorite(int favoriteId);
   Future<void> removeExerciseFavorite(int subCategoryId);
+  // SubCategory - Program
+  Future<Either> getAllSubCategoryProgram();
+
+  // Exercise Mode
+  Future<Either> getAllExerciseMode();
+  // Search
+  Future<Either> searchBySubCategoryName(String subCategoryName);
+// Equipment
+  Future<Either> getAllEquipmentBySubCategoryId(int subCategoryId);
+  Future<Either> getAllEquipment();
 }
 
 class ExerciseServiceImpl extends ExerciseService {
@@ -168,6 +178,7 @@ class ExerciseServiceImpl extends ExerciseService {
           body: json.encode({
             'userId': userId,
             'exerciseId': req.exerciseId,
+            'subCategoryId': req.subCategoryId,
             "duration": req.duration,
             "resetBatch": req.resetBatch
           }));
@@ -255,7 +266,8 @@ class ExerciseServiceImpl extends ExerciseService {
   Future<Either> getAllExerciseFavorite(int favoriteId) async {
     try {
       final userId = SharedPreferenceService.userId;
-      Uri url = Uri.parse("$baseAPI/api/exercise/favorite/exercise/all/$userId/$favoriteId");
+      Uri url = Uri.parse(
+          "$baseAPI/api/exercise/favorite/exercise/all/$userId/$favoriteId");
       final response = await http.get(url);
       List<dynamic> responseData = json.decode(response.body);
       return Right(responseData);
@@ -270,8 +282,7 @@ class ExerciseServiceImpl extends ExerciseService {
       final userId = SharedPreferenceService.userId;
       Uri url = Uri.parse("$baseAPI/api/exercise/favorite/new/$userId");
       final response = await http.post(url,
-          headers: {'Content-Type': 'application/json'},
-          body: favoriteName);
+          headers: {'Content-Type': 'application/json'}, body: favoriteName);
       print('Favorite: ${response.body}');
       return Right(response.body);
     } catch (err) {
@@ -284,7 +295,8 @@ class ExerciseServiceImpl extends ExerciseService {
       ExerciseFavoriteRequest req) async {
     try {
       final userId = SharedPreferenceService.userId;
-      Uri url = Uri.parse("$baseAPI/api/exercise/favorite/add/exercise/$userId");
+      Uri url =
+          Uri.parse("$baseAPI/api/exercise/favorite/add/exercise/$userId");
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
           body: json.encode(
@@ -308,12 +320,87 @@ class ExerciseServiceImpl extends ExerciseService {
 
   @override
   Future<void> removeExerciseFavorite(int subCategoryId) async {
-    Uri url = Uri.parse("$baseAPI/api/exercise/favorite/delete/exercise/$subCategoryId");
+    Uri url = Uri.parse(
+        "$baseAPI/api/exercise/favorite/delete/exercise/$subCategoryId");
     final response = await http.delete(url);
     if (response.statusCode == 204) {
       print("Exercise Favorite deleted successfully.");
     } else {
       print("Failed to delete record. Status code: ${response.statusCode}");
+    }
+  }
+
+// SubCategory - Program
+  @override
+  Future<Either> getAllSubCategoryProgram() async {
+    try {
+      Uri url = Uri.parse("$baseAPI/api/exercise/sub/category/program");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return const Left('No sub category program');
+      }
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('Error Mesage: $err');
+    }
+  }
+
+  // Exercise Mode
+  @override
+  Future<Either> getAllExerciseMode() async {
+    try {
+      Uri url = Uri.parse("$baseAPI/api/exercise/mode/all");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return const Left('No exercise mode');
+      }
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('Error Mesage: $err');
+    }
+  }
+
+  @override
+  Future<Either> searchBySubCategoryName(String subCategoryName) async {
+    try {
+      Uri url = Uri.parse(
+          "$baseAPI/api/exercise/search?subCategoryName=$subCategoryName");
+      final response = await http.get(url);
+      if (response.statusCode == 404) {
+        return Left('No sub category by $subCategoryName');
+      }
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('No Data : $err');
+    }
+  }
+
+  // Equipments
+  @override
+  Future<Either> getAllEquipmentBySubCategoryId(
+      int subCategoryId) async {
+    try {
+      Uri url = Uri.parse("$baseAPI/api/exercise/equipment/$subCategoryId");
+      final response = await http.get(url);
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('No Data : $err');
+    }
+  }
+
+  @override
+  Future<Either> getAllEquipment() async {
+    try {
+      Uri url = Uri.parse("$baseAPI/api/exercise/equipment/all");
+      final response = await http.get(url);
+      List<dynamic> responseData = jsonDecode(response.body);
+      return Right(responseData);
+    } catch (err) {
+      return Left('No Data : $err');
     }
   }
 

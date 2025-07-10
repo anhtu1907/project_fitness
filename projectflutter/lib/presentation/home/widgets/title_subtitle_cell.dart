@@ -18,8 +18,8 @@ class TitleSubtitleCell extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
       decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 2)]),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 1)]),
       child: Column(
         children: [
           Text(

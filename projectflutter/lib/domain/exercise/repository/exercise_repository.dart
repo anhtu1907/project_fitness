@@ -27,4 +27,18 @@ abstract class ExerciseRepository {
   Future<Either> addExerciseFavoriteByUserId(ExerciseFavoriteRequest req);
   Future<void> removeFavorite(int favoriteId);
   Future<void> removeExerciseFavorite(int subCategoryId);
+
+  // SubCategory-Program
+  Future<Either> getAllSubCategoryProgram();
+
+  // Exercise Mode
+  Future<Either> getAllExerciseMode();
+
+  // Search
+  Future<Either> searchBySubCategoryName(String subCategoryName);
+
+  // Equipment
+  Future<Either> getAllEquipment();
+  // Future<Either> getAllExerciseEquipment();
+  Future<Either> getAllEquipmentBySubCategoryId(int subCategoryId);
 }

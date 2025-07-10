@@ -35,10 +35,13 @@ class AuthServiceImpl extends AuthService {
         final Map<String, dynamic> responseData = json.decode(response.body);
         final prefs = await SharedPreferences.getInstance();
         final String token = responseData['token'];
+        final bool active = responseData['active'];
 
         final int userId = responseData['id'];
         final String firstname = responseData['firstname'];
-
+        if (!active) {
+          return const Left('Account is not activated yet.');
+        }
         await prefs.setString('token', token);
         await prefs.setString('firstname', firstname);
         SharedPreferenceService.userId = userId;
@@ -63,6 +66,7 @@ class AuthServiceImpl extends AuthService {
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
           body: json.encode({
+            'username': user.username,
             'firstname': user.firstname,
             'lastname': user.lastname,
             'email': user.email,

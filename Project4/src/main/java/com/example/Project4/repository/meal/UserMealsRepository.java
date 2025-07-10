@@ -19,8 +19,10 @@ public interface UserMealsRepository extends JpaRepository<UserMealsModel, Integ
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM user_meals WHERE user_id = :userId AND CONVERT(date, created_at) = :targetDate", nativeQuery = true)
+    // @Query(value = "DELETE FROM user_meals WHERE user_id = :userId AND
+    // CONVERT(date, created_at) = :targetDate", nativeQuery = true)
+    // void deleteAllByUserIdAndCreatedAtDate(@Param("userId") int userId,
+    // @Param("targetDate") LocalDate targetDate);
+    @Query(value = "DELETE FROM user_meals WHERE user_id = :userId AND DATE(created_at) = :targetDate", nativeQuery = true)
     void deleteAllByUserIdAndCreatedAtDate(@Param("userId") int userId, @Param("targetDate") LocalDate targetDate);
-//     @Query(value = "DELETE FROM user_meals WHERE user_id = :userId AND DATE(created_at) = :targetDate", nativeQuery = true)
-// void deleteAllByUserIdAndCreatedAtDate(@Param("userId") int userId, @Param("targetDate") LocalDate targetDate);
 }

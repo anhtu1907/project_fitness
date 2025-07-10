@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new IncorrectPasswordException("Incorrect password");
         }
-        if (!user.isStatus()) {
+        if (!user.isActive()) {
             throw new AccountDisabledException("Account is disabled");
         }
         return user;
@@ -65,6 +65,7 @@ public class AuthServiceImpl implements AuthService {
             code.append(random.nextInt(10));
         }
         UserModel user = new UserModel();
+        user.setUsername(registerRequest.getUsername());
         user.setFirstname(registerRequest.getFirstname());
         user.setLastname(registerRequest.getLastname());
         user.setEmail(registerRequest.getEmail());
@@ -72,12 +73,10 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(hashPassword);
         user.setDob(registerRequest.getDob());
         user.setGender(registerRequest.getGender());
-        user.setImage(registerRequest.getImage());
         user.setPhone(registerRequest.getPhone());
         user.setToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzQ1MjQ4ODc3LCJleHAiOjE3NDUyNTI0Nzd9.v8aHvgT78FCYo9p-XILy0PEccQpWdNHjClMaK955LQ8");
         user.setPinCode(code.toString());
-        user.setStatus(false);
-        user.setRoleid(2);
+        user.setActive(false);
         user.setCreatedAt(LocalDateTime.now());
 
         var isSucess = userRepository.save(user);
@@ -126,7 +125,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Invalid verification code");
         }
         user.setPinCode(null);
-        user.setStatus(true);
+        user.setActive(true);
 
         userRepository.save(user);
         return "Email verified successfully!";

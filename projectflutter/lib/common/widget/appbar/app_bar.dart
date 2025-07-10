@@ -23,7 +23,10 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: true,
       title: Column(
-        children: [title ?? const Text(''), subTitle ?? const Text('')],
+        children: [
+          if (title != null) title!,
+          if (subTitle != null) subTitle!,
+        ],
       ),
       actions: [action ?? Container()],
       leading: hideBack

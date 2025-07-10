@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/domain/auth/entity/user.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_cubit.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_state.dart';
@@ -16,9 +17,11 @@ class PersonalDataPage extends StatelessWidget {
     return Scaffold(
         appBar:  BasicAppBar(
           hideBack: false,
-          title: const Text(
+          title: Text(
             "Personal Data",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            style: TextStyle(
+                fontSize: AppFontSize.titleAppBar(context),
+                fontWeight: FontWeight.w700),
           ),
           onPressed: (){
             Navigator.of(context).pop();
@@ -35,7 +38,7 @@ class PersonalDataPage extends StatelessWidget {
                 }
                 if (state is UserInfoLoaded) {
                   final today = DateTime.now();
-                  final age = today.year - state.user.dob.year;
+                  final age = today.year - state.user.dob!.year;
                   return SafeArea(
                     child: SingleChildScrollView(
                       child: Padding(
@@ -97,9 +100,7 @@ class PersonalDataPage extends StatelessWidget {
     return ClipRRect(
         borderRadius: BorderRadius.circular(40),
         child: Image.asset(
-          user.image.isEmpty
-              ? (user.gender == 1 ? AppImages.male : AppImages.female)
-              : user.image,
+          user.gender == 1 ? AppImages.male : AppImages.female,
           width: 100,
           height: 100,
           fit: BoxFit.cover,
@@ -107,7 +108,7 @@ class PersonalDataPage extends StatelessWidget {
   }
 
   Widget _bodyProfile(UserEntity user) {
-    final formattedDate = DateFormat('dd/MM/yyyy').format(user.dob);
+    final formattedDate = DateFormat('dd/MM/yyyy').format(user.dob!);
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

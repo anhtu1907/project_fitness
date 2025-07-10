@@ -23,6 +23,9 @@ public class ExerciseSessionModel {
     @ManyToOne
     @JoinColumn(name = "exercise_id", referencedColumnName = "id")
     private ExercisesModel exercise;
+    @ManyToOne
+    @JoinColumn(name = "sub_category_id", referencedColumnName = "id")
+    private ExerciseSubCategoryModel subCategory;
     @Column(name = "kcal")
     private double kcal;
     @Column(name = "reset_batch")

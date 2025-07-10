@@ -12,8 +12,8 @@ class MealsEntity {
   final double carbonhydrate;
   final double fiber;
   final double sugar;
-  final MealSubCategoryModel subCategory;
-  final MealTimeModel timeOfDay;
+  final List<MealSubCategoryModel> subCategory;
+  final List<MealTimeModel> timeOfDay;
 
   MealsEntity(
       {required this.id,

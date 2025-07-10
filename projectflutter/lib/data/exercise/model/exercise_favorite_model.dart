@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:projectflutter/data/auth/model/user.dart';
+import 'package:projectflutter/data/auth/model/user_simple_dto.dart';
 import 'package:projectflutter/data/exercise/model/exercise_sub_category_model.dart';
 import 'package:projectflutter/data/exercise/model/favorites_model.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_favorite_entity.dart';
@@ -9,20 +9,21 @@ class ExerciseFavoriteModel {
   final int id;
   final FavoritesModel? favorite;
   final ExerciseSubCategoryModel? subCategory;
-  final UserModel? user;
+  final UserSimpleDTO? user;
 
-  const ExerciseFavoriteModel(
-      {required this.id,
-      required this.favorite,
-      required this.subCategory,
-      required this.user});
+  const ExerciseFavoriteModel({
+    required this.id,
+    required this.favorite,
+    required this.subCategory,
+    required this.user,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'favorite': favorite,
       'subCategory': subCategory,
-      'user': user
+      'user': user,
     };
   }
 
@@ -33,11 +34,10 @@ class ExerciseFavoriteModel {
             ? FavoritesModel.fromMap(map['favorite'] as Map<String, dynamic>)
             : null,
         subCategory: map['subCategory'] != null
-            ? ExerciseSubCategoryModel.fromMap(
-                map['subCategory'] as Map<String, dynamic>)
+            ? ExerciseSubCategoryModel.fromMap(map['subCategory'] as Map<String, dynamic>)
             : null,
         user: map['user'] != null
-            ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+            ? UserSimpleDTO.fromMap(map['user'] as Map<String, dynamic>)
             : null);
   }
   String toJson() => json.encode(toMap());

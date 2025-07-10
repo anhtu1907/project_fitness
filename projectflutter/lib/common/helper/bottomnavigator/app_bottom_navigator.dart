@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 
 class AppBottomNavigator extends StatelessWidget {
   const AppBottomNavigator({
@@ -19,22 +20,23 @@ class AppBottomNavigator extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(icon: FontAwesomeIcons.house, index: 0, label: 'Home'),
-          _buildNavItem(
+          _buildNavItem(context,icon: FontAwesomeIcons.house, index: 0, label: 'Home'),
+          _buildNavItem(context,
               icon: FontAwesomeIcons.bowlRice, index: 1, label: 'Meal'),
-          _buildNavItem(
-              icon: FontAwesomeIcons.chartColumn, index: 2, label: 'Personal'),
-          _buildNavItem(
+          _buildNavItem(context,
+              icon: FontAwesomeIcons.calendarCheck, index: 2, label: 'Personal'),
+          _buildNavItem(context,
               icon: FontAwesomeIcons.dumbbell, index: 3, label: 'Exercise'),
-          _buildNavItem(
+          _buildNavItem(context,
               icon: FontAwesomeIcons.userShield, index: 4, label: 'Profile'),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(
+  Widget _buildNavItem(BuildContext context,
       {required IconData icon, required int index, required String label}) {
+    var media = MediaQuery.of(context).size;
     return Expanded(
       child: GestureDetector(
         onTap: () => onTap(index),
@@ -45,16 +47,17 @@ class AppBottomNavigator extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               FaIcon(icon,
-                  size: 24,
+                  size: AppFontSize.tabIcon(context),
                   color: currentIndex == index
                       ? AppColors.primaryColor1
                       : const Color(0xFF4C585B)),
+              SizedBox(height: media.height * 0.004,),
               Text(label,
                   style: TextStyle(
                       color: currentIndex == index
                           ? AppColors.primaryColor1
                           : const Color(0xFF4C585B),
-                      fontSize: 12)),
+                      fontSize: AppFontSize.content(context))),
             ],
           ),
         ),

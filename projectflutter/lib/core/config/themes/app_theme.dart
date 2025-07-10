@@ -44,13 +44,13 @@ class AppTheme {
             color: Color(0xffA7A7A7), fontWeight: FontWeight.w500),
         contentPadding: const EdgeInsets.all(15),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide.none),
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide(color: AppColors.gray.withOpacity(0.2))),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(20),
           borderSide: const BorderSide(color: Colors.blue, width: 3),
         ),
       ));

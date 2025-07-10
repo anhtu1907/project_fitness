@@ -46,6 +46,9 @@ class MealCategoryItem extends StatelessWidget {
                 height: imageSize,
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
+                  border: Border.all(
+                    color: AppColors.black.withOpacity(0.15)
+                  ),
                   borderRadius: BorderRadius.circular(imageSize / 2),
                 ),
                 child: ClipRRect(

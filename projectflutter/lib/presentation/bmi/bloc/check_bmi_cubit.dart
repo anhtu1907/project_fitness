@@ -1,7 +1,5 @@
-import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projectflutter/domain/bmi/usecase/check_bmi_usecase.dart';
 import 'package:projectflutter/domain/bmi/usecase/get_all_data_by_user.dart';
 
 import 'package:projectflutter/presentation/bmi/bloc/check_bmi_state.dart';
@@ -12,25 +10,28 @@ class CheckBmiCubit extends Cubit<CheckBmiState> {
 
   void checkBmi() async {
     emit(BmiLoading());
+    print("Start checkBmi...");
     try {
       final getData = await sl<GetAllDataByUserUseCase>().call();
+      print("getData completed: $getData");
       getData.fold(
-              (l) {
-            print('Get Data Left: $l');
+            (l) {
+          print("Fold left: $l");
+          emit(BmiNotExists());
+        },
+            (r) {
+          print("Fold right: $r");
+          if (r.isEmpty) {
             emit(BmiNotExists());
-          },
-              (r) {
-            if (r.isEmpty) {
-              print('Get Data: empty list');
-              emit(BmiNotExists());
-            } else {
-              print('Get Data: has data');
-              emit(BmiExists());
-            }
+          } else {
+            emit(BmiExists());
           }
+        },
       );
     } catch (error) {
+      print("Catch error: $error");
       emit(BmiError(errorMessage: error.toString()));
     }
   }
+
 }

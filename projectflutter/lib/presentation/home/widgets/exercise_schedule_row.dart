@@ -12,7 +12,8 @@ import 'package:projectflutter/presentation/home/bloc/exercise_schedule_cubit.da
 
 class ExerciseScheduleRow extends StatelessWidget {
   final ExerciseScheduleEntity entity;
-  const ExerciseScheduleRow({super.key, required this.entity});
+  final String level;
+  const ExerciseScheduleRow({super.key, required this.entity, required this.level});
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +27,19 @@ class ExerciseScheduleRow extends StatelessWidget {
       decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+              color: AppColors.gray.withOpacity(0.2),
+              width: 1
+          ),
           boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 2)]),
       child: Row(
         children: [
           ClipRRect(
-            // borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(30),
             child: Image.asset(
-              exerciseSubCategory[entity.subCategory!.id].toString(),
-              width: 60,
-              height: 60,
+              entity.subCategory!.subCategoryImage,
+              width: 70,
+              height: 70,
               fit: BoxFit.cover,
             ),
           ),
@@ -104,7 +109,12 @@ class ExerciseScheduleRow extends StatelessWidget {
                 final result = await AppNavigator.pushFuture(
                     context,
                     ExerciseBySubCategoryView(
-                        subCategoryId: entity.subCategory!.id));
+                        subCategoryId: entity.subCategory!.id,
+                        image: entity.subCategory!.subCategoryImage,
+                        level: level)
+                    // ExerciseBySubCategoryView(
+                    //     subCategoryId: entity.subCategory!.id,image: entity.subCategory!.subCategoryImage,)
+                    );
                 if (result == true) {
                   Future.delayed(const Duration(milliseconds: 300), () {
                     if (context.mounted) {

@@ -1,12 +1,17 @@
 package com.example.Project4.models.meal;
 
+import java.util.HashSet;
+import java.util.Set;
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.*;
 
@@ -38,10 +43,14 @@ public class MealsModel {
     private double fiber;
     @Column(name="sugar")
     private double sugar;
-    @ManyToOne
-    @JoinColumn(name = "sub_category_id", referencedColumnName = "id")
-    private MealSubCategoryModel subCategory;
-    @ManyToOne
-    @JoinColumn(name = "time_id", referencedColumnName = "id")
-    private MealTimeModel timeOfDay;
+    @ManyToMany
+    @JoinTable(name = "meal_subcategories", 
+    joinColumns = @JoinColumn(name = "meal_id"), 
+    inverseJoinColumns = @JoinColumn(name = "sub_category_id"))
+    private Set<MealSubCategoryModel> subCategory = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "meal_times", 
+    joinColumns = @JoinColumn(name = "meal_id"), 
+    inverseJoinColumns = @JoinColumn(name = "time_id"))
+    private Set<MealTimeModel> timeOfDay = new HashSet<>();
 }

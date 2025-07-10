@@ -1,10 +1,13 @@
 package com.example.Project4.models.exercise;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name="exercise_category")
+@Table(name = "exercise_category")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,4 +20,7 @@ public class ExerciseCategoryModel {
     private String categoryName;
     @Column(name = "category_image")
     private String categoryImage;
+
+    @ManyToMany(mappedBy = "category")
+    private Set<ExerciseSubCategoryModel> subCategories = new HashSet<>();
 }

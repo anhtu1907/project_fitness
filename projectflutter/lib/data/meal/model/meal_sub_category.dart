@@ -32,7 +32,7 @@ class MealSubCategoryModel {
     return MealSubCategoryModel(
       id: map['id'] as int,
       subCategoryName: map['subCategoryName'] as String,
-      subCategoryImage: map['subCategoryImage'] as String,
+      subCategoryImage: map['subCategoryImage'] ?? '',
       description: map['description'] as String,
       category: map['category'] != null
           ? MealCategoryModel.fromMap(map['category'] as Map<String, dynamic>)
@@ -53,6 +53,6 @@ extension MealSubCategoryXModel on MealSubCategoryModel {
         subCategoryName: subCategoryName,
         subCategoryImage: subCategoryImage,
         description: description,
-        category: category!);
+        category: category);
   }
 }

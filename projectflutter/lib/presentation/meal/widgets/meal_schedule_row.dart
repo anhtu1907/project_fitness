@@ -74,7 +74,7 @@ class MealScheduleRow extends StatelessWidget {
                 await deleteUseCase.call(params: entity.id);
 
                 if (context.mounted) {
-                  context.read<UserMealCubit>().displayRecord();
+                  context.read<UserMealCubit>().deleteRecordLocally(entity.id);
                 }
               }
             },

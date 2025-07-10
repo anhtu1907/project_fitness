@@ -2,7 +2,10 @@
 import 'dart:convert';
 
 import 'package:projectflutter/data/exercise/model/exercise_category_model.dart';
+import 'package:projectflutter/data/exercise/model/exercise_favorite_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_mode_model.dart';
+import 'package:projectflutter/data/exercise/model/exercise_programs_model.dart';
+import 'package:projectflutter/data/exercise/model/exercise_schedule_model.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_sub_category_entity.dart';
 
 class ExerciseSubCategoryModel {
@@ -10,24 +13,23 @@ class ExerciseSubCategoryModel {
   final String subCategoryName;
   final String subCategoryImage;
   final String description;
-  final ExerciseCategoryModel? category;
-  final ExerciseModeModel? mode;
+  final List<ExerciseCategoryModel> category;
 
-  ExerciseSubCategoryModel(
-      {required this.id,
-      required this.subCategoryName,
-      required this.subCategoryImage,
-      required this.description,
-      required this.category,
-      required this.mode});
+  ExerciseSubCategoryModel({
+    required this.id,
+    required this.subCategoryName,
+    required this.subCategoryImage,
+    required this.description,
+    required this.category,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'subCategoryName': subCategoryName,
       'subCategoryImage': subCategoryImage,
       'description': description,
-      'category': category,
-      'mode': mode,
+      'category': category.map((x) => x.toMap()).toList()
     };
   }
 
@@ -38,12 +40,12 @@ class ExerciseSubCategoryModel {
       subCategoryImage: map['subCategoryImage'] ?? '',
       description: map['description'] ?? '',
       category: map['category'] != null
-          ? ExerciseCategoryModel.fromMap(
-              map['category'] as Map<String, dynamic>)
-          : null,
-      mode: map['mode'] != null
-          ? ExerciseModeModel.fromMap(map['mode'] as Map<String, dynamic>)
-          : null,
+          ? List<ExerciseCategoryModel>.from(
+              (map['category'] as List).map(
+                (x) => ExerciseCategoryModel.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : [],
     );
   }
 
@@ -54,14 +56,14 @@ class ExerciseSubCategoryModel {
           json.decode(source) as Map<String, dynamic>);
 }
 
-extension ExerciseSubCategorysXModel on ExerciseSubCategoryModel {
+extension ExerciseSubCategoryXModel on ExerciseSubCategoryModel {
   ExerciseSubCategoryEntity toEntity() {
     return ExerciseSubCategoryEntity(
-        id: id,
-        subCategoryName: subCategoryName,
-        subCategoryImage: subCategoryImage,
-        description: description,
-        category: category,
-        mode: mode);
+      id: id,
+      subCategoryName: subCategoryName,
+      subCategoryImage: subCategoryImage,
+      description: description,
+      category: category
+    );
   }
 }

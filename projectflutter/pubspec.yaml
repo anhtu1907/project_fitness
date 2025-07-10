@@ -90,6 +90,7 @@ flutter:
     # Splash
     - assets/images/fitness-logo.png
     - assets/images/sent-email.png
+    - assets/images/logo_app.png
     #Gender
     - assets/images/u1.png
     - assets/images/u2.png
@@ -164,6 +165,17 @@ flutter:
     - assets/images/shoulder_category.png
     - assets/images/chest_category.png
     - assets/images/core_category.png
+    - assets/images/search_lose_weight.png
+    - assets/images/search_build_muscle.png
+    - assets/images/search_keep_fit.png
+    - assets/images/gym.png
+    - assets/images/dumbbell.png
+    - assets/images/chair.png
+    - assets/images/bed.png
+    - assets/images/wall.jpg
+    - assets/images/build_muscle.png
+    - assets/images/keep_fit.png
+    - assets/images/lose_weight.png
 
 
 

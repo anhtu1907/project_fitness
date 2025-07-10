@@ -15,4 +15,6 @@ class ExerciseBySubCategoryCubit extends Cubit<ExerciseBySubCategoryState> {
       emit(ExerciseBySubCategoryLoaded(entity: data));
     });
   }
+
+
 }

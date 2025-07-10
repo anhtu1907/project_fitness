@@ -22,7 +22,7 @@ public class ExerciseFavoriteModel {
     private FavoritesModel favorite;
     @ManyToOne
     @JoinColumn(name = "sub_category_id", referencedColumnName = "id")
-    private ExerciseSubCategoyrModel subCategory;
+    private ExerciseSubCategoryModel subCategory;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserModel user;

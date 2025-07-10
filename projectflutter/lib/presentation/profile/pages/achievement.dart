@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/core/data/exercise_sub_category_image.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_progress_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
@@ -19,15 +20,16 @@ class AchievementPage extends StatelessWidget {
     return Scaffold(
         appBar: BasicAppBar(
           hideBack: false,
-          title: const Text(
+          title: Text(
             "Achievement",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            style: TextStyle(
+                fontSize: AppFontSize.titleAppBar(context),
+                fontWeight: FontWeight.w700),
           ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        backgroundColor: AppColors.backgroundColor,
         body: MultiBlocProvider(
             providers: [
               BlocProvider(
@@ -51,24 +53,7 @@ class AchievementPage extends StatelessWidget {
               }
               if (state is ExercisesLoaded) {
                 final exerciseList = state.entity;
-                Map<String, List<ExercisesEntity>> countExercise = {};
-                for (var exercise in exerciseList) {
-                  final subCategoryName = exercise.subCategory!.subCategoryName;
-                  countExercise
-                      .putIfAbsent(subCategoryName, () => [])
-                      .add(exercise);
-                }
-                Map<String, int> countExerciseNumber = {};
-                countExercise.forEach((subCategoryName, exercises) {
-                  countExerciseNumber[subCategoryName] = exercises.length;
-                });
 
-                Map<String, double> kcalPerSubcategory = {};
-                countExercise.forEach((subCategoryName, exercises) {
-                  double totalKcal =
-                      exercises.fold(0.0, (sum, item) => sum += item.kcal);
-                  kcalPerSubcategory[subCategoryName] = totalKcal;
-                });
 
                 return BlocBuilder<WorkoutProgressCubit, WorkoutProgressState>(
                     builder: (context, state) {
@@ -86,49 +71,69 @@ class AchievementPage extends StatelessWidget {
                     final progressList = state.listProgress;
                     Map<String, List<ExerciseProgressEntity>>
                         groupedSubCategoryResetBatch = {};
-                    for (var progress in state.listProgress) {
-                      final subCategoryName = progress
-                          .exercise!.exercise!.subCategory!.subCategoryName;
-                      final resetBatch = progress.exercise!.resetBatch;
-                      if(resetBatch == 0){
-                        final key = '$subCategoryName-$resetBatch';
-                        groupedSubCategoryResetBatch
-                            .putIfAbsent(key, () => [])
-                            .add(progress);
-                      }
-
+                    Map<int, Map<String, dynamic>> countExercise = {};
+                    for (var e in progressList) {
+                      final key = '${e.session!.subCategory!.id}-${e.session!.resetBatch}';
+                      groupedSubCategoryResetBatch[key] ??= [];
+                      groupedSubCategoryResetBatch[key]!.add(e);
                     }
-                    Map<String, double> percentPerSubcategory = {};
-                    for (var entry in countExercise.entries) {
-                      final subCategoryName = entry.key;
-                      final totalExercise = countExerciseNumber[subCategoryName]!;
+                    for (var exercise in exerciseList) {
+                      for (var sub in exercise.subCategory) {
+                        final subCategoryId = sub.id;
+
+                        if (!countExercise.containsKey(subCategoryId)) {
+                          countExercise[subCategoryId] = {
+                            'subCategory': sub,
+                            'exercises': <ExercisesEntity>[],
+                          };
+                        }
+                        countExercise[subCategoryId]!['exercises'].add(exercise);
+                      }
+                    }
+
+                    Map<int, int> countExerciseNumber = {};
+                    Map<int, double> kcalPerSubcategory = {};
+
+                    countExercise.forEach((subCategoryId, value) {
+                      final exercises = value['exercises'] as List<ExercisesEntity>;
+                      countExerciseNumber[subCategoryId] = exercises.length;
+                      final totalKcal = exercises.fold(
+                          0.0, (sum, item) => sum += item.kcal);
+                      kcalPerSubcategory[subCategoryId] = totalKcal;
+                    });
+
+                    Map<int, double> percentPerSubcategory = {};
+                    countExercise.forEach((subCategoryId, value) {
+                      final subCategory = value['subCategory'] as dynamic;
+                      final subCategoryName = subCategory.subCategoryName;
+                      final totalExercise = countExerciseNumber[subCategoryId]!;
+
                       final groupProgressList = groupedSubCategoryResetBatch.entries
-                          .where((e) => e.key.startsWith('$subCategoryName-'))
+                          .where((e) => e.key.startsWith('$subCategoryId-'))
                           .expand((e) => e.value)
                           .toList();
 
                       final completedCount = groupProgressList.length;
 
-                      final percent = completedCount / totalExercise;
-                      percentPerSubcategory[subCategoryName] = percent;
-                    }
-
+                      final percent = totalExercise == 0.0 ? 0.0 : completedCount / totalExercise;
+                      percentPerSubcategory[subCategoryId] = percent;
+                    });
+                    final sortedEntries = countExercise.entries.toList()
+                      ..sort((a, b) => a.key.compareTo(b.key));
                     return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 10),
                         child: SingleChildScrollView(
                           child: Column(
-                            children: countExercise.entries.map((entry) {
-                              final list = entry.value;
-                              var subCategoryId = list.first.subCategory!.id;
-                              var subCategoryImage =
-                                  list.first.subCategory!.subCategoryImage;
-                              var subCategoryName =
-                                  list.first.subCategory!.subCategoryName;
-
-                              var totalExercise =
-                                  countExerciseNumber[subCategoryName]!;
-                              var percent = percentPerSubcategory[subCategoryName]!;
+                            children: sortedEntries.map((entry) {
+                              final subCategoryId = entry.key;
+                              final data = entry.value;
+                              final subCategory = data['subCategory'];
+                              final subCategoryName = subCategory.subCategoryName;
+                              final subCategoryImage = subCategory.subCategoryImage;
+                              final totalExercise = countExerciseNumber[subCategoryId]!;
+                              final percent = percentPerSubcategory[subCategoryId]!;
+                              final kcal = kcalPerSubcategory[subCategoryId]!;
                               return AchievementRow(
                                   image: (subCategoryImage == '' ||
                                           subCategoryImage.isEmpty)
@@ -136,7 +141,7 @@ class AchievementPage extends StatelessWidget {
                                           .toString()
                                       : subCategoryImage,
                                   name: subCategoryName,
-                                  kcal: kcalPerSubcategory[subCategoryName]!,
+                                  kcal: kcal,
                                   percent: percent,
                                   totalExercise: totalExercise);
                             }).toList(),

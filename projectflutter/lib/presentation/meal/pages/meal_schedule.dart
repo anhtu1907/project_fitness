@@ -4,6 +4,7 @@ import 'package:projectflutter/common/helper/dialog/show_dialog.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/domain/meal/entity/user_meals.dart';
 import 'package:projectflutter/domain/meal/usecase/delete_all_record_meal.dart';
 import 'package:projectflutter/presentation/bmi/bloc/health_cubit.dart';
@@ -25,9 +26,13 @@ class _MealScheduleState extends State<MealSchedule> {
   DateTime date = DateTime.now();
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return Scaffold(
         appBar: BasicAppBar(
-          title: const Text('Meal Schedule'),
+          title: Text(
+            'Meal Schedule',
+            style: TextStyle(fontSize: AppFontSize.titleAppBar(context)),
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -45,7 +50,7 @@ class _MealScheduleState extends State<MealSchedule> {
                 child: Column(
               children: [
                 SizedBox(
-                    height: 150,
+                    height: media.height * 0.2,
                     child: Builder(builder: (context) {
                       return CalendarCustom(onDateSelected: (selectedDate) {
                         setState(() {
@@ -148,10 +153,11 @@ class _MealScheduleState extends State<MealSchedule> {
 
                         Map<String, List<UserMealsEntity>> groupedByTime = {};
                         for (var meal in listUserMeal) {
-                          final timeOfDay = meal.meal.timeOfDay!.timeName;
-                          groupedByTime
-                              .putIfAbsent(timeOfDay, () => [])
-                              .add(meal);
+                          for (var time in meal.meal.timeOfDay) {
+                            groupedByTime
+                                .putIfAbsent(time.timeName, () => [])
+                                .add(meal);
+                          }
                         }
 
                         return SingleChildScrollView(
@@ -169,7 +175,7 @@ class _MealScheduleState extends State<MealSchedule> {
                                       'Meal Plan',
                                       style: TextStyle(
                                           color: AppColors.black,
-                                          fontSize: 16,
+                                          fontSize: AppFontSize.body(context),
                                           fontWeight: FontWeight.bold),
                                     ),
                                     TextButton(
@@ -198,7 +204,7 @@ class _MealScheduleState extends State<MealSchedule> {
                                           'CLEAR ALL',
                                           style: TextStyle(
                                               color: AppColors.primaryColor1,
-                                              fontSize: 14,
+                                              fontSize: AppFontSize.caption(context),
                                               fontWeight: FontWeight.bold),
                                         ))
                                   ],
@@ -219,8 +225,8 @@ class _MealScheduleState extends State<MealSchedule> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(entry.key,
-                                                    style: const TextStyle(
-                                                        fontSize: 18,
+                                                    style:  TextStyle(
+                                                        fontSize: AppFontSize.mealItemSchedule(context),
                                                         fontWeight:
                                                             FontWeight.bold)),
                                                 ListView.builder(
@@ -242,8 +248,8 @@ class _MealScheduleState extends State<MealSchedule> {
                                       ),
                                     )
                                   : const Padding(
-                                      padding:  EdgeInsets.symmetric(
-                                          vertical: 15),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 15),
                                       child: Center(
                                         child:
                                             Text('No meals for selected date'),
@@ -259,11 +265,11 @@ class _MealScheduleState extends State<MealSchedule> {
                                       'Today Meal Nutritions',
                                       style: TextStyle(
                                           color: AppColors.black,
-                                          fontSize: 16,
+                                          fontSize: AppFontSize.titleScheduleMeal(context),
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    const SizedBox(
-                                      height: 10,
+                                    SizedBox(
+                                      height: media.height * 0.01,
                                     ),
                                     // Calories
                                     MealNutritionsRow(

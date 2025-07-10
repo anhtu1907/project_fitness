@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:projectflutter/data/auth/model/user.dart';
+import 'package:projectflutter/data/auth/model/user_simple_dto.dart';
 import 'package:projectflutter/domain/exercise/entity/favorites_entity.dart';
 
 class FavoritesModel {
   final int id;
   final String favoriteName;
-  final UserModel? user;
+  final UserSimpleDTO? user;
 
   const FavoritesModel(
       {required this.id, required this.favoriteName, required this.user});
@@ -24,7 +25,7 @@ class FavoritesModel {
         id: map['id'] as int,
         favoriteName: map['favoriteName'] as String,
         user: map['user'] != null
-            ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+            ? UserSimpleDTO.fromMap(map['user'] as Map<String, dynamic>)
             : null);
   }
 

@@ -5,6 +5,7 @@ import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/common/widget/workout/workout_row.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/core/data/exercise_sub_category_image.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_progress_entity.dart';
 import 'package:projectflutter/presentation/exercise/bloc/button_exercise_cubit.dart';
@@ -22,17 +23,18 @@ class WorkoutProgressPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  BasicAppBar(
+      appBar: BasicAppBar(
         hideBack: false,
-        title: const Text(
+        title: Text(
           "Latest Workout",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          style: TextStyle(
+              fontSize: AppFontSize.titleAppBar(context),
+              fontWeight: FontWeight.w700),
         ),
-        onPressed: (){
+        onPressed: () {
           Navigator.of(context).pop();
         },
       ),
-      backgroundColor: AppColors.backgroundColor,
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -58,10 +60,12 @@ class WorkoutProgressPage extends StatelessWidget {
 
               final Map<String, Set<int>> uniqueExercisesSubPerCategory = {};
               for (var e in exerciseList) {
-                final subCategoryName = e.subCategory!.subCategoryName;
-                uniqueExercisesSubPerCategory
-                    .putIfAbsent(subCategoryName, () => {})
-                    .add(e.id);
+                for (var sub in e.subCategory) {
+                  final subCategoryName = sub.subCategoryName;
+                  uniqueExercisesSubPerCategory
+                      .putIfAbsent(subCategoryName, () => <int>{})
+                      .add(e.id);
+                }
               }
 
               return BlocBuilder<WorkoutProgressCubit, WorkoutProgressState>(
@@ -78,13 +82,16 @@ class WorkoutProgressPage extends StatelessWidget {
                     Map<String, List<ExerciseProgressEntity>>
                         groupedSubCategoryResetBatch = {};
                     for (var progress in state.listProgress) {
-                      final subCategoryName = progress
-                          .exercise!.exercise!.subCategory!.subCategoryName;
-                      final resetBatch = progress.exercise!.resetBatch;
-                      final key = '$subCategoryName-$resetBatch';
-                      groupedSubCategoryResetBatch
-                          .putIfAbsent(key, () => [])
-                          .add(progress);
+                      final session = progress.session;
+                      if (session != null && session.subCategory != null) {
+                        final subCategoryId = session.subCategory!.id;
+                        final resetBatch = session.resetBatch;
+                        final key = '$subCategoryId-$resetBatch';
+
+                        groupedSubCategoryResetBatch
+                            .putIfAbsent(key, () => [])
+                            .add(progress);
+                      }
                     }
 
                     final sortedEntries =
@@ -101,28 +108,38 @@ class WorkoutProgressPage extends StatelessWidget {
                     return SafeArea(
                       child: SingleChildScrollView(
                         child: Padding(
-                          padding:  const EdgeInsets.only(bottom: 8, left: 10, right: 10),
+                          padding: const EdgeInsets.only(
+                              bottom: 8, left: 10, right: 10),
                           child: Column(
                             children: sortedEntries.map((entry) {
                               final list = entry.value;
-                              var duration = (list.fold(0, (sum,item) => sum += item.exercise!.exercise!.duration) / 60).floor();
-                              var subCategoryImage = list.first.exercise!
-                                  .exercise!.subCategory!.subCategoryImage;
-                              var subCategoryName = list.first.exercise!.exercise!
-                                  .subCategory!.subCategoryName;
-                              var subCategoryId =
-                                  list.first.exercise!.exercise!.subCategory!.id;
+                              var duration = (list.fold(
+                                          0,
+                                          (sum, item) => sum += item
+                                              .session!.exercise!.duration) /
+                                      60)
+                                  .floor();
+                              final firstSub = list.first;
+                              final subCategoryOfSession =
+                                  firstSub.session!.subCategory;
+                              var subCategoryImage =
+                                  subCategoryOfSession!.subCategoryImage;
+                              var subCategoryName =
+                                  subCategoryOfSession.subCategoryName;
+                              var subCategoryId = subCategoryOfSession.id;
                               var completed = list.length;
-                              var total =
+                              var totalExercise =
                                   uniqueExercisesSubPerCategory[subCategoryName]
                                           ?.length ??
                                       0;
-                              var progressRatio =
-                                  total > 0 ? completed / total : 0.0;
+                              var resetBatch = list.last.session!.resetBatch;
+                              var progressRatio = totalExercise > 0
+                                  ? completed / totalExercise
+                                  : 0.0;
                               var totalKcal = list.fold<double>(
                                   0,
                                   (sum, item) =>
-                                      sum + (item.exercise?.kcal ?? 0));
+                                      sum + (item.session?.kcal ?? 0));
 
                               return Builder(builder: (context) {
                                 return WorkoutRow(
@@ -136,7 +153,8 @@ class WorkoutProgressPage extends StatelessWidget {
                                     kcal: totalKcal,
                                     onPressed: () async {
                                       if (progressRatio * 100 < 100) {
-                                        final prefs = await SharedPreferences.getInstance();
+                                        final prefs = await SharedPreferences
+                                            .getInstance();
                                         prefs.setBool('overlay', true);
                                         var shouldContinue =
                                             await ShowDialog.shouldContinue(
@@ -145,9 +163,9 @@ class WorkoutProgressPage extends StatelessWidget {
                                                 'Are you sure want to continue?');
                                         if (shouldContinue == true) {
                                           final filteredExercises = exerciseList
-                                              .where((e) =>
-                                                  e.subCategory!.id ==
-                                                  subCategoryId)
+                                              .where((e) => e.subCategory.any(
+                                                  (sub) =>
+                                                      sub.id == subCategoryId))
                                               .toList();
                                           var currentIndex = await context
                                               .read<ButtonExerciseCubit>()
@@ -159,6 +177,8 @@ class WorkoutProgressPage extends StatelessWidget {
                                               context,
                                               ExerciseStart(
                                                   exercises: filteredExercises,
+                                                  kcal: totalKcal,
+                                                  subCategoryId: subCategoryId,
                                                   currentIndex: currentIndex),
                                             );
                                           }
@@ -173,7 +193,11 @@ class WorkoutProgressPage extends StatelessWidget {
                                           if (context.mounted) {
                                             AppNavigator.push(
                                               context,
-                                              const ExerciseResultPage(),
+                                              ExerciseResultPage(
+                                                  resetBatch: resetBatch,
+                                                  totalExercise: totalExercise,
+                                                  kcal: totalKcal,
+                                                  duration: duration),
                                             );
                                           }
                                         }

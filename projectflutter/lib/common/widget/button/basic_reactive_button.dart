@@ -37,7 +37,7 @@ class BasicReactiveButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: AppColors.primaryG,
+              colors: AppColors.primaryGButton,
               begin: Alignment.centerLeft,
               end: Alignment.centerRight),
           borderRadius: BorderRadius.circular(50)),

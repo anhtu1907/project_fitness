@@ -1,31 +1,38 @@
-Map<String, List<String>> newCategory = {
-  'For Beginners': [
-    "Lose Fat (NO JUMPING)",
-    "Quick Lower Body Shaper ",
-    "Belly Fat Burner HIIT Beginer"
-  ],
-  'Fat Burning': [
-    "Quick Lower Body Shaper ",
-    "Get Rid of Man Boobs HIIT",
-    "Belly Fat Burner HIIT Beginer"
-  ],
-  'Build Muscle': [
-    "Get Rid of Man Boobs HIIT",
-    "Build Wider Shoulders",
-    "Dumbbell Lose Arm Fat"
-  ],
-  'Killer Challenge': [
-    "Quick Lower Body Shaper ",
-    "Dumbbell Lose Arm Fat",
-    "Get Rid of Man Boobs HIIT",
-  ]
-};
+// Map<String, List<String>> newCategory = {
+//   'For Beginners': [
+//     "Beginner Exercise 1",
+//     "Beginner Exercise 2",
+//     "Beginner Exercise 3"
+//   ],
+//   'Fat Burning': [
+//     "Quick Lower Body Shaper",
+//     "Get Rid of Man Boobs HIIT",
+//     "Belly Fat Burner HIIT Beginer"
+//   ],
+//   'Build Muscle': [
+//     "Get Rid of Man Boobs HIIT",
+//     "Build Wider Shoulders",
+//     "Dumbbell Lose Arm Fat"
+//   ],
+//   'Killer Challenge': [
+//     "Quick Lower Body Shaper",
+//     "Dumbbell Lose Arm Fat",
+//     "Get Rid of Man Boobs HIIT",
+//   ]
+// };
 
-final specialSubCategoryNames = {
+List<String> newCategory = [
+  'For Beginners',
+  'Fat Burning',
+  'Build Muscle',
+  'Killer Challenge'
+];
+
+List<String> specialSubCategoryNames = [
   '7 Days Exercise',
   '14 Days Exercise',
   '30 Days Exercise',
-};
+];
 
 Map<String, List<String>> freshmorning = {
   'Stretching & Yoga': [

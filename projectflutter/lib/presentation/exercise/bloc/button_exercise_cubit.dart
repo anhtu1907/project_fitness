@@ -35,18 +35,21 @@ class ButtonExerciseCubit extends Cubit<ButtonExerciseState> {
     }, (data) {
       if (data is List<ExerciseProgressEntity> && data.isNotEmpty) {
         final filteredData = data
-            .where((progress) =>
-                progress.exercise!.exercise!.subCategory!.id == subCategoryId)
+            .where(
+              (progress) =>
+              progress.session?.subCategory!.id == subCategoryId,
+            )
             .toList();
+
         if (filteredData.isEmpty) {
           emit(ButtonInitialize());
           return;
         }
         final maxBatch = filteredData
-            .map((e) => e.exercise!.resetBatch)
+            .map((e) => e.session!.resetBatch)
             .fold<int>(0, (a, b) => a > b ? a : b);
         final latestBatchData = filteredData
-            .where((e) => e.exercise!.resetBatch == maxBatch)
+            .where((e) => e.session!.resetBatch == maxBatch)
             .toList();
         final allCompleted = latestBatchData.any((e) => e.progress == 100);
         final hasIncomplete = latestBatchData.any((e) => e.progress < 100);
@@ -68,15 +71,17 @@ class ButtonExerciseCubit extends Cubit<ButtonExerciseState> {
     return await reuslt.fold((err) {
       return err;
     }, (progressList) async {
-      int? subCategoryId = exercises.first.subCategory!.id;
+      int? subCategoryId = exercises.first.subCategory.first.id;
       final resetBatch = await getResetBatchBySubCategory(subCategoryId);
-      print('Reset Batch: $resetBatch');
       final exerciseIds = (progressList as List<ExerciseProgressEntity>)
           .where((e) =>
-              e.exercise!.exercise!.subCategory!.id == subCategoryId &&
-              e.exercise!.resetBatch == resetBatch &&
-              e.exercise!.exercise != null)
-          .map((e) => e.exercise!.exercise!.id)
+              e.session?.exercise?.subCategory.any(
+                    (sub) => sub.id == subCategoryId,
+                  ) ==
+                  true &&
+              e.session?.resetBatch == resetBatch &&
+              e.session?.exercise != null)
+          .map((e) => e.session!.exercise!.id)
           .toList();
       final uncompletedExercises =
           exercises.where((e) => !exerciseIds.contains(e.id));

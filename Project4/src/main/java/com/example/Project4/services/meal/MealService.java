@@ -4,20 +4,22 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.example.Project4.payload.meal.UserMealsRequest;
-import com.example.Project4.models.meal.MealCategoryModel;
-import com.example.Project4.models.meal.MealSubCategoryModel;
+import com.example.Project4.dto.meal.MealCategoryDTO;
+import com.example.Project4.dto.meal.MealSubCategoryDTO;
+import com.example.Project4.dto.meal.MealsDTO;
+import com.example.Project4.dto.meal.UserMealDTO;
 import com.example.Project4.models.meal.MealsModel;
-import com.example.Project4.models.meal.UserMealsModel;
+
 
 public interface MealService {
-    List<MealsModel> getAllMeal();
-    List<MealCategoryModel> getAllCategory();
-    List<MealSubCategoryModel> getAllSubCategory();
+    List<MealsDTO> getAllMeal();
+    List<MealCategoryDTO> getAllCategory();
+    List<MealSubCategoryDTO> getAllSubCategory();
     List<MealsModel> searchByMealName(String mealName);
-    MealsModel getMealById(int mealId);
-    List<MealsModel> getMealBySubCategoryId(int subCategoryId);
-    List<UserMealsModel> saveRecordMeal(UserMealsRequest request);
-    List<UserMealsModel> getRecordMeal(int userId);
+    MealsDTO getMealById(int mealId);
+    List<MealsDTO> getMealBySubCategoryId(int subCategoryId);
+    List<UserMealDTO> saveRecordMeal(UserMealsRequest request);
+    List<UserMealDTO> getRecordMeal(int userId);
     void deleteRecordMeal(int recordId);
     void deleteAllRecordMeal(int userId, LocalDate date);
 }

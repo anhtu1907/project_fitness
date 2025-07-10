@@ -4,6 +4,7 @@ import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/round_button.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/presentation/bmi/bloc/health_cubit.dart';
 import 'package:projectflutter/presentation/bmi/bloc/health_state.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_cubit.dart';
@@ -38,7 +39,10 @@ class BmiReview extends StatelessWidget {
               height: media.width * 0.4,
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: AppColors.primaryG),
-                  borderRadius: BorderRadius.circular(media.width * 0.075)),
+                  border: Border.all(
+                    color: AppColors.gray.withOpacity(0.15)
+                  ),
+                  borderRadius: BorderRadius.circular(30)),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -60,7 +64,7 @@ class BmiReview extends StatelessWidget {
                               'BMI (Body Mass Index)',
                               style: TextStyle(
                                   color: AppColors.white,
-                                  fontSize: 14,
+                                  fontSize: AppFontSize.caption(context),
                                   fontWeight: FontWeight.w700),
                             ),
                             if (health.last.bmi < 18.4)
@@ -68,7 +72,7 @@ class BmiReview extends StatelessWidget {
                                 'You have a underweight',
                                 style: TextStyle(
                                     color: AppColors.white.withOpacity(0.7),
-                                    fontSize: 12,
+                                    fontSize: AppFontSize.content(context),
                                     fontWeight: FontWeight.w700),
                               ),
                             if (health.last.bmi >= 18.5 &&
@@ -77,7 +81,7 @@ class BmiReview extends StatelessWidget {
                                 'You have a normal weight',
                                 style: TextStyle(
                                     color: AppColors.white.withOpacity(0.7),
-                                    fontSize: 12,
+                                    fontSize: AppFontSize.content(context),
                                     fontWeight: FontWeight.w700),
                               ),
                             if (health.last.bmi >= 25 &&
@@ -86,7 +90,7 @@ class BmiReview extends StatelessWidget {
                                 'You have a overweight',
                                 style: TextStyle(
                                     color: AppColors.white.withOpacity(0.7),
-                                    fontSize: 12,
+                                    fontSize: AppFontSize.content(context),
                                     fontWeight: FontWeight.w700),
                               ),
                             if (health.last.bmi >= 30.0 &&
@@ -95,7 +99,7 @@ class BmiReview extends StatelessWidget {
                                 'You have a obesity',
                                 style: TextStyle(
                                     color: AppColors.white.withOpacity(0.7),
-                                    fontSize: 12,
+                                    fontSize: AppFontSize.content(context),
                                     fontWeight: FontWeight.w700),
                               ),
                             if (health.last.bmi >= 35.0 &&
@@ -104,7 +108,7 @@ class BmiReview extends StatelessWidget {
                                 'You have a obesity II',
                                 style: TextStyle(
                                     color: AppColors.white.withOpacity(0.7),
-                                    fontSize: 12,
+                                    fontSize: AppFontSize.content(context),
                                     fontWeight: FontWeight.w700),
                               ),
                             SizedBox(
@@ -119,7 +123,7 @@ class BmiReview extends StatelessWidget {
                                     AppNavigator.push(
                                         context, const BmiDetailsPage());
                                   },
-                                  fontSize: 12,
+                                  fontSize: AppFontSize.content(context),
                                   fontWeight: FontWeight.w400,
                                   type: RoundButtonType.bgSGradient,
                                 ))

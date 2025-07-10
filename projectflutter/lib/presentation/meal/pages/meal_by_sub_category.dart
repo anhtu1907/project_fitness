@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/domain/meal/entity/meals.dart';
 import 'package:projectflutter/presentation/meal/bloc/meal_by_sub_category_cubit.dart';
 import 'package:projectflutter/presentation/meal/bloc/meal_by_sub_category_state.dart';
@@ -17,12 +18,16 @@ class MealBySubCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BasicAppBar(
-        title: Text(categoryName),
-        onPressed: (){
+        title: Text(
+          categoryName,
+          style: TextStyle(
+              fontSize: AppFontSize.titleAppBar(context),
+              fontWeight: FontWeight.w700),
+        ),
+        onPressed: () {
           Navigator.of(context).pop();
         },
       ),
-      backgroundColor: AppColors.backgroundColor,
       body: BlocProvider(
         create: (context) =>
             MealBySubCategoryCubit()..listMealBySubCategory(subCategoryId),
@@ -41,9 +46,9 @@ class MealBySubCategory extends StatelessWidget {
             if (state is MealBySubCategoryLoaded) {
               Map<String, List<MealsEntity>> groupedByTime = {};
               for (var meal in state.entity) {
-                final timeOfDay = meal.timeOfDay.timeName;
-                print('Time of Day : $timeOfDay');
-                groupedByTime.putIfAbsent(timeOfDay, () => []).add(meal);
+                for (var time in meal.timeOfDay) {
+                  groupedByTime.putIfAbsent(time.timeName, () => []).add(meal);
+                }
               }
               return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -51,11 +56,16 @@ class MealBySubCategory extends StatelessWidget {
                     children: groupedByTime.entries.map((entry) {
                       return Column(
                         children: [
-                          const SizedBox(height: 10,),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Text(entry.key,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 10,),
+                              style: TextStyle(
+                                  fontSize: AppFontSize.body(context),
+                                  fontWeight: FontWeight.bold)),
+                          const SizedBox(
+                            height: 10,
+                          ),
                           GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),

@@ -61,11 +61,10 @@ class MealCategoryList extends StatelessWidget {
                   final foodList = state.entity;
                   Map<String, List<MealsEntity>> groupedSubCategory = {};
                   for (var food in foodList) {
-                    final subCategoryName =
-                        food.subCategory.subCategoryName.trim();
-                    groupedSubCategory
-                        .putIfAbsent(subCategoryName, () => [])
-                        .add(food);
+                    for (var sub in food.subCategory) {
+                      final subCategoryName = sub.subCategoryName;
+                      groupedSubCategory.putIfAbsent(subCategoryName, () => []).add(food);
+                    }
                   }
                   Map<String, double> kcalBySubCategory = {};
                   groupedSubCategory.forEach((subCatName, foods) {

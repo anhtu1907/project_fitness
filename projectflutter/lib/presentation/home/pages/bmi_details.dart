@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/common/helper/bottomsheet/app_bottom_sheet.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/domain/auth/entity/user.dart';
 import 'package:projectflutter/domain/bmi/entity/bmi.dart';
 import 'package:projectflutter/presentation/bmi/bloc/health_cubit.dart';
@@ -17,11 +18,11 @@ class BmiDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const BasicAppBar(
+        appBar: BasicAppBar(
           hideBack: true,
           title: Text(
             "BMI Details",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            style: TextStyle(fontSize: AppFontSize.titleAppBar(context), fontWeight: FontWeight.w700),
           ),
         ),
         body: MultiBlocProvider(providers: [
@@ -60,7 +61,7 @@ class BmiDetailsPage extends StatelessWidget {
                               mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                _bodyFat(),
+                                _bodyFat(context),
                                 const SizedBox(
                                   height: 15,
                                 ),
@@ -80,7 +81,7 @@ class BmiDetailsPage extends StatelessWidget {
         ));
   }
 
-  Widget _bodyFat() {
+  Widget _bodyFat(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       decoration: BoxDecoration(
@@ -99,24 +100,24 @@ class BmiDetailsPage extends StatelessWidget {
                 BorderSide(width: 0.3, color: Colors.grey.shade300)),
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         children: [
-          _buildTableRow('Type', 'Male (%)', 'Female (%)', isHeader: true),
-          _buildTableRow('Essential fat', '2 - 5%', '10 - 13%'),
-          _buildTableRow('Athletes', '6 – 13%', '14 – 20%'),
-          _buildTableRow('Fitness', '14 – 17%', '21 – 24%'),
-          _buildTableRow('Normal', '18 – 24%', '25 – 31%'),
-          _buildTableRow('Overweight', '25 – 30%', '32 – 38%'),
-          _buildTableRow('Obese', '31 – 35%', '39 – 43%'),
-          _buildTableRow('Obese II', '≥36%', '≥44%'),
+          _buildTableRow(context,'Type', 'Male (%)', 'Female (%)', isHeader: true),
+          _buildTableRow(context,'Essential fat', '2 - 5%', '10 - 13%'),
+          _buildTableRow(context,'Athletes', '6 – 13%', '14 – 20%'),
+          _buildTableRow(context,'Fitness', '14 – 17%', '21 – 24%'),
+          _buildTableRow(context,'Normal', '18 – 24%', '25 – 31%'),
+          _buildTableRow(context,'Overweight', '25 – 30%', '32 – 38%'),
+          _buildTableRow(context,'Obese', '31 – 35%', '39 – 43%'),
+          _buildTableRow(context,'Obese II', '≥36%', '≥44%'),
         ],
       ),
     );
   }
 
-  TableRow _buildTableRow(String label, String male, String female,
+  TableRow _buildTableRow(BuildContext context,String label, String male, String female,
       {bool isHeader = false}) {
     final style = TextStyle(
       color: AppColors.black,
-      fontSize: isHeader ? 16 : 14,
+      fontSize: isHeader ? AppFontSize.body(context) : AppFontSize.caption(context),
       fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
     );
 
@@ -158,7 +159,7 @@ class BmiDetailsPage extends StatelessWidget {
 
   Widget _bmiUserDetails(List<BmiEntity> health,UserEntity user, BuildContext context) {
     final today = DateTime.now();
-    int age = today.year - user.dob.year;
+    int age = today.year - user.dob!.year;
     double? bodyfat;
     double? smm; // Khối lượng cơ xương
     double? tbw; // Tổng lượng nước trong cơ thể
@@ -234,7 +235,7 @@ class BmiDetailsPage extends StatelessWidget {
                     style: TextStyle(
                         color: AppColors.white,
                         fontWeight: FontWeight.w700,
-                        fontSize: 14),
+                        fontSize: AppFontSize.caption(context)),
                   ),
                 ),
               ),

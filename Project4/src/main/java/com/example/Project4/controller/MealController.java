@@ -63,7 +63,7 @@ public class MealController {
 
     @GetMapping("/record/{userId}")
     public ResponseEntity<?> getRecordMeal(@PathVariable int userId) {
-        return ResponseEntity.status(201).body(mealService.getRecordMeal(userId));
+        return ResponseEntity.status(200).body(mealService.getRecordMeal(userId));
     }
 
     @DeleteMapping("/record/{recordId}")

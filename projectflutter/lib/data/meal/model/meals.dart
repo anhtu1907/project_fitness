@@ -15,8 +15,8 @@ class MealsModel {
   final double carbonhydrate;
   final double fiber;
   final double sugar;
-  final MealSubCategoryModel? subCategory;
-  final MealTimeModel? timeOfDay;
+  final List<MealSubCategoryModel> subCategory;
+  final List<MealTimeModel> timeOfDay;
 
   MealsModel(
       {required this.id,
@@ -44,8 +44,8 @@ class MealsModel {
       'carbonhydrate': carbonhydrate,
       'fiber': fiber,
       'sugar': sugar,
-      'subCategory': subCategory,
-      'timeOfDay': timeOfDay
+      'subCategory': subCategory.map((e) => e.toMap()).toList(),
+      'timeOfDay': timeOfDay.map((e) => e.toMap()).toList(),
     };
   }
 
@@ -61,13 +61,15 @@ class MealsModel {
       carbonhydrate: map['carbonhydrate'] as double,
       fiber: map['fiber'] as double,
       sugar: map['sugar'] as double,
-      subCategory: map['subCategory'] != null
-          ? MealSubCategoryModel.fromMap(
-              map['subCategory'] as Map<String, dynamic>)
-          : null,
-      timeOfDay: map['timeOfDay'] != null
-          ? MealTimeModel.fromMap(map['timeOfDay'] as Map<String, dynamic>)
-          : null,
+      subCategory: (map['subCategory'] as List<dynamic>?)
+              ?.map((e) =>
+                  MealSubCategoryModel.fromMap(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      timeOfDay: (map['timeOfDay'] as List<dynamic>?)
+              ?.map((e) => MealTimeModel.fromMap(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
@@ -90,7 +92,7 @@ extension MealsXModel on MealsModel {
         carbonhydrate: carbonhydrate,
         fiber: fiber,
         sugar: sugar,
-        subCategory: subCategory!,
-        timeOfDay: timeOfDay!);
+        subCategory: subCategory,
+        timeOfDay: timeOfDay);
   }
 }

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/presentation/meal/widgets/meal_category_list.dart';
 import 'package:projectflutter/presentation/meal/widgets/meal_schedule_check.dart';
-import 'package:projectflutter/presentation/meal/widgets/meal_search_field.dart';
+import 'package:projectflutter/presentation/meal/widgets/search/meal_search_field.dart';
+import 'package:projectflutter/presentation/meal/widgets/meal_type_list.dart';
 
 class MealsPage extends StatelessWidget {
   const MealsPage({super.key});
@@ -17,9 +19,9 @@ class MealsPage extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Text('Meals'),
-            const SizedBox(
-              width: 10,
+            Text('Meals', style: TextStyle(fontSize: AppFontSize.heading2(context)),),
+            SizedBox(
+              width: media.width * 0.02,
             ),
             FaIcon(
               FontAwesomeIcons.bowlFood,
@@ -29,7 +31,6 @@ class MealsPage extends StatelessWidget {
         ),
         hideBack: true,
       ),
-      backgroundColor: AppColors.backgroundColor,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -53,7 +54,7 @@ class MealsPage extends StatelessWidget {
                     'Category',
                     style: TextStyle(
                         color: AppColors.black,
-                        fontSize: 16,
+                        fontSize: AppFontSize.titleBody(context),
                         fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
@@ -63,33 +64,7 @@ class MealsPage extends StatelessWidget {
                   SizedBox(
                     height: media.width * 0.05,
                   ),
-                  Text(
-                    'Goal',
-                    style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: media.width * 0.05,
-                  ),
-                  Text(
-                    'Time of Day',
-                    style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: media.width * 0.05,
-                  ),
-                  Text(
-                    'Diet',
-                    style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
-                  ),
+                  const MealTypeList()
                 ],
               ),
             ),

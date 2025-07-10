@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/core/data/exercise_sub_category_image.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_user_entity.dart';
 import 'package:projectflutter/presentation/profile/bloc/history_cubit.dart';
@@ -17,9 +18,11 @@ class HistoryPage extends StatelessWidget {
     return Scaffold(
         appBar:  BasicAppBar(
           hideBack: false,
-          title: const Text(
+          title: Text(
             "Activity History",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            style: TextStyle(
+                fontSize: AppFontSize.titleAppBar(context),
+                fontWeight: FontWeight.w700),
           ),
           onPressed: (){
             Navigator.of(context).pop();
@@ -62,14 +65,18 @@ class HistoryPage extends StatelessWidget {
                         Map<String, List<ExerciseUserEntity>>
                             groupedCategoryResetBatch = {};
                         for (var history in state.listHistory) {
-                          final subCategoryName =
-                              history.session!.exercise!.subCategory!.subCategoryName;
                           final resetBatch = history.session!.resetBatch;
-                          final key = '$subCategoryName-$resetBatch';
-                          if (groupedCategoryResetBatch.containsKey(key)) {
-                            groupedCategoryResetBatch[key]!.add(history);
-                          } else {
-                            groupedCategoryResetBatch[key] = [history];
+                          final subCategories = history.session!.exercise!.subCategory;
+
+                          for (var sub in subCategories) {
+                            final subCategoryName = sub.subCategoryName;
+                            final key = '$subCategoryName-$resetBatch';
+
+                            if (groupedCategoryResetBatch.containsKey(key)) {
+                              groupedCategoryResetBatch[key]!.add(history);
+                            } else {
+                              groupedCategoryResetBatch[key] = [history];
+                            }
                           }
                         }
 
@@ -94,11 +101,11 @@ class HistoryPage extends StatelessWidget {
                                 var formatedTime =
                                     DateFormat('HH:mm').format(time!);
                                 var subCategoryId =
-                                    list.first.session!.exercise!.subCategory!.id;
-                                var subCategoryName = list.first.session!.exercise!
-                                    .subCategory!.subCategoryName;
-                                var subCategoryImage = list.first.session!
-                                    .exercise!.subCategory!.subCategoryImage;
+                                    list.first.session!.exercise!.subCategory.first.id;
+                                var subCategoryName =
+                                    list.first.session!.exercise!.subCategory.first.subCategoryName;
+                                var subCategoryImage =
+                                    list.first.session!.exercise!.subCategory.first.subCategoryImage;
                                 var duration = list.fold<int>(
                                     0,
                                     (sum, item) =>

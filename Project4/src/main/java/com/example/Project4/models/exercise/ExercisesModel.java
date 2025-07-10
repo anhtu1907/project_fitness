@@ -1,10 +1,13 @@
 package com.example.Project4.models.exercise;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name="exercises")
+@Table(name = "exercises")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +26,15 @@ public class ExercisesModel {
     private int duration;
     @Column(name = "total_kcal")
     private double kcal;
+    @ManyToMany
+    @JoinTable(name = "exercise_subcategories", 
+    joinColumns = @JoinColumn(name = "exercise_id"), 
+    inverseJoinColumns = @JoinColumn(name = "sub_category_id"))
+    private Set<ExerciseSubCategoryModel> subCategory = new HashSet<>();
     @ManyToOne
-    @JoinColumn(name = "sub_category_id", referencedColumnName = "id")
-    private ExerciseSubCategoyrModel subCategory;
+    @JoinColumn(name = "equipment_id", referencedColumnName = "id")
+    private EquipmentsModel equipment;
+    @ManyToOne
+    @JoinColumn(name = "mode_id", referencedColumnName = "id")
+    private ExerciseModeModel mode;
 }

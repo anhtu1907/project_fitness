@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
-import 'package:projectflutter/core/data/exercise_sub_category_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_sub_category_entity.dart';
 import 'package:projectflutter/presentation/exercise/pages/exercise_by_sub_category_view.dart';
-import 'package:projectflutter/presentation/exercise/widgets/exercise_sub_category_row.dart';
+import 'package:projectflutter/presentation/exercise/widgets/subcategory/exercise_sub_category_row.dart';
 
 class ExerciseSubCategoryListPage extends StatelessWidget {
   final List<ExerciseSubCategoryEntity> total;
   final String categoryName;
+  final String level;
   final Map<String, int> duration;
   const ExerciseSubCategoryListPage(
       {super.key,
       required this.categoryName,
+      required this.level,
       required this.duration,
       required this.total});
 
@@ -29,13 +31,18 @@ class ExerciseSubCategoryListPage extends StatelessWidget {
 
     return Scaffold(
       appBar: BasicAppBar(
-        title: Text(categoryName),
+        title: Text(categoryName,
+            style: TextStyle(
+                fontSize: AppFontSize.titleAppBar(context),
+                fontWeight: FontWeight.w700)),
         subTitle: Text(
           '${total.length} workouts',
           style: TextStyle(
-              color: AppColors.gray, fontSize: 14, fontWeight: FontWeight.w500),
+              color: AppColors.gray,
+              fontSize: AppFontSize.subTitleAppBar(context),
+              fontWeight: FontWeight.w500),
         ),
-        onPressed: (){
+        onPressed: () {
           Navigator.of(context).pop();
         },
       ),
@@ -45,16 +52,19 @@ class ExerciseSubCategoryListPage extends StatelessWidget {
             itemCount: total.length,
             itemBuilder: (context, index) {
               return ExerciseSubcategoryRow(
-                  image: exerciseSubCategory[total[index].id].toString(),
+                  image: total[index].subCategoryImage,
                   name: total[index].subCategoryName,
                   duration: _formatDuration(
                       duration[total[index].subCategoryName] ?? 0),
-                  level: total[index].mode!.modeName,
+                  level: level,
                   onPressed: () {
                     AppNavigator.push(
                         context,
                         ExerciseBySubCategoryView(
-                            subCategoryId: total[index].id));
+                          subCategoryId: total[index].id,
+                          level: level,
+                          image: total[index].subCategoryImage,
+                        ));
                   });
             },
           )),

@@ -1,14 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:projectflutter/data/auth/model/user.dart';
+import 'package:projectflutter/data/auth/model/user_simple_dto.dart';
+import 'package:projectflutter/data/exercise/model/exercise_sub_category_model.dart';
 import 'package:projectflutter/data/exercise/model/exercises_model.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_session_entity.dart';
 
 class ExerciseSessionModel {
   final int id;
-  final UserModel? user;
+  final UserSimpleDTO? user;
   final ExercisesModel? exercise;
+  final ExerciseSubCategoryModel? subCategory;
   final double kcal;
   final int resetBatch;
   final int duration;
@@ -18,6 +20,7 @@ class ExerciseSessionModel {
       {required this.id,
       required this.user,
       required this.exercise,
+        required this.subCategory,
       required this.kcal,
       required this.resetBatch,
       required this.duration,
@@ -39,10 +42,13 @@ class ExerciseSessionModel {
     return ExerciseSessionModel(
         id: map['id'] as int,
         user: map['user'] != null
-            ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+            ? UserSimpleDTO.fromMap(map['user'] as Map<String, dynamic>)
             : null,
         exercise: map['exercise'] != null
             ? ExercisesModel.fromMap(map['exercise'] as Map<String, dynamic>)
+            : null,
+        subCategory: map['subCategory'] != null
+            ? ExerciseSubCategoryModel.fromMap(map['subCategory'] as Map<String, dynamic>)
             : null,
         kcal: map['kcal'] as double,
         resetBatch: map['resetBatch'] as int,
@@ -64,6 +70,7 @@ extension ExerciseSessionXModel on ExerciseSessionModel {
         user: user,
         exercise: exercise,
         duration: duration,
+        subCategory: subCategory,
         kcal: kcal,
         resetBatch: resetBatch,
         createdAt: createdAt);

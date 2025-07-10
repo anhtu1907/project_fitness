@@ -4,7 +4,7 @@ import 'package:projectflutter/data/meal/model/meal_sub_category.dart';
 import 'package:projectflutter/data/meal/model/meals.dart';
 import 'package:projectflutter/data/meal/model/user_meal_record.dart';
 import 'package:projectflutter/data/meal/request/user_meal_request.dart';
-import 'package:projectflutter/data/meal/service/meal_service.dart';
+import 'package:projectflutter/data/meal/source/meal_service.dart';
 import 'package:projectflutter/domain/meal/entity/meal_category.dart';
 import 'package:projectflutter/domain/meal/entity/meal_sub_category.dart';
 import 'package:projectflutter/domain/meal/entity/meals.dart';

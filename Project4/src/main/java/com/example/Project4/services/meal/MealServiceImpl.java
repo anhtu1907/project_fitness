@@ -3,13 +3,17 @@ package com.example.Project4.services.meal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.Project4.payload.meal.UserMealsRequest;
-import com.example.Project4.models.meal.MealCategoryModel;
-import com.example.Project4.models.meal.MealSubCategoryModel;
+import com.example.Project4.dto.meal.MealCategoryDTO;
+import com.example.Project4.dto.meal.MealSubCategoryDTO;
+import com.example.Project4.dto.meal.MealsDTO;
+import com.example.Project4.dto.meal.UserMealDTO;
+import com.example.Project4.mapper.MealMapper;
 import com.example.Project4.models.meal.MealsModel;
 import com.example.Project4.models.meal.UserMealsModel;
 import com.example.Project4.repository.auth.UserRepository;
@@ -17,7 +21,6 @@ import com.example.Project4.repository.meal.MealCategoryRepository;
 import com.example.Project4.repository.meal.MealsRepository;
 import com.example.Project4.repository.meal.MealSubCategoryRepository;
 import com.example.Project4.repository.meal.UserMealsRepository;
-
 
 @Service
 public class MealServiceImpl implements MealService {
@@ -34,43 +37,46 @@ public class MealServiceImpl implements MealService {
     private UserRepository uRepository;
 
     @Override
-    public List<MealCategoryModel> getAllCategory() {
-        return mCategoryRepository.findAll();
+    public List<MealCategoryDTO> getAllCategory() {
+        return mCategoryRepository.findAll().stream().map(MealMapper::toCategoryDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<MealsModel> getAllMeal() {
-        return mealRepository.findAll();
+    public List<MealsDTO> getAllMeal() {
+        return mealRepository.findAll().stream().map(MealMapper::toMealDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<MealSubCategoryModel> getAllSubCategory() {
-        return mSubCategoryRepository.findAll();
+    public List<MealSubCategoryDTO> getAllSubCategory() {
+        return mSubCategoryRepository.findAll().stream().map(MealMapper::toSubCategoryDto).collect(Collectors.toList());
     }
 
     @Override
-    public MealsModel getMealById(int mealId) {
-        MealsModel meal = mealRepository.findById(mealId).orElseThrow(() -> new RuntimeException("Meal not found by mealID:" + mealId));
-        return meal;
+    public MealsDTO getMealById(int mealId) {
+        MealsModel meal = mealRepository.findById(mealId)
+                .orElseThrow(() -> new RuntimeException("Meal not found by mealID:" + mealId));
+        return MealMapper.toMealDto(meal);
     }
 
     @Override
-    public List<MealsModel> getMealBySubCategoryId(int subCategoryId) {
-        return mealRepository.findAllBySubCategoryId(subCategoryId);
+    public List<MealsDTO> getMealBySubCategoryId(int subCategoryId) {
+        List<MealsModel> meals = mealRepository.findAllBySubCategoryId(subCategoryId);
+         return meals.stream()
+            .map(MealMapper::toMealDto)
+            .collect(Collectors.toList());
     }
 
     @Override
-    public List<UserMealsModel> getRecordMeal(int userId) {
-        List<UserMealsModel> record = uMealsRepository.findByUserId(userId);
-        if(record.isEmpty()){
-            throw new RuntimeException("No meals found for this user");
-        }
-        return record;
+    public List<UserMealDTO> getRecordMeal(int userId) {
+        List<UserMealsModel> records = uMealsRepository.findByUserId(userId);
+        List<UserMealDTO> dtos = records.stream()
+                                    .map(MealMapper::toUserMealDTO)
+                                    .collect(Collectors.toList());
+        return dtos;
     }
-    
 
     @Override
-    public List<UserMealsModel> saveRecordMeal(UserMealsRequest request) {
+    public List<UserMealDTO> saveRecordMeal(UserMealsRequest request) {
         var user = uRepository.findById(request.getUser())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         List<UserMealsModel> saveRecords = new ArrayList<>();
@@ -84,7 +90,9 @@ public class MealServiceImpl implements MealService {
             saveRecords.add(uMealsRepository.save(usermeals));
         }
 
-        return saveRecords;
+        return saveRecords.stream()
+                      .map(MealMapper::toUserMealDTO)
+                      .collect(Collectors.toList());
     }
 
     @Override
@@ -94,13 +102,13 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public void deleteAllRecordMeal(int userId, LocalDate targetDate) {
-        uMealsRepository.deleteAllByUserIdAndCreatedAtDate(userId,targetDate);
+        uMealsRepository.deleteAllByUserIdAndCreatedAtDate(userId, targetDate);
     }
 
     @Override
     public List<MealsModel> searchByMealName(String mealName) {
         List<MealsModel> meals = mealRepository.findByMealNameLike("%" + mealName + "%");
-        if(meals.isEmpty()){
+        if (meals.isEmpty()) {
             throw new RuntimeException("No meals found for meal name");
         }
         return meals;

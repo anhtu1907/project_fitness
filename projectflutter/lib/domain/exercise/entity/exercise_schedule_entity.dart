@@ -1,9 +1,9 @@
-import 'package:projectflutter/data/auth/model/user.dart';
+import 'package:projectflutter/data/auth/model/user_simple_dto.dart';
 import 'package:projectflutter/data/exercise/model/exercise_sub_category_model.dart';
 
 class ExerciseScheduleEntity {
   final int id;
-  final UserModel? user;
+  final UserSimpleDTO? user;
   final ExerciseSubCategoryModel? subCategory;
   final DateTime? scheduleTime;
 

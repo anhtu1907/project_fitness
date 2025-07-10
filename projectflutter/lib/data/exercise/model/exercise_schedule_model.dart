@@ -1,13 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
-import 'package:projectflutter/data/auth/model/user.dart';
+import 'package:projectflutter/data/auth/model/user_simple_dto.dart';
 import 'package:projectflutter/data/exercise/model/exercise_sub_category_model.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_schedule_entity.dart';
 
 class ExerciseScheduleModel {
   final int id;
-  final UserModel? user;
+  final UserSimpleDTO? user;
   final ExerciseSubCategoryModel? subCategory;
   final DateTime? scheduleTime;
 
@@ -30,7 +29,7 @@ class ExerciseScheduleModel {
     return ExerciseScheduleModel(
       id: map['id'] as int,
       user: map['user'] != null
-          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          ? UserSimpleDTO.fromMap(map['user'] as Map<String, dynamic>)
           : null,
       subCategory: map['subCategory'] != null
           ? ExerciseSubCategoryModel.fromMap(

@@ -28,9 +28,9 @@ Future<void> main() async {
   }
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
-  // await prefs.remove('onboarding_done');
 
   // final prefs = await SharedPreferences.getInstance();
+  // await prefs.remove('onboarding_done');
   // await prefs.remove('token');
   // await prefs.remove('userId');
   // await prefs.remove('bmi_exist');

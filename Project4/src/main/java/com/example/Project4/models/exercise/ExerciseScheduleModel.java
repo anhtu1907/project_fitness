@@ -22,7 +22,7 @@ public class ExerciseScheduleModel {
     private UserModel user;
     @ManyToOne
     @JoinColumn(name = "sub_category_id", referencedColumnName = "id")
-    private ExerciseSubCategoyrModel subCategory;
+    private ExerciseSubCategoryModel subCategory;
     @Column(name = "schedule_time")
     private LocalDateTime scheduleTime;
 }

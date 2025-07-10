@@ -37,25 +37,55 @@ class WhatTrainRow extends StatelessWidget {
             );
           }
           if (state is ExercisesLoaded) {
+            final listExercise = state.entity;
+            final Map<String, List<ExercisesEntity>> groupedExercises = {};
+
+            for (var exercise in listExercise) {
+              if (exercise.mode == null) continue;
+
+              for (var sub in exercise.subCategory) {
+                final key = '${sub.id}-${exercise.mode!.id}';
+                groupedExercises.putIfAbsent(key, () => []).add(exercise);
+              }
+            }
             Map<String, List<ExercisesEntity>> groupedCategory = {};
             for (var exercise in state.entity) {
-              final categoryName = exercise.subCategory!.subCategoryName;
-              if (groupedCategory.containsKey(categoryName)) {
-                groupedCategory[categoryName]!.add(exercise);
-              } else {
-                groupedCategory[categoryName] = [exercise];
+              for(var sub in exercise.subCategory){
+                final categoryName = sub.subCategoryName;
+                if (groupedCategory.containsKey(categoryName)) {
+                  groupedCategory[categoryName]!.add(exercise);
+                } else {
+                  groupedCategory[categoryName] = [exercise];
+                }
               }
+
             }
             return SafeArea(
               child: SingleChildScrollView(
                 child: Column(
                   children: groupedCategory.entries.take(4).map((entry) {
                     final list = entry.value;
-                    var subCategoryId = list.first.subCategory!.id;
-                    var subCategoryName =
-                        list.first.subCategory!.subCategoryName;
+                    var sub = list.first.subCategory.first;
+                    var subCategoryId = sub.id;
+                    var subCategoryImage = sub.subCategoryImage;
+                    var subCategoryName = sub.subCategoryName;
                     var duration =
                         list.fold<int>(0, (sum, item) => sum += item.duration);
+                    ExercisesEntity? exerciseForSub;
+                    String? modeName;
+                    for (var key in groupedExercises.keys) {
+                      if (key.startsWith('$subCategoryId-')) {
+                        final exercises = groupedExercises[key];
+                        if (exercises != null && exercises.isNotEmpty) {
+                          exerciseForSub = exercises.first;
+                          modeName = exercises.first.mode?.modeName;
+                          break;
+                        }
+                      }
+                    }
+
+                    int exerciseId = exerciseForSub?.id ?? 0;
+                    String level = modeName ?? '';
                     return Container(
                       margin: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 2),
@@ -132,6 +162,8 @@ class WhatTrainRow extends StatelessWidget {
                                               context,
                                               ExerciseBySubCategoryView(
                                                 subCategoryId: subCategoryId,
+                                                level: level,
+                                                image: subCategoryImage,
                                               ));
                                         },
                                       )),

@@ -20,7 +20,7 @@ class CheckBmiPage extends StatelessWidget {
               AppNavigator.pushReplacement(context, const CheckBmiGoalPage());
             }
             if (state is BmiNotExists) {
-              AppNavigator.pushReplacement(context, HeightWeightPage());
+              AppNavigator.pushReplacement(context, const HeightWeightPage());
             }
           },
           builder: (context, state) {

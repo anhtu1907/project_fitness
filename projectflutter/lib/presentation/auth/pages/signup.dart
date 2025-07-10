@@ -1,23 +1,24 @@
-import 'package:flutter/gestures.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:projectflutter/common/bloc/button/button_state.dart';
 import 'package:projectflutter/common/bloc/button/button_state_cubit.dart';
-import 'package:projectflutter/common/bloc/field/field_state.dart';
-import 'package:projectflutter/common/bloc/field/field_state_cubit.dart';
-import 'package:projectflutter/common/components/fields/my_text_field.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
-import 'package:projectflutter/common/widget/appbar/app_bar.dart';
-import 'package:projectflutter/common/widget/button/basic_reactive_button.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
-import 'package:projectflutter/core/icon/icon_custom.dart';
-import 'package:projectflutter/data/auth/request/register_request.dart';
-import 'package:projectflutter/domain/auth/usecase/signup_usecase.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/presentation/auth/bloc/gender_selection_cubit.dart';
 import 'package:projectflutter/presentation/auth/pages/sent_email.dart';
 import 'package:projectflutter/presentation/auth/pages/signin.dart';
+import 'package:projectflutter/presentation/auth/widgets/dob_field.dart';
+import 'package:projectflutter/presentation/auth/widgets/email_field.dart';
+import 'package:projectflutter/presentation/auth/widgets/gender_item.dart';
+import 'package:projectflutter/presentation/auth/widgets/password_field.dart';
+import 'package:projectflutter/presentation/auth/widgets/signup_button.dart';
+import 'package:projectflutter/presentation/auth/widgets/switch_page_button.dart';
+import 'package:projectflutter/presentation/auth/widgets/text_field_custom.dart';
 import 'package:projectflutter/secure_storage.dart';
 
 class SignupPage extends StatefulWidget {
@@ -29,6 +30,7 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _usernameCon = TextEditingController();
   final TextEditingController _firstnameCon = TextEditingController();
   final TextEditingController _lastnameCon = TextEditingController();
   final TextEditingController _emailCon = TextEditingController();
@@ -52,13 +54,9 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     super.dispose();
+    _usernameCon.dispose();
     _firstnameCon.dispose();
     _lastnameCon.dispose();
     _emailCon.dispose();
@@ -70,19 +68,23 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        behavior: HitTestBehavior.translucent,
-        child: MultiBlocProvider(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: AppColors.backgroundAuth,
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          behavior: HitTestBehavior.translucent,
+          child: MultiBlocProvider(
             providers: [
               BlocProvider(
                 create: (context) => GenderSelectionCubit(),
               ),
               BlocProvider(
                 create: (context) => ButtonStateCubit(),
-              )
+              ),
             ],
             child: BlocListener<ButtonStateCubit, ButtonState>(
               listener: (context, state) {
@@ -104,223 +106,167 @@ class _SignupPageState extends State<SignupPage> {
                 }
               },
               child: SafeArea(
-                child: Form(
-                  key: _formKey,
-                  autovalidateMode: _autovalidateMode,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                          height: 300,
-                          decoration: BoxDecoration(
-                              gradient:
-                                  LinearGradient(colors: AppColors.primaryG)),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 50, bottom: 30, left: 15, right: 15),
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: Image.asset(
-                                    AppImages.signinLogo,
-                                    width: double.infinity,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 25,
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Sign Up',
-                                        style: TextStyle(
-                                            color: AppColors.white,
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.bold),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 30),
+                        Center(
+                          child: Image.asset(
+                            AppImages.signinLogo,
+                            height: 120,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: BackdropFilter(
+                            filter:
+                            ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(20),
+                              child: Form(
+                                key: _formKey,
+                                autovalidateMode: _autovalidateMode,
+                                child: Column(
+                                  children: [
+                                     Align(
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            'Create Account',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: AppFontSize.heading1(context),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            'Join FitMate and start your fitness',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: AppFontSize.body(context),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const SizedBox(
-                                        height: 15,
+                                    ),
+                                    const SizedBox(height: 30),
+                                    TextFieldCustom(
+                                      controller: _usernameCon,
+                                      hintText: 'Username',
+                                      icon: Icons.account_box,
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value.isEmpty) {
+                                          return 'Username is required';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const SizedBox(height: 20),
+                                    TextFieldCustom(
+                                      controller: _firstnameCon,
+                                      hintText: 'First Name',
+                                      icon: Icons.person,
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value.isEmpty) {
+                                          return 'First name is required';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const SizedBox(height: 20),
+                                    TextFieldCustom(
+                                      controller: _lastnameCon,
+                                      hintText: 'Last Name',
+                                      icon: Icons.person,
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value.isEmpty) {
+                                          return 'Last name is required';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const SizedBox(height: 20),
+                                    EmailField(controller: _emailCon),
+                                    const SizedBox(height: 20),
+                                    PasswordField(controller: _passwordCon),
+                                    const SizedBox(height: 20),
+                                    _genders(),
+                                    const SizedBox(height: 20),
+                                    DobField(
+                                      controller: _dobCon,
+                                      onTap: () {
+                                        _selectDate(context);
+                                      },
+                                    ),
+                                    const SizedBox(height: 20),
+                                    TextFieldCustom(
+                                      controller: _phoneCon,
+                                      hintText: "Phone",
+                                      icon: Icons.phone,
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value.isEmpty) {
+                                          return 'Phone is required';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SignupButton(
+                                      formKey: _formKey,
+                                      usernameController: _usernameCon,
+                                      firstnameController: _firstnameCon,
+                                      lastnameController: _lastnameCon,
+                                      emailController: _emailCon,
+                                      passwordController: _passwordCon,
+                                      dobController: _dobCon,
+                                      phoneController: _phoneCon,
+                                      secureStorage: secureStorage,
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: SwitchPageButton(
+                                        questionText:
+                                        "Already have an account?",
+                                        buttonText: "Sign in",
+                                        onTap: () {
+                                          AppNavigator.pushReplacement(
+                                              context,
+                                              const SigninPage());
+                                        },
                                       ),
-                                      Text(
-                                        'Please sign up to continue',
-                                        style: TextStyle(
-                                            color: AppColors.white,
-                                            fontSize: 16),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          )),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              children: [
-                                _firstnameField(),
-                                const SizedBox(
-                                  height: 20,
+                                    )
+                                  ],
                                 ),
-                                _lastnameField(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                _emailField(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                _passwordField(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                _genders(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                _dobField(context),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                _phoneField(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                _signupButton(),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: _alreadyAccount(context),
-                                )
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      )
-                    ],
+
+                        const SizedBox(height: 30),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            )),
-      ),
-    );
-  }
-
-  Widget _firstnameField() {
-    return MyTextField(
-        controller: _firstnameCon,
-        hintText: "First Name",
-        obSecureText: false,
-        prefixIcon: const IconCustom(icon: Icons.person),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'First name is required';
-          }
-          return null;
-        },
-        keyboardType: TextInputType.text);
-  }
-
-  Widget _lastnameField() {
-    return MyTextField(
-        controller: _lastnameCon,
-        hintText: "Last Name",
-        obSecureText: false,
-        prefixIcon: const IconCustom(icon: Icons.account_circle),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Last name is required';
-          }
-          return null;
-        },
-        keyboardType: TextInputType.text);
-  }
-
-  Widget _dobField(BuildContext context) {
-    return MyTextField(
-        controller: _dobCon,
-        hintText: "Date of Birth",
-        onTap: () => _selectDate(context),
-        obSecureText: false,
-        prefixIcon: const IconCustom(icon: Icons.calendar_today),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'DoB is required';
-          }
-          return null;
-        },
-        keyboardType: TextInputType.datetime);
-  }
-
-  Widget _phoneField() {
-    return MyTextField(
-        controller: _phoneCon,
-        hintText: "Phone",
-        obSecureText: false,
-        prefixIcon: const IconCustom(icon: Icons.phone),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Phone is required';
-          }
-          return null;
-        },
-        keyboardType: TextInputType.number);
-  }
-
-  Widget _emailField() {
-    return MyTextField(
-        controller: _emailCon,
-        hintText: "Email",
-        obSecureText: false,
-        prefixIcon: const IconCustom(icon: Icons.email),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Email is required';
-          }
-          if (!RegExp(r"^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(value)) {
-            return 'Invalid email format';
-          }
-          return null;
-        },
-        keyboardType: TextInputType.text);
-  }
-
-  Widget _passwordField() {
-    return BlocProvider(
-      create: (context) => FieldStateCubit(),
-      child: BlocBuilder<FieldStateCubit, FieldState>(
-        builder: (context, state) {
-          final obSecure = state is HideTextState;
-          return MyTextField(
-              controller: _passwordCon,
-              hintText: 'Password',
-              prefixIcon: const IconCustom(icon: Icons.lock),
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    context.read<FieldStateCubit>().toggleVisibility();
-                  },
-                  icon:
-                      Icon(obSecure ? Icons.visibility_off : Icons.visibility)),
-              obSecureText: obSecure,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Password is required';
-                }
-                return null;
-              },
-              keyboardType: TextInputType.text);
-        },
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -331,101 +277,20 @@ class _SignupPageState extends State<SignupPage> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _genderTile(context, 1, 'Male', state),
-            const SizedBox(
-              width: 20,
+            GenderItem(
+              genderIndex: 1,
+              label: 'Male',
+              selectedIndex: state,
             ),
-            _genderTile(context, 2, 'Female', state)
+            const SizedBox(width: 20),
+            GenderItem(
+              genderIndex: 2,
+              label: 'Female',
+              selectedIndex: state,
+            ),
           ],
         );
       },
-    );
-  }
-
-  Widget _genderTile(
-      BuildContext context, int genderIndex, String gender, int selectedIndex) {
-    return Expanded(
-      flex: 1,
-      child: GestureDetector(
-        onTap: () {
-          context.read<GenderSelectionCubit>().selectGender(genderIndex);
-        },
-        child: Container(
-          height: 30,
-          decoration: BoxDecoration(
-              color: selectedIndex == genderIndex
-                  ? AppColors.primaryColor1
-                  : AppColors.secondDarkBackground,
-              border: Border.all(
-                  color:
-                      selectedIndex == genderIndex ? Colors.white : Colors.grey,
-                  width: 1),
-              borderRadius: BorderRadius.circular(10)),
-          child: Center(
-            child: Text(
-              gender,
-              style: TextStyle(
-                  fontWeight: selectedIndex == genderIndex
-                      ? FontWeight.bold
-                      : FontWeight.normal,
-                  fontSize: 16,
-                  color: Colors.white),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _signupButton() {
-    return Builder(
-      builder: (context) {
-        return BasicReactiveButton(
-            title: "Sign up",
-            onPressed: () async {
-              setState(() {
-                _autovalidateMode = AutovalidateMode.always;
-              });
-              await secureStorage.writeSecureData('email', _emailCon.text);
-              await secureStorage.writeSecureData(
-                  'password', _passwordCon.text);
-              if (_formKey.currentState!.validate()) {
-                final genderIndex = context.read<GenderSelectionCubit>().state;
-                context.read<ButtonStateCubit>().execute(
-                    usecase: SignupUsecase(),
-                    params: RegisterRequest(
-                        firstname: _firstnameCon.text,
-                        lastname: _lastnameCon.text,
-                        email: _emailCon.text,
-                        password: _passwordCon.text,
-                        dob: DateFormat('yyyy-MM-dd').parse(_dobCon.text),
-                        gender: genderIndex,
-                        phone: _phoneCon.text));
-              }
-            });
-      },
-    );
-  }
-
-  Widget _alreadyAccount(BuildContext context) {
-    return RichText(
-      text: TextSpan(children: [
-        TextSpan(
-            text: "Already have an account?",
-            style: Theme.of(context).textTheme.labelSmall),
-        const WidgetSpan(child: SizedBox(width: 8)),
-        TextSpan(
-          text: "Sign in",
-          recognizer: TapGestureRecognizer()
-            ..onTap = () {
-              AppNavigator.pushReplacement(context, SigninPage());
-            },
-          style: Theme.of(context)
-              .textTheme
-              .labelMedium!
-              .copyWith(fontWeight: FontWeight.bold),
-        ),
-      ]),
     );
   }
 }

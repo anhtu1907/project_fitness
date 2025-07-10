@@ -2,19 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/presentation/exercise/bloc/exercise_by_sub_category_cubit.dart';
 import 'package:projectflutter/presentation/exercise/bloc/exercise_by_sub_category_state.dart';
-import 'package:projectflutter/presentation/exercise/widgets/exercise_button.dart';
-import 'package:projectflutter/presentation/exercise/widgets/exercise_sub_category_details.dart';
+import 'package:projectflutter/presentation/exercise/bloc/exercise_equipment_cubit.dart';
+import 'package:projectflutter/presentation/exercise/bloc/exercise_equipment_state.dart';
+import 'package:projectflutter/presentation/exercise/widgets/others/exercise_button.dart';
+import 'package:projectflutter/presentation/exercise/widgets/subcategory/exercise_sub_category_details.dart';
 
 class ExerciseBySubCategoryView extends StatelessWidget {
   final int subCategoryId;
-  const ExerciseBySubCategoryView({super.key, required this.subCategoryId});
+  final String image;
+  final String level;
+  const ExerciseBySubCategoryView(
+      {super.key,
+      required this.subCategoryId,
+      required this.image,
+        required this.level});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => ExerciseBySubCategoryCubit()
-          ..listExerciseBySubCategoryId(subCategoryId),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => ExerciseBySubCategoryCubit()
+              ..listExerciseBySubCategoryId(subCategoryId),
+          ),
+          BlocProvider(
+            create: (context) =>
+                ExerciseEquipmentCubit()..listAllEquipmentBySubId(subCategoryId),
+          )
+        ],
         child:
             BlocBuilder<ExerciseBySubCategoryCubit, ExerciseBySubCategoryState>(
           builder: (context, state) {
@@ -29,32 +45,60 @@ class ExerciseBySubCategoryView extends StatelessWidget {
               );
             }
             if (state is ExerciseBySubCategoryLoaded) {
-              final subCategoryName =
-                  state.entity.first.subCategory!.subCategoryName;
-              final description = state.entity.first.subCategory!.description;
-              final level = state.entity.first.subCategory!.mode!.modeName;
+              final exercises = state.entity;
+
+              if (exercises.isEmpty) {
+                return const Center(
+                    child: Text('No exercises found for this sub-category.'));
+              }
+              final sub = state.entity.first.subCategory.first;
+
+              final subCategoryName = sub.subCategoryName;
+              final description = sub.description;
               final totalDuration = state.entity
                   .fold<int>(0, (sum, item) => sum += item.duration);
               final kcal =
                   state.entity.fold<double>(0, (sum, item) => sum += item.kcal);
+              return BlocBuilder<ExerciseEquipmentCubit,
+                  ExerciseEquipmentState>(
+                builder: (context, state) {
+                  if (state is ExerciseEquipmentLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (state is LoadExerciseEquipmentFailure) {
+                    return Center(
+                      child: Text(state.errorMessage),
+                    );
+                  }
 
-              return Stack(
-                children: [
-                  ExerciseSubCategoryDetails(
-                    subCategoryId: subCategoryId,
-                    subCategoryName: subCategoryName,
-                    exercises: state.entity,
-                    description: description,
-                    level: level,
-                    totalDuration: totalDuration,
-                    kcal: kcal,
-                    totalExercise: state.entity.length,
-                  ),
-                  ExerciseButton(
-                    exercises: state.entity,
-                    subCategoryId: state.entity.first.subCategory!.id,
-                  )
-                ],
+                  if (state is ExerciseEquipmentLoaded) {
+                    final equipments = state.entity;
+                    return Stack(
+                      children: [
+                        ExerciseSubCategoryDetails(
+                          subCategoryId: subCategoryId,
+                          subCategoryName: subCategoryName,
+                          exercises: exercises,
+                          description: description,
+                          level: level,
+                          totalDuration: totalDuration,
+                          kcal: kcal,
+                          image: image,
+                          totalExercise: exercises.length,
+                          equipments: equipments,
+                        ),
+                        ExerciseButton(
+                          exercises: exercises,
+                          kcal: kcal,
+                          subCategoryId: subCategoryId,
+                        )
+                      ],
+                    );
+                  }
+                  return Container();
+                },
               );
             }
             return Container();

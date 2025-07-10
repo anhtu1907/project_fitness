@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
-import 'package:projectflutter/presentation/exercise/widgets/title_sub_title_cell_time_result.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
+import 'package:projectflutter/presentation/exercise/widgets/cell/title_sub_title_cell_time_result.dart';
 import 'package:projectflutter/presentation/home/pages/tabs.dart';
 import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell.dart';
 
 
 class ExerciseResultPage extends StatelessWidget {
-  //   final int resetBatch;
-//   final int totalExercise;
-//   final double kcal;
-//   final int duration;
+    final int resetBatch;
+  final int totalExercise;
+  final double kcal;
+  final int duration;
 
-//   const ExerciseResultPage(
-//       {super.key,
-//       required this.resetBatch,
-//       required this.totalExercise,
-//       required this.kcal,
-//       required this.duration});
-  const ExerciseResultPage({super.key});
+  const ExerciseResultPage(
+      {super.key,
+      required this.resetBatch,
+      required this.totalExercise,
+      required this.kcal,
+      required this.duration});
+  // const ExerciseResultPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,41 +78,41 @@ class ExerciseResultPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const Padding(
+                    Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
                       child: Column(
                         children: [
                           Row(
                             children: [
                               Expanded(
                                 child: TitleSubtitleCell(
-                                  value: 5,
+                                  value: totalExercise,
                                   subtitle: "Exercises",
                                   unit: "",
                                 ),
                               ),
-                              SizedBox(width: 10),
+                              SizedBox(width: width * 0.025),
                               Expanded(
                                 child: TitleSubtitleCell(
-                                  value: 1230,
+                                  value: kcal,
                                   subtitle: "Burned",
                                   unit: "kcal",
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: width * 0.05),
                           Row(
                             children: [
                               Expanded(
                                 child: TitleSubTitleCellTimeResult(
-                                  value: 120,
+                                  value: duration,
                                   subtitle: "Duration",
                                 ),
                               ),
-                              SizedBox(width: 10),
-                              Expanded(
+                              SizedBox(width: width * 0.025),
+                              const Expanded(
                                 child: TitleSubtitleCell(
                                   value: 0,
                                   subtitle: "ResetBatch",
@@ -132,7 +133,7 @@ class ExerciseResultPage extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 30),
                   child: SizedBox(
                     width: width * 0.8,
-                    height: 50,
+                    height: height * 0.06,
                     child: ElevatedButton(
                       onPressed: () {
                         AppNavigator.pushAndRemoveUntil(context, const TabsPage());
@@ -141,13 +142,13 @@ class ExerciseResultPage extends StatelessWidget {
                         backgroundColor: AppColors.primaryColor1,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         "Finish",
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: AppFontSize.value16Text(context),
                           fontWeight: FontWeight.bold,
                         ),
                       ),

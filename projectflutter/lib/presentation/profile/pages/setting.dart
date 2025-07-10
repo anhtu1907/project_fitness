@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -9,9 +10,11 @@ class SettingPage extends StatelessWidget {
     return Scaffold(
       appBar:  BasicAppBar(
         hideBack: false,
-        title: const Text(
+        title: Text(
           "Settings",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          style: TextStyle(
+              fontSize: AppFontSize.titleAppBar(context),
+              fontWeight: FontWeight.w700),
         ),
         onPressed: (){
           Navigator.of(context).pop();

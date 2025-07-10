@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/presentation/auth/pages/signin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,7 +38,7 @@ class OnBoardingPage4 extends StatelessWidget {
                     "Improve Sleep\nQuality",
                     style: TextStyle(
                         color: AppColors.black,
-                        fontSize: 24,
+                        fontSize: AppFontSize.heading1(context),
                         fontWeight: FontWeight.w700),
                   ),
                 ),
@@ -45,7 +46,7 @@ class OnBoardingPage4 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
                     "Improve the quality of your sleep with us, good quality sleep can bring a good mood in the morning",
-                    style: TextStyle(color: AppColors.gray, fontSize: 14),
+                    style: TextStyle(color: AppColors.gray, fontSize: AppFontSize.body(context)),
                   ),
                 ),
               ],

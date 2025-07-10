@@ -1,8 +1,11 @@
 import 'package:dartz/dartz.dart';
+import 'package:projectflutter/data/exercise/model/equipments_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_category_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_favorite_model.dart';
+import 'package:projectflutter/data/exercise/model/exercise_mode_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_progress_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_schedule_model.dart';
+import 'package:projectflutter/data/exercise/model/exercise_sub_category_program_model.dart';
 import 'package:projectflutter/data/exercise/model/favorites_model.dart';
 import 'package:projectflutter/data/exercise/request/exercise_favorite_request.dart';
 import 'package:projectflutter/data/exercise/request/exercise_schedule_request.dart';
@@ -12,12 +15,15 @@ import 'package:projectflutter/data/exercise/model/exercise_sub_category_model.d
 import 'package:projectflutter/data/exercise/model/exercise_user_model.dart';
 import 'package:projectflutter/data/exercise/model/exercises_model.dart';
 import 'package:projectflutter/data/exercise/source/exercise_service.dart';
+import 'package:projectflutter/domain/exercise/entity/equipments_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_category_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_favorite_entity.dart';
+import 'package:projectflutter/domain/exercise/entity/exercise_mode_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_progress_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_schedule_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_session_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_sub_category_entity.dart';
+import 'package:projectflutter/domain/exercise/entity/exercise_sub_category_program_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_user_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/favorites_entity.dart';
@@ -26,7 +32,6 @@ import 'package:projectflutter/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExerciseRepositoryImpl extends ExerciseRepository {
-
   // Exercise
   @override
   Future<Either> getAllSubCategory() async {
@@ -69,7 +74,6 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
     });
   }
 
-
   @override
   Future<Either> getAllExercise() async {
     var exercises = await sl<ExerciseService>().getAllExercise();
@@ -77,7 +81,7 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
       return Left(err);
     }, (data) {
       List<ExercisesModel> models =
-      (data as List).map((e) => ExercisesModel.fromMap(e)).toList();
+          (data as List).map((e) => ExercisesModel.fromMap(e)).toList();
       List<ExercisesEntity> entities = models.map((m) => m.toEntity()).toList();
 
       return Right(entities);
@@ -91,14 +95,13 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
       return Left(err);
     }, (data) {
       List<ExerciseCategoryModel> models =
-      (data as List).map((e) => ExerciseCategoryModel.fromMap(e)).toList();
+          (data as List).map((e) => ExerciseCategoryModel.fromMap(e)).toList();
       List<ExerciseCategoryEntity> entities =
-      models.map((m) => m.toEntity()).toList();
+          models.map((m) => m.toEntity()).toList();
 
       return Right(entities);
     });
   }
-
 
   // Result
 
@@ -116,10 +119,13 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
       final Map<int, List<ExerciseProgressEntity>> sessionsBySubCategory = {};
 
       for (var session in entities) {
-        final subCategoryId = session.exercise!.exercise!.subCategory!.id;
+        final subCategories = session.session!.exercise!.subCategory;
 
-        sessionsBySubCategory.putIfAbsent(subCategoryId, () => []);
-        sessionsBySubCategory[subCategoryId]!.add(session);
+        for (var sub in subCategories) {
+          final subCategoryId = sub.id;
+          sessionsBySubCategory.putIfAbsent(subCategoryId, () => []);
+          sessionsBySubCategory[subCategoryId]!.add(session);
+        }
       }
       final prefs = await SharedPreferences.getInstance();
 
@@ -127,7 +133,7 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
         final subCategoryId = entry.key;
         final sessions = entry.value;
         final maxBatch = sessions
-            .map((s) => s.exercise?.resetBatch ?? 0)
+            .map((s) => s.session?.resetBatch ?? 0)
             .fold<int>(0, (prev, current) => current > prev ? current : prev);
 
         await prefs.setInt("reset_batch_subCategory_$subCategoryId", maxBatch);
@@ -207,25 +213,27 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
 
   // Favorite
 
-@override
+  @override
   Future<Either> getAllFavorite() async {
     var favorites = await sl<ExerciseService>().getAllFavorite();
-    return favorites.fold((err){
+    return favorites.fold((err) {
       return Left(err);
-    }, (data){
-      List<FavoritesModel> models = (data as List).map((e) => FavoritesModel.fromMap(e)).toList();
+    }, (data) {
+      List<FavoritesModel> models =
+          (data as List).map((e) => FavoritesModel.fromMap(e)).toList();
       List<FavoritesEntity> entities = models.map((m) => m.toEntity()).toList();
       return Right(entities);
     });
   }
 
   @override
-  Future<Either> addNewFavoriteByUserId(String favoriteName) async{
+  Future<Either> addNewFavoriteByUserId(String favoriteName) async {
     return await sl<ExerciseService>().addNewFavoriteByUserId(favoriteName);
   }
 
   @override
-  Future<Either> addExerciseFavoriteByUserId(ExerciseFavoriteRequest req) async {
+  Future<Either> addExerciseFavoriteByUserId(
+      ExerciseFavoriteRequest req) async {
     return await sl<ExerciseService>().addExerciseFavoriteByUserId(req);
   }
 
@@ -241,13 +249,114 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
 
   @override
   Future<Either> getAllExerciseFavorite(int favoriteId) async {
-    var favorites = await sl<ExerciseService>().getAllExerciseFavorite(favoriteId);
-    return favorites.fold((err){
+    var favorites =
+        await sl<ExerciseService>().getAllExerciseFavorite(favoriteId);
+    return favorites.fold((err) {
       return Left(err);
-    }, (data){
-      List<ExerciseFavoriteModel> models = (data as List).map((e) => ExerciseFavoriteModel.fromMap(e)).toList();
-      List<ExerciseFavoriteEntity> entities = models.map((m) => m.toEntity()).toList();
+    }, (data) {
+      List<ExerciseFavoriteModel> models =
+          (data as List).map((e) => ExerciseFavoriteModel.fromMap(e)).toList();
+      List<ExerciseFavoriteEntity> entities =
+          models.map((m) => m.toEntity()).toList();
       return Right(entities);
     });
   }
+
+  // SubCategory - Program
+  @override
+  Future<Either> getAllSubCategoryProgram() async {
+    var subCategoryProgram =
+        await sl<ExerciseService>().getAllSubCategoryProgram();
+    return subCategoryProgram.fold((err) {
+      return Left(err);
+    }, (data) {
+      List<ExerciseSubCategoryProgramModel> models = (data as List)
+          .map((e) => ExerciseSubCategoryProgramModel.fromMap(e))
+          .toList();
+      List<ExerciseSubCategoryProgramEntity> entities =
+          models.map((m) => m.toEntity()).toList();
+      return Right(entities);
+    });
+  }
+
+  // Exercise Mode
+  @override
+  Future<Either> getAllExerciseMode() async {
+    var exerciseMode = await sl<ExerciseService>().getAllExerciseMode();
+    return exerciseMode.fold((err) {
+      return Left(err);
+    }, (data) {
+      List<ExerciseModeModel> models =
+          (data as List).map((e) => ExerciseModeModel.fromMap(e)).toList();
+      List<ExerciseModeEntity> entities =
+          models.map((m) => m.toEntity()).toList();
+      return Right(entities);
+    });
+  }
+
+  // Search
+
+  @override
+  Future<Either> searchBySubCategoryName(String subCategoryName) async {
+    var subCategory =
+        await sl<ExerciseService>().searchBySubCategoryName(subCategoryName);
+    return subCategory.fold((err) {
+      return Left(err);
+    }, (data) {
+      List<ExerciseSubCategoryModel> models = (data as List)
+          .map((e) => ExerciseSubCategoryModel.fromMap(e))
+          .toList();
+      List<ExerciseSubCategoryEntity> entities =
+          models.map((m) => m.toEntity()).toList();
+
+      return Right(entities);
+    });
+  }
+
+  // Equipmentss
+  @override
+  Future<Either> getAllEquipmentBySubCategoryId(int subCategoryId) async {
+    var equipments =
+        await sl<ExerciseService>().getAllEquipmentBySubCategoryId(subCategoryId);
+    return equipments.fold((err) {
+      return Left(err);
+    }, (data) {
+      List<EquipmentsModel> models =
+          (data as List).map((e) => EquipmentsModel.fromMap(e)).toList();
+      List<EquipmentsEntity> entities =
+          models.map((m) => m.toEntity()).toList();
+
+      return Right(entities);
+    });
+  }
+
+  @override
+  Future<Either> getAllEquipment() async {
+    var equipments = await sl<ExerciseService>().getAllEquipment();
+    return equipments.fold((err) {
+      return Left(err);
+    }, (data) {
+      List<EquipmentsModel> models =
+          (data as List).map((e) => EquipmentsModel.fromMap(e)).toList();
+      List<EquipmentsEntity> entities =
+          models.map((m) => m.toEntity()).toList();
+
+      return Right(entities);
+    });
+  }
+
+  // @override
+  // Future<Either> getAllExerciseEquipment() async {
+  //   var equipments = await sl<ExerciseService>().getAllExerciseEquipment();
+  //   return equipments.fold((err) {
+  //     return Left(err);
+  //   }, (data) {
+  //     List<EquipmentsModel> models =
+  //         (data as List).map((e) => EquipmentsModel.fromMap(e)).toList();
+  //     List<EquipmentsEntity> entities =
+  //         models.map((m) => m.toEntity()).toList();
+  //
+  //     return Right(entities);
+  //   });
+  // }
 }

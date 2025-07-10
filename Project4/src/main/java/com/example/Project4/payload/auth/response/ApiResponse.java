@@ -3,10 +3,7 @@ package com.example.Project4.payload.auth.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 
-
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 

@@ -1,11 +1,11 @@
-import 'package:projectflutter/data/auth/model/user.dart';
+import 'package:projectflutter/data/auth/model/user_simple_dto.dart';
 import 'package:projectflutter/data/meal/model/meals.dart';
 
 class UserMealsEntity {
   final int id;
-  final UserModel user;
+  final UserSimpleDTO user;
   final MealsModel meal;
-  final DateTime? createdAt;
+  final DateTime createdAt;
 
   UserMealsEntity(
       {required this.id,

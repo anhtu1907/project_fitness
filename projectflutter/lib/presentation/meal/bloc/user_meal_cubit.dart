@@ -20,10 +20,11 @@ class UserMealCubit extends Cubit<UserMealState> {
 
   void listRecord() async {
     var result = await sl<GetAllRecordMealUseCase>().call();
+    print("Result: $result");
     result.fold((err) {
       emit(LoadUserMealFailure(errorMessage: err));
     }, (data) {
-      emit(UserMealLoaded(entity: data));
+      emit(UserMealLoaded(entity: data ?? []));
     });
   }
 
@@ -34,5 +35,15 @@ class UserMealCubit extends Cubit<UserMealState> {
           meal.createdAt!.day == selectedDate.day;
     }).toList();
     emit(UserMealLoaded(entity: filteredMeals));
+  }
+
+  void deleteRecordLocally(int recordId) {
+    final currentState = state;
+    if (currentState is UserMealLoaded) {
+      final newList = List<UserMealsEntity>.from(currentState.entity)
+        ..removeWhere((e) => e.id == recordId);
+
+      emit(UserMealLoaded(entity: newList));
+    }
   }
 }

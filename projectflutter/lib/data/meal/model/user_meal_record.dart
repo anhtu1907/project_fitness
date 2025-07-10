@@ -1,13 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:projectflutter/data/auth/model/user.dart';
+import 'package:projectflutter/data/auth/model/user_simple_dto.dart';
 import 'package:projectflutter/data/meal/model/meals.dart';
 import 'package:projectflutter/domain/meal/entity/user_meals.dart';
 
 class UserMealRecord {
   final int id;
-  final UserModel? user;
+  final UserSimpleDTO? user;
   final MealsModel? meal;
   final DateTime? createdAt;
 
@@ -30,7 +30,7 @@ class UserMealRecord {
     return UserMealRecord(
         id: map['id'] as int,
         user: map['user'] != null
-            ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+            ? UserSimpleDTO.fromMap(map['user'] as Map<String, dynamic>)
             : null,
         meal: map['meal'] != null
             ? MealsModel.fromMap(map['meal'] as Map<String, dynamic>)

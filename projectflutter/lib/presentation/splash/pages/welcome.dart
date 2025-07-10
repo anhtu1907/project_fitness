@@ -3,6 +3,7 @@ import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/basic_button.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/presentation/bmi/pages/check_bmi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -55,17 +56,18 @@ class _WelcomePageState extends State<WelcomePage> {
             Text('Welcome, $firstname',
                 style: TextStyle(
                     color: AppColors.black,
-                    fontSize: 20,
+                    fontSize: AppFontSize.heading1(context),
                     fontWeight: FontWeight.w700)),
             Text(
               "You are all set now, let’s reach your\ngoals together with us",
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.gray, fontSize: 12),
+              style: TextStyle(color: AppColors.gray, fontSize: AppFontSize.caption(context)),
             ),
             const Spacer(),
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomCenter,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: SizedBox(
+                width: double.infinity,
                 child: BasicButton(
                     title: "Go To Home",
                     onPressed: () {

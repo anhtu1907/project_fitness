@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/presentation/home/pages/exercise_schedule.dart';
 import 'package:projectflutter/presentation/home/widgets/activity_status.dart';
 import 'package:projectflutter/presentation/bmi/widgets/bmi_review.dart';
@@ -24,13 +25,15 @@ class _HomPageState extends State<HomPage> {
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
     return Scaffold(
+      extendBodyBehindAppBar: false,
       appBar: BasicAppBar(
+        backgroundColor: AppColors.backgroundColorWhite,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Text('Home Workout'),
-            const SizedBox(
-              width: 10,
+            Text('Home Workout', style: TextStyle(fontSize: AppFontSize.heading2(context)),),
+            SizedBox(
+              width: media.width * 0.02,
             ),
             FaIcon(
               FontAwesomeIcons.fire,
@@ -40,7 +43,6 @@ class _HomPageState extends State<HomPage> {
         ),
         hideBack: true,
       ),
-      backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -63,7 +65,7 @@ class _HomPageState extends State<HomPage> {
                       'Latest Workout',
                       style: TextStyle(
                           color: AppColors.black,
-                          fontSize: 16,
+                          fontSize: AppFontSize.body(context),
                           fontWeight: FontWeight.bold),
                     ),
                     TextButton(
@@ -74,7 +76,7 @@ class _HomPageState extends State<HomPage> {
                         'View All',
                         style: TextStyle(
                             color: AppColors.primaryColor1,
-                            fontSize: 16,
+                            fontSize: AppFontSize.body(context),
                             fontWeight: FontWeight.bold
                         ),
                       ),
@@ -92,7 +94,7 @@ class _HomPageState extends State<HomPage> {
                   'Activity Status',
                   style: TextStyle(
                       color: AppColors.black,
-                      fontSize: 16,
+                      fontSize: AppFontSize.body(context),
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
@@ -108,7 +110,7 @@ class _HomPageState extends State<HomPage> {
                       'Workout Schedule',
                       style: TextStyle(
                           color: AppColors.black,
-                          fontSize: 16,
+                          fontSize: AppFontSize.body(context),
                           fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
@@ -121,7 +123,7 @@ class _HomPageState extends State<HomPage> {
                           'View All',
                           style: TextStyle(
                               color: AppColors.primaryColor1,
-                              fontSize: 16,
+                              fontSize: AppFontSize.body(context),
                               fontWeight: FontWeight.bold),
                         ))
                   ],

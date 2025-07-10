@@ -11,17 +11,21 @@ import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
 import 'package:projectflutter/domain/exercise/usecase/start_exercise.dart';
 import 'package:projectflutter/presentation/exercise/bloc/button_exercise_cubit.dart';
 import 'package:projectflutter/presentation/exercise/pages/exercise_result.dart';
-import 'package:projectflutter/presentation/exercise/widgets/exercise_rest.dart';
-import 'package:projectflutter/presentation/exercise/widgets/show_overlay.dart';
+import 'package:projectflutter/presentation/exercise/widgets/others/exercise_rest.dart';
+import 'package:projectflutter/presentation/exercise/widgets/show/show_overlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExerciseStart extends StatefulWidget {
   final List<ExercisesEntity> exercises;
   final int currentIndex;
+  final double kcal;
   final int resetBatch;
+  final int subCategoryId;
   const ExerciseStart(
       {super.key,
       required this.exercises,
+        required this.kcal,
+        required this.subCategoryId,
       required this.currentIndex,
       this.resetBatch = 0});
 
@@ -46,12 +50,11 @@ class _ExerciseStartsState extends State<ExerciseStart> {
     super.initState();
     currentExercise = widget.exercises[widget.currentIndex];
     _initPreferencesAndStart();
-
   }
 
-  void _initPreferencesAndStart() async{
+  void _initPreferencesAndStart() async {
     final prefs = await SharedPreferences.getInstance();
-    final overlayPref =  prefs.getBool('overlay');
+    final overlayPref = prefs.getBool('overlay');
     setState(() {
       _showOverlay = widget.currentIndex == 0 || overlayPref!;
       // _counter = currentExercise.duration;
@@ -109,7 +112,7 @@ class _ExerciseStartsState extends State<ExerciseStart> {
   void _startExercise() async {
     final currentResetBatch = await context
         .read<ButtonExerciseCubit>()
-        .getResetBatchBySubCategory(currentExercise.subCategory!.id);
+        .getResetBatchBySubCategory(currentExercise.subCategory.first.id);
     _startGenericTimer(
       initialValue: _counter,
       onTick: (val) => _counter = val,
@@ -119,11 +122,10 @@ class _ExerciseStartsState extends State<ExerciseStart> {
         ExerciseSessionRequest req = ExerciseSessionRequest(
           exerciseId: currentExercise.id,
           duration: _totalDuration,
+          subCategoryId: widget.subCategoryId,
           resetBatch: currentResetBatch!,
         );
 
-        print(
-            "Exercise ID: ${currentExercise.id} - Duration: $_totalDuration - Reset Batch: ${currentResetBatch}");
         StartExerciseUseCase().call(params: req);
 
         if (widget.currentIndex < widget.exercises.length - 1) {
@@ -142,9 +144,17 @@ class _ExerciseStartsState extends State<ExerciseStart> {
           context,
           ExerciseStart(
               exercises: widget.exercises,
+              kcal: widget.kcal,
+              subCategoryId: widget.subCategoryId,
               currentIndex: widget.currentIndex + 1));
     } else {
-      AppNavigator.pushReplacement(context, const ExerciseResultPage());
+      AppNavigator.pushReplacement(
+          context,
+           ExerciseResultPage(
+              resetBatch: widget.resetBatch,
+              totalExercise: widget.exercises.length,
+              kcal: widget.kcal,
+              duration: _totalDuration));
     }
 
     setState(() {
@@ -335,11 +345,11 @@ class _ExerciseStartsState extends State<ExerciseStart> {
               startExercise: _startExercise,
               showOverlay: _showOverlay,
               onPressed: () {
-                  setState(() {
-                    _showOverlay = false;
-                  });
-                  _startExercise();
-                },
+                setState(() {
+                  _showOverlay = false;
+                });
+                _startExercise();
+              },
               countDown: _countdown)
       ]),
     );

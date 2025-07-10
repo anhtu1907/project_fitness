@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/presentation/splash/pages/on_boarding_page_3.dart';
 
 class OnBoardingPage2 extends StatelessWidget {
@@ -36,7 +37,7 @@ class OnBoardingPage2 extends StatelessWidget {
                     'Get Burn',
                     style: TextStyle(
                         color: AppColors.black,
-                        fontSize: 24,
+                        fontSize: AppFontSize.heading1(context),
                         fontWeight: FontWeight.w700),
                   ),
                 ),
@@ -44,7 +45,7 @@ class OnBoardingPage2 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
                     "Let’s keep burning, to achive yours goals, it hurts only temporarily, if you give up now you will be in pain forever",
-                    style: TextStyle(color: AppColors.gray, fontSize: 14),
+                    style: TextStyle(color: AppColors.gray, fontSize: AppFontSize.body(context)),
                   ),
                 ),
               ],

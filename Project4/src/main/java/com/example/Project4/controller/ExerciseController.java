@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.Project4.models.exercise.ExerciseFavoriteModel;
-import com.example.Project4.models.exercise.FavoritesModel;
+import com.example.Project4.dto.exercise.EquipmentsDTO;
+import com.example.Project4.dto.exercise.ExerciseFavoriteDTO;
+import com.example.Project4.dto.exercise.FavoritesDTO;
 import com.example.Project4.payload.exercise.ExerciseFavoriteRequest;
 import com.example.Project4.payload.exercise.ExerciseScheduleRequest;
 import com.example.Project4.payload.exercise.ExerciseSessionRequest;
@@ -125,13 +127,13 @@ public class ExerciseController {
     // Favorite
     @GetMapping("/favorite/all/{userId}")
     public ResponseEntity<?> getAllFavoriteByUserId(@PathVariable int userId) {
-        List<FavoritesModel> favorites = exerciseService.getAllFavoriteByUserId(userId);
+        List<FavoritesDTO> favorites = exerciseService.getAllFavoriteByUserId(userId);
         return ResponseEntity.status(200).body(favorites);
     }
 
     @GetMapping("/favorite/exercise/all/{userId}/{favoriteId}")
     public ResponseEntity<?> getAllExerciseFavoriteByUserId(@PathVariable int userId, @PathVariable int favoriteId) {
-        List<ExerciseFavoriteModel> exercise = exerciseService.getAllExerciseFavoriteByUserId(userId,favoriteId);
+        List<ExerciseFavoriteDTO> exercise = exerciseService.getAllExerciseFavoriteByUserId(userId,favoriteId);
         return ResponseEntity.status(200).body(exercise);
     }
 
@@ -139,7 +141,7 @@ public class ExerciseController {
     @PostMapping("/favorite/new/{userId}")
     public ResponseEntity<?> addNewFavoriteByUserId(@PathVariable int userId, @RequestBody String favoriteName) {
         try {
-            FavoritesModel favorite = exerciseService.addNewFavoriteByUserId(userId, favoriteName);
+            FavoritesDTO favorite = exerciseService.addNewFavoriteByUserId(userId, favoriteName);
             return ResponseEntity.status(201).body(favorite);   
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
@@ -147,10 +149,10 @@ public class ExerciseController {
     }
 
     @PostMapping("/favorite/add/exercise/{userId}")
-    public ResponseEntity<?> addNewFavoriteByUserId(@PathVariable int userId,
+    public ResponseEntity<?> addExerciseFavoriteByUserId(@PathVariable int userId,
             @RequestBody ExerciseFavoriteRequest req) {
         try {
-            ExerciseFavoriteModel favorite = exerciseService.addExerciseFavoriteByUserId(req, userId);
+            ExerciseFavoriteDTO favorite = exerciseService.addExerciseFavoriteByUserId(req, userId);
             return ResponseEntity.status(201).body(favorite);
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
@@ -177,4 +179,42 @@ public class ExerciseController {
         }
     }
 
+    @GetMapping("/sub/category/program")
+    public ResponseEntity<?> getAllSubCategoryProgram(){
+        return ResponseEntity.status(200).body(exerciseService.getAllSubCategoryProgam());
+    }
+    // Exercise Mode
+    @GetMapping("/mode/all")
+    public ResponseEntity<?> getAllExerciseMode(){
+        return ResponseEntity.status(200).body(exerciseService.getAllExerciseMode());
+    }
+    // Search
+     @GetMapping("/search")
+    public ResponseEntity<?> getAllSubCategoryByName(@RequestParam(required = false) String subCategoryName) {
+        if (subCategoryName == null || subCategoryName.trim().isEmpty()) {
+            return ResponseEntity.ok(exerciseService.getAllSubCategory());
+        }
+        return ResponseEntity.ok(exerciseService.searchBySubCategoryName(subCategoryName));
+    }
+    // Equipment
+     @GetMapping("/equipment/{subCategoryId}")
+    public ResponseEntity<?> getAllEquipmentBySubCategoryId(@PathVariable int subCategoryId) {
+        try {
+            List<EquipmentsDTO> equipments = exerciseService.getAllEquipmentBySubCategoryId(subCategoryId);
+            return ResponseEntity.status(200).body(equipments);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
+    }
+
+     @GetMapping("/equipment/all")
+    public ResponseEntity<?> getAllEquipment() {
+        try {
+            List<EquipmentsDTO> equipments = exerciseService.getAllEquipment();
+            return ResponseEntity.status(200).body(equipments);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
+    }
+    
 }

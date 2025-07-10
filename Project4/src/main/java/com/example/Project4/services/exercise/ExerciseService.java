@@ -6,37 +6,74 @@ import com.example.Project4.payload.exercise.ExerciseFavoriteRequest;
 import com.example.Project4.payload.exercise.ExerciseScheduleRequest;
 import com.example.Project4.payload.exercise.ExerciseSessionRequest;
 import com.example.Project4.payload.exercise.ExerciseUpdateScheduleRequest;
-import com.example.Project4.models.exercise.ExerciseCategoryModel;
-import com.example.Project4.models.exercise.ExerciseFavoriteModel;
-import com.example.Project4.models.exercise.ExerciseProgressModel;
-import com.example.Project4.models.exercise.ExerciseScheduleModel;
-import com.example.Project4.models.exercise.ExerciseSessionModel;
-import com.example.Project4.models.exercise.ExerciseSubCategoyrModel;
-import com.example.Project4.models.exercise.ExerciseUserModel;
+import com.example.Project4.dto.exercise.EquipmentsDTO;
+import com.example.Project4.dto.exercise.ExerciseCategoryDTO;
+import com.example.Project4.dto.exercise.ExerciseFavoriteDTO;
+import com.example.Project4.dto.exercise.ExerciseProgressDTO;
+import com.example.Project4.dto.exercise.ExerciseScheduleDTO;
+import com.example.Project4.dto.exercise.ExerciseSessionDTO;
+import com.example.Project4.dto.exercise.ExerciseSubCategoryDTO;
+import com.example.Project4.dto.exercise.ExerciseSubCategoryProgramDTO;
+import com.example.Project4.dto.exercise.ExerciseUserDTO;
+import com.example.Project4.dto.exercise.ExercisesDTO;
+import com.example.Project4.dto.exercise.FavoritesDTO;
+import com.example.Project4.models.exercise.ExerciseModeModel;
 import com.example.Project4.models.exercise.ExercisesModel;
-import com.example.Project4.models.exercise.FavoritesModel;
 
 public interface ExerciseService {
-    List<ExercisesModel> getAllExercise();
-    List<ExerciseCategoryModel> getAllCategory();
-    List<ExerciseSubCategoyrModel> getAllSubCategory();
-    List<ExercisesModel> getExerciseBySubCategoryId(int subCategoryId);
+    List<ExerciseSubCategoryProgramDTO> getAllSubCategoryProgam();
+
+    List<ExerciseModeModel> getAllExerciseMode();
+
+    List<ExercisesDTO> getAllExercise();
+
+    List<ExerciseCategoryDTO> getAllCategory();
+
+    List<ExerciseSubCategoryDTO> getAllSubCategory();
+
+    List<ExercisesDTO> getExerciseBySubCategoryId(int subCategoryId);
+
     ExercisesModel getExerciseById(int exerciseId);
-    List<ExerciseProgressModel> getAllExerciseProgressByUserId(int userId);
-    List<ExerciseSessionModel> getAllExerciseSessionByUserId(int userId);
-    List<ExerciseUserModel> getAllExerciseResultByUserId(int userId);
-    List<ExerciseScheduleModel> getAllScheduleByUserId(int userId);
-    ExerciseProgressModel startExercise(ExerciseSessionRequest req);
-    ExerciseScheduleModel scheduleExercise(ExerciseScheduleRequest req);
-    ExerciseScheduleModel updateScheduleExercise(ExerciseUpdateScheduleRequest req);
+
+    List<ExerciseProgressDTO> getAllExerciseProgressByUserId(int userId);
+
+    List<ExerciseSessionDTO> getAllExerciseSessionByUserId(int userId);
+
+    List<ExerciseUserDTO> getAllExerciseResultByUserId(int userId);
+
     boolean findByIdAndUserId(int scheduleId, int userId);
+
     void deleteExerciseSchdedule(int scheduleId);
+
     void deleteAllExerciseScheduleByTime();
+
+    // Schedule
+    ExerciseProgressDTO startExercise(ExerciseSessionRequest req);
+
+    List<ExerciseScheduleDTO> getAllScheduleByUserId(int userId);
+
+    ExerciseScheduleDTO scheduleExercise(ExerciseScheduleRequest req);
+
+    ExerciseScheduleDTO updateScheduleExercise(ExerciseUpdateScheduleRequest req);
+
     // Favorite
-    List<FavoritesModel> getAllFavoriteByUserId(int userId);
-    List<ExerciseFavoriteModel> getAllExerciseFavoriteByUserId(int userId, int favoriteId);
-    FavoritesModel addNewFavoriteByUserId(int userId, String favoriteName);
-    ExerciseFavoriteModel addExerciseFavoriteByUserId(ExerciseFavoriteRequest req ,int userId);
+    List<FavoritesDTO> getAllFavoriteByUserId(int userId);
+
+    List<ExerciseFavoriteDTO> getAllExerciseFavoriteByUserId(int userId, int favoriteId);
+
+    FavoritesDTO addNewFavoriteByUserId(int userId, String favoriteName);
+
+    ExerciseFavoriteDTO addExerciseFavoriteByUserId(ExerciseFavoriteRequest req, int userId);
+
     void removeFavorite(int favoriteId);
+
     void removeExerciseFavorite(int subCategoryId);
+
+    // Search
+    List<ExerciseSubCategoryDTO> searchBySubCategoryName(String subCategoryName);
+
+    // Equipment
+    List<EquipmentsDTO> getAllEquipmentBySubCategoryId(int subCategoryId);
+
+    List<EquipmentsDTO> getAllEquipment();
 }

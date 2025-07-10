@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/presentation/bmi/bloc/health_cubit.dart';
 import 'package:projectflutter/presentation/bmi/bloc/health_state.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_cubit.dart';
@@ -23,6 +24,7 @@ class _DataProgressCaloriesAbsorptionState
     extends State<DataProgressCaloriesAbsorption> {
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -106,9 +108,10 @@ class _DataProgressCaloriesAbsorptionState
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.white,
-                                border:
-                                    Border.all(color: Colors.white, width: 1),
-                                borderRadius: BorderRadius.circular(12)),
+                                border: Border.all(
+                                  color: AppColors.gray.withOpacity(0.15),
+                                ),
+                                borderRadius: BorderRadius.circular(20)),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,15 +120,15 @@ class _DataProgressCaloriesAbsorptionState
                                   'Intake',
                                   style: TextStyle(
                                       color: AppColors.black,
-                                      fontSize: 20,
+                                      fontSize: AppFontSize.value20Text(context),
                                       fontWeight: FontWeight.bold),
                                 ),
-                                const SizedBox(
-                                  height: 10,
+                                SizedBox(
+                                  height: media.height * 0.01,
                                 ),
                                 SizedBox(
-                                  height: 130,
-                                  width: MediaQuery.of(context).size.width,
+                                  height: media.height * 0.18,
+                                  width: media.width,
                                   child: Center(
                                     child: CircularPercentIndicator(
                                       radius: 65,

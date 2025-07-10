@@ -1,0 +1,159 @@
+import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
+import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
+import 'package:projectflutter/presentation/exercise/pages/exercise_by_sub_category_view.dart';
+
+class ExercisePlanCard extends StatelessWidget {
+  final String itemDateFormatted;
+  final int day;
+  final bool isToday;
+  final bool isUpcoming;
+  final bool isFirstDay;
+  final String duration;
+  final double kcal;
+  final String imagePath;
+  final int subCategoryId;
+  final String level;
+
+  const ExercisePlanCard({
+    super.key,
+    required this.itemDateFormatted,
+    required this.day,
+    required this.isToday,
+    required this.isUpcoming,
+    required this.isFirstDay,
+    required this.duration,
+    required this.kcal,
+    required this.imagePath,
+    required this.subCategoryId,
+    required this.level,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
+
+    return GestureDetector(
+      onTap: () {
+        AppNavigator.push(
+            context,
+            ExerciseBySubCategoryView(
+                subCategoryId: subCategoryId, image: imagePath, level: level));
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: isFirstDay ? 16 : 0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 8,
+              offset: const Offset(2, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        itemDateFormatted,
+                        style: TextStyle(
+                            color: AppColors.gray.withOpacity(0.6),
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppFontSize.value12Text(context)),
+                      ),
+                      SizedBox(
+                        height: media.height * 0.001,
+                      ),
+                      Text(
+                        'Day $day',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: isToday
+                                ? AppFontSize.value30Text(context)
+                                : AppFontSize.value24Text(context)),
+                      ),
+                      SizedBox(
+                        height: media.height * 0.001,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '$duration mins',
+                            style: TextStyle(
+                                fontSize: AppFontSize.value11Text(context)),
+                          ),
+                          SizedBox(width: media.width * 0.01),
+                          Text(
+                            ' | ',
+                            style: TextStyle(
+                                color: AppColors.gray.withOpacity(0.3),
+                                fontSize: AppFontSize.value11Text(context)),
+                          ),
+                          SizedBox(width: media.width * 0.01),
+                          Text('${kcal.toStringAsFixed(0)} kcal',
+                              style: TextStyle(
+                                  fontSize: AppFontSize.value11Text(context)))
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.asset(
+                          imagePath,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: media.height * 0.02),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              child: SizedBox(
+                width: double.infinity,
+                height: media.height * 0.06,
+                child: ElevatedButton(
+                  onPressed: () {
+                    AppNavigator.push(
+                        context,
+                        ExerciseBySubCategoryView(
+                            subCategoryId: subCategoryId, image: imagePath, level: level));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: isToday
+                        ? AppColors.primaryColor3
+                        : AppColors.gray.withOpacity(0.5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text('Start Now',
+                      style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

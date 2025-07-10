@@ -1,21 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:projectflutter/data/auth/model/user.dart';
+import 'package:projectflutter/data/auth/model/user_simple_dto.dart';
 import 'package:projectflutter/data/exercise/model/exercise_session_model.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_progress_entity.dart';
 
 class ExerciseProgressModel {
   final int id;
-  final UserModel? user;
-  final ExerciseSessionModel? exercise;
+  final UserSimpleDTO? user;
+  final ExerciseSessionModel? session;
   final double progress;
   final DateTime? lastUpdated;
 
   ExerciseProgressModel(
       {required this.id,
       required this.user,
-      required this.exercise,
+      required this.session,
       required this.progress,
       required this.lastUpdated});
 
@@ -23,7 +23,7 @@ class ExerciseProgressModel {
     return <String, dynamic>{
       'id': id,
       'user': user,
-      'exercises': exercise,
+      'exercises': session,
       'progress': progress,
       'lastUpdated': lastUpdated?.toIso8601String(),
     };
@@ -33,11 +33,11 @@ class ExerciseProgressModel {
     return ExerciseProgressModel(
       id: map['id'] as int,
       user: map['user'] != null
-          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          ? UserSimpleDTO.fromMap(map['user'] as Map<String, dynamic>)
           : null,
-      exercise: map['exercise'] != null
+      session: map['session'] != null
           ? ExerciseSessionModel.fromMap(
-              map['exercise'] as Map<String, dynamic>)
+              map['session'] as Map<String, dynamic>)
           : null,
       progress: map['progress'] as double,
       lastUpdated: map['lastUpdated'] != null
@@ -58,7 +58,7 @@ extension ExerciseProgressXModel on ExerciseProgressModel {
     return ExerciseProgressEntity(
         id: id,
         user: user,
-        exercise: exercise,
+        session: session,
         progress: progress,
         lastUpdated: lastUpdated);
   }

@@ -41,14 +41,15 @@ class LatestWorkout extends StatelessWidget {
 
           if (exerciseState is ExercisesLoaded) {
             final exerciseList = exerciseState.entity;
-
-            // Tạo uniqueExercisesPerCategory
             final Map<String, Set<int>> uniqueExercisesSubPerCategory = {};
             for (var e in exerciseList) {
-              final subCategoryName = e.subCategory!.subCategoryName;
-              uniqueExercisesSubPerCategory
-                  .putIfAbsent(subCategoryName, () => {})
-                  .add(e.id);
+              for(var sub in e.subCategory){
+                final subCategoryName = sub.subCategoryName;
+                uniqueExercisesSubPerCategory
+                    .putIfAbsent(subCategoryName, () => {})
+                    .add(e.id);
+              }
+
             }
 
             return BlocBuilder<WorkoutProgressCubit, WorkoutProgressState>(
@@ -62,18 +63,30 @@ class LatestWorkout extends StatelessWidget {
                 }
 
                 if (state is WorkoutProgressLoaded) {
+                  final progress = state.listProgress;
+                  if (progress.isEmpty) {
+                    return const SizedBox(
+                        height: 60,
+                        child: Center(
+                          child: Text('No recent workouts available'),
+                        ));
+                  }
                   Map<String, List<ExerciseProgressEntity>>
                       groupedSubCategoryResetBatch = {};
                   for (var progress in state.listProgress) {
-                    final subCategoryName = progress
-                        .exercise!.exercise!.subCategory!.subCategoryName;
-                    final resetBatch = progress.exercise!.resetBatch;
-                    final key = '$subCategoryName-$resetBatch';
-                    groupedSubCategoryResetBatch
-                        .putIfAbsent(key, () => [])
-                        .add(progress);
-                  }
+                    final session = progress.session;
+                    if (session != null &&
+                        session.subCategory != null) {
+                      final subCategoryId = session.subCategory!.id;
+                      final resetBatch = session.resetBatch;
+                      final key = '$subCategoryId-$resetBatch';
 
+                      groupedSubCategoryResetBatch
+                          .putIfAbsent(key, () => [])
+                          .add(progress);
+                    }
+
+                  }
                   final sortedEntries =
                       groupedSubCategoryResetBatch.entries.toList()
                         ..sort((a, b) {
@@ -90,22 +103,29 @@ class LatestWorkout extends StatelessWidget {
                       child: Column(
                         children: sortedEntries.take(2).map((entry) {
                           final list = entry.value;
-                          var duration = (list.fold(0, (sum,item) => sum += item.exercise!.exercise!.duration) / 60).floor();
-                          var subCategoryImage = list.first.exercise!.exercise!
-                              .subCategory!.subCategoryImage;
-                          var subCategoryName = list.first.exercise!.exercise!
-                              .subCategory!.subCategoryName;
-                          var subCategoryId =
-                              list.first.exercise!.exercise!.subCategory!.id;
+                          var duration = (list.fold(
+                                      0,
+                                      (sum, item) => sum +=
+                                          item.session!.exercise!.duration) /
+                                  60)
+                              .floor();
+                          final firstSub = list.first;
+                          final subCategoryOfSession = firstSub.session!.subCategory;
+
+                          var subCategoryImage = subCategoryOfSession!.subCategoryImage;
+                          var subCategoryName = subCategoryOfSession.subCategoryName;
+                          var subCategoryId = subCategoryOfSession.id;
+
                           var completed = list.length;
-                          var total =
+                          var totalExercise =
                               uniqueExercisesSubPerCategory[subCategoryName]
                                       ?.length ??
                                   0;
+                          var resetBatch = list.last.session!.resetBatch;
                           var progressRatio =
-                              total > 0 ? completed / total : 0.0;
+                          totalExercise > 0 ? completed / totalExercise : 0.0;
                           var totalKcal = list.fold<double>(0,
-                              (sum, item) => sum + (item.exercise?.kcal ?? 0));
+                              (sum, item) => sum + (item.session?.kcal ?? 0));
 
                           return Builder(builder: (context) {
                             return WorkoutRow(
@@ -124,26 +144,25 @@ class LatestWorkout extends StatelessWidget {
                                             context,
                                             'Continue?',
                                             'Are you sure want to continue?');
-                                    print('Progress: ${progressRatio * 100}');
                                     if (shouldContinue == true) {
-                                      final prefs = await SharedPreferences.getInstance();
+                                      final prefs =
+                                          await SharedPreferences.getInstance();
                                       prefs.setBool('overlay', true);
-                                      final filteredExercises = exerciseList
-                                          .where((e) =>
-                                              e.subCategory!.id ==
-                                              subCategoryId)
-                                          .toList();
+                                      final filteredExercises = exerciseList.where((e) {
+                                        return e.subCategory.any((sub) => sub.id == subCategoryId);
+                                      }).toList();
                                       var currentIndex = await context
                                           .read<ButtonExerciseCubit>()
                                           .getNextExerciseIndex(
                                               filteredExercises);
-                                      print('Current Index: $currentIndex');
                                       if (context.mounted &&
                                           currentIndex != null) {
                                         AppNavigator.push(
                                           context,
                                           ExerciseStart(
                                               exercises: filteredExercises,
+                                              kcal: totalKcal,
+                                              subCategoryId: subCategoryId,
                                               currentIndex: currentIndex),
                                         );
                                       }
@@ -158,7 +177,11 @@ class LatestWorkout extends StatelessWidget {
                                       if (context.mounted) {
                                         AppNavigator.push(
                                           context,
-                                          const ExerciseResultPage(),
+                                           ExerciseResultPage(
+                                              resetBatch: resetBatch,
+                                              totalExercise: totalExercise,
+                                              kcal: totalKcal,
+                                              duration: duration),
                                         );
                                       }
                                     }

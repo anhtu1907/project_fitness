@@ -1,7 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
-import 'package:projectflutter/core/data/exercises_image.dart';
 import 'package:projectflutter/core/data/exercises_image_gif.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
@@ -20,7 +19,6 @@ class ExerciseDetailsPage extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        backgroundColor: AppColors.white,
         body: SingleChildScrollView(
             child: Container(
                 padding:
@@ -35,7 +33,7 @@ class ExerciseDetailsPage extends StatelessWidget {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20)),
                         child: Image.network(
-                          exerciseImageMap[exercises.id].toString(),
+                          exercises.exerciseImage,
                           width: media.width,
                           height: media.width * 0.43,
                           fit: BoxFit.contain,
@@ -55,7 +53,7 @@ class ExerciseDetailsPage extends StatelessWidget {
                         height: media.width * 0.01,
                       ),
                       Text(
-                        '${exercises.subCategory!.subCategoryName} | ${exercises.kcal.toStringAsFixed(0)} Calories Burn',
+                        '${exercises.subCategory.first.subCategoryName} | ${exercises.kcal.toStringAsFixed(0)} Calories Burn',
                         style: TextStyle(
                           color: AppColors.gray,
                           fontSize: 14,

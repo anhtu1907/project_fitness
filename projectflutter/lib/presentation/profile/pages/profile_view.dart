@@ -1,39 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
-import 'package:projectflutter/common/widget/appbar/app_bar.dart';
-import 'package:projectflutter/common/widget/personal/setting_row.dart';
-import 'package:projectflutter/core/config/assets/app_image.dart';
+import 'package:projectflutter/common/api/shared_preference_service.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
-import 'package:projectflutter/domain/auth/entity/user.dart';
-import 'package:projectflutter/presentation/auth/pages/signin.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/presentation/bmi/bloc/health_cubit.dart';
 import 'package:projectflutter/presentation/bmi/bloc/health_state.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_cubit.dart';
 import 'package:projectflutter/presentation/home/bloc/user_info_display_state.dart';
 import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell.dart';
-import 'package:projectflutter/presentation/profile/pages/achievement.dart';
-import 'package:projectflutter/presentation/profile/pages/contact_us.dart';
-import 'package:projectflutter/presentation/profile/pages/personal_data.dart';
-import 'package:projectflutter/presentation/profile/pages/privacy_policy.dart';
-import 'package:projectflutter/presentation/profile/pages/setting.dart';
-import 'package:projectflutter/presentation/profile/pages/workout_progress.dart';
-import 'package:projectflutter/presentation/profile/pages/history.dart';
+import 'package:projectflutter/presentation/profile/widgets/account_setting.dart';
+import 'package:projectflutter/presentation/profile/widgets/avatar_item.dart';
+import 'package:projectflutter/presentation/profile/widgets/logout_button.dart';
+import 'package:projectflutter/presentation/profile/widgets/other_setting.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body:  MultiBlocProvider(providers: [
-          BlocProvider(
-          create: (context) => UserInfoDisplayCubit()..displayUserInfo()),
-    BlocProvider(
-    create: (context) => HealthCubit()..getDataHealth()),
-      ],
+      body: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+                create: (context) =>
+                UserInfoDisplayCubit()
+                  ..displayUserInfo()),
+            BlocProvider(create: (context) =>
+            HealthCubit()
+              ..getDataHealth()),
+          ],
           child: BlocBuilder<UserInfoDisplayCubit, UserInfoDisplayState>(
             builder: (context, state) {
               if (state is UserInfoLoading) {
@@ -44,272 +41,129 @@ class ProfilePage extends StatelessWidget {
               if (state is UserInfoLoaded) {
                 final user = state.user;
                 final formatedDate =
-                DateFormat('dd/MM/yyyy').format(state.user.createdAt);
-                return BlocBuilder<HealthCubit,HealthState>(builder: (context, state) {
-                  if (state is LoadedHealthFailure) {
-                    return Center(
-                      child: Text(state.errorMessage),
-                    );
-                  }
-                  if (state is HealthLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if(state is HealthLoaded){
-                    final health = state.bmi;
-                    return SafeArea(
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  _avatarProfile(user),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${user.firstname} ${user.lastname}',
-                                        style: TextStyle(
-                                            color: AppColors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
+                DateFormat('dd/MM/yyyy').format(user.createdAt!);
+                return BlocBuilder<HealthCubit, HealthState>(
+                  builder: (context, state) {
+                    if (state is LoadedHealthFailure) {
+                      return Center(
+                        child: Text(state.errorMessage),
+                      );
+                    }
+                    if (state is HealthLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (state is HealthLoaded) {
+                      final health = state.bmi;
+                      final userId = SharedPreferenceService.userId;
+                      final currentUserHealth =
+                      health.where((e) => e.user!.id == userId).toList();
+                      return SafeArea(
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    AvatarItem(user: user,),
+                                    SizedBox(
+                                      width: media.width * 0.03,
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${user.firstname} ${user.lastname}',
+                                          style: TextStyle(
+                                              color: AppColors.black,
+                                              fontSize: AppFontSize.value16Text(context),
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          'Joined on: $formatedDate',
+                                          style: TextStyle(
+                                              color: AppColors.gray,
+                                              fontSize: AppFontSize.value14Text(context),
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: media.height * 0.02,
+                                ),
+                                const LogoutButton(),
+                                SizedBox(
+                                  height: media.height * 0.025,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: TitleSubtitleCell(
+                                        value: currentUserHealth.first.height
+                                            .toStringAsFixed(0),
+                                        subtitle: "Height",
+                                        unit: "cm",
                                       ),
-                                      Text(
-                                        'Joined on: $formatedDate',
-                                        style: TextStyle(
-                                            color: AppColors.gray,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal),
+                                    ),
+                                    SizedBox(
+                                      width: media.width * 0.04,
+                                    ),
+                                    Expanded(
+                                      child: TitleSubtitleCell(
+                                        value: currentUserHealth.last.weight
+                                            .toStringAsFixed(0),
+                                        subtitle: "Weight",
+                                        unit: "kg",
                                       ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              _logoutButton(),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TitleSubtitleCell(
-                                      value: health.last.height.toStringAsFixed(0),
-                                      subtitle: "Height",
-                                      unit: "cm",
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  Expanded(
-                                    child: TitleSubtitleCell(
-                                      value: health.last.weight.toStringAsFixed(0),
-                                      subtitle: "Weight",
-                                      unit: "kg",
+                                    SizedBox(
+                                      width: media.width * 0.04,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  Expanded(
-                                    child: TitleSubtitleCell(
-                                      value: health.last.bmi.toStringAsFixed(1),
-                                      subtitle: "BMI",
-                                      unit: "kg/m²",
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              accountSetting(context),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              otherSetting(context),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                            ],
+                                    Expanded(
+                                      child: TitleSubtitleCell(
+                                        value: currentUserHealth.last.bmi
+                                            .toStringAsFixed(1),
+                                        subtitle: "BMI",
+                                        unit: "kg/m²",
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: media.height * 0.025,
+                                ),
+                                const AccountSetting(),
+                                SizedBox(
+                                  height: media.height * 0.025,
+                                ),
+                                const OtherSetting(),
+
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }
-                  return Container();
-                },);
-
+                      );
+                    }
+                    return Container();
+                  },
+                );
               }
               return Container();
             },
           )),
     );
-
   }
 
-  Widget _avatarProfile(UserEntity user) {
-    return ClipRRect(
-        borderRadius: BorderRadius.circular(40),
-        child: Image.asset(
-          user.image.isEmpty
-              ? (user.gender == 1 ? AppImages.male : AppImages.female)
-              : user.image,
-          width: 60,
-          height: 60,
-          fit: BoxFit.cover,
-        ));
-  }
 
-  Widget accountSetting(BuildContext context) {
-    List<AccoutSetting> accountData = [
-      AccoutSetting(
-          imageIcon: AppImages.pPersonsal,
-          title: "Personal Data",
-          onPressed: () {
-            AppNavigator.push(context, const PersonalDataPage());
-          }),
-      AccoutSetting(
-          imageIcon: AppImages.pAchi,
-          title: "Achievement",
-          onPressed: () {
-            AppNavigator.push(context, const AchievementPage());
-          }),
-      AccoutSetting(
-          imageIcon: AppImages.pActivity,
-          title: "Activity History",
-          onPressed: () {
-            AppNavigator.push(context, const HistoryPage());
-          }),
-      AccoutSetting(
-          imageIcon: AppImages.pWorkout,
-          title: "Workout Progress",
-          onPressed: () {
-            AppNavigator.push(context, const WorkoutProgressPage());
-          }),
-    ];
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 2)]),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Account',
-            style: TextStyle(
-                color: AppColors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: accountData.length,
-            itemBuilder: (context, index) {
-              return SettingRow(
-                  imageIcon: accountData[index].imageIcon,
-                  title: accountData[index].title,
-                  onPressed: accountData[index].onPressed);
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget otherSetting(BuildContext context) {
-    List<AccoutSetting> otherData = [
-      AccoutSetting(
-          imageIcon: AppImages.pContact,
-          title: "Contact Us",
-          onPressed: () {
-            AppNavigator.push(context, const ContactUsPage());
-          }),
-      AccoutSetting(
-          imageIcon: AppImages.pPrivacy,
-          title: "Privacy Policy",
-          onPressed: () {
-            AppNavigator.push(context, const PrivacyPolicyPage());
-          }),
-      AccoutSetting(
-          imageIcon: AppImages.pSetting,
-          title: "Setting",
-          onPressed: () {
-            AppNavigator.push(context, const SettingPage());
-          }),
-    ];
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 2)]),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Other',
-            style: TextStyle(
-                color: AppColors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: otherData.length,
-            padding: EdgeInsets.zero,
-            itemBuilder: (context, index) {
-              return SettingRow(
-                  imageIcon: otherData[index].imageIcon,
-                  title: otherData[index].title,
-                  onPressed: otherData[index].onPressed);
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _logoutButton() {
-    return Builder(
-      builder: (context) {
-        return ElevatedButton.icon(
-          onPressed: () {
-            context.read<UserInfoDisplayCubit>().logout();
-            AppNavigator.pushAndRemoveUntil(context, SigninPage());
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            side: BorderSide.none
-          ),
-          label: const Text('Logout'),
-          icon: const Icon(Icons.logout),
-        );
-      },
-    );
-  }
 }
 
 class AccoutSetting {
