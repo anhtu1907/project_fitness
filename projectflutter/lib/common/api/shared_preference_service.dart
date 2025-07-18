@@ -4,13 +4,12 @@ class SharedPreferenceService {
   static SharedPreferences? _prefs;
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
-    print('SharedPreferences initialized');
   }
 
-  static int? get userId => _prefs?.getInt('userId');
-  static set userId(int? value) {
+  static String? get userId => _prefs?.getString('userId');
+  static set userId(String? value) {
     if (value != null) {
-      _prefs?.setInt('userId', value);
+      _prefs?.setString('userId', value);
     } else {
       _prefs?.remove('userId');
     }
@@ -22,6 +21,15 @@ class SharedPreferenceService {
       _prefs?.setStringList('favoriteIds', value);
     } else {
       _prefs?.remove('favoriteIds');
+    }
+  }
+  static String? get token => _prefs?.getString('token');
+
+  static set token(String? value) {
+    if (value != null) {
+      _prefs?.setString('token', value);
+    } else {
+      _prefs?.remove('token');
     }
   }
 }

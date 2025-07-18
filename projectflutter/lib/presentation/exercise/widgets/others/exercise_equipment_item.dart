@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
 
@@ -15,9 +16,7 @@ class ExerciseEquipmentItem extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
           color: const Color(0xff91C8E4).withOpacity(0.1),
-          border: Border.all(
-              color: AppColors.black.withOpacity(0.25)
-          ),
+          border: Border.all(color: AppColors.black.withOpacity(0.25)),
           borderRadius: BorderRadius.circular(20)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -25,7 +24,7 @@ class ExerciseEquipmentItem extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Image.asset(
+            child: SwitchImageType.buildImage(
               image,
               fit: BoxFit.cover,
               width: media.width * 0.07,

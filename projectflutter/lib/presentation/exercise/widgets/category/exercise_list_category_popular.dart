@@ -82,43 +82,60 @@ class ExerciseListCategoryPopular extends StatelessWidget {
                         children: groupedSubCategoryByPopular.entries.map((entry) {
                           final categoryName = entry.key;
                           final subList = entry.value;
+                          final Map<int, Set<String>> modeBySubCategoryId = {};
 
+                          for (final exercise in listExercise) {
+                            if (exercise.subCategory.length == 1) {
+                              final modeNames = exercise.modes.map((m) => m.modeName.toLowerCase());
+                              for (final sub in exercise.subCategory) {
+                                modeBySubCategoryId.putIfAbsent(sub.id, () => {});
+                                modeBySubCategoryId[sub.id]!.addAll(modeNames);
+                              }
+                            }
+                          }
+
+                          final Map<int, String> levelBySubCategoryId = {};
+                          const ordered = ['Beginner', 'Intermediate', 'Advanced', 'Stretch'];
+
+                          for (final entry in modeBySubCategoryId.entries) {
+                            final modes = entry.value;
+                            if (modes.isNotEmpty) {
+                              levelBySubCategoryId[entry.key] = ordered.firstWhere(
+                                    (m) => modes.contains(m.toLowerCase()),
+                                orElse: () => modes.first,
+                              );
+                            }
+                          }
                           final Map<String, List<ExercisesEntity>> groupedExercises = {};
+
                           for (var exercise in listExercise) {
-                            if (exercise.mode == null) continue;
+                            if (exercise.modes == null) continue;
                             for (var sub in exercise.subCategory) {
-                              final key = '${sub.id}-${exercise.mode!.id}';
+                              final key = '${sub.id}-${exercise.modes.first.id}';
                               groupedExercises
                                   .putIfAbsent(key, () => [])
                                   .add(exercise);
                             }
                           }
 
-                          final List<ExerciseSubCategoryProgramEntity> finalList = [];
-                          String? modeName;
+                          final List<(ExerciseSubCategoryProgramEntity, String)> finalListWithLevel = [];
+
                           for (var e in subList) {
                             final subCategoryId = e.subCategory?.id;
-                            ExercisesEntity? exerciseForSub;
+                            if (subCategoryId == null) continue;
 
-                            if (subCategoryId != null) {
-                              for (var key in groupedExercises.keys) {
-                                if (key.startsWith('$subCategoryId-')) {
-                                  final exercises = groupedExercises[key];
-                                  if (exercises != null && exercises.isNotEmpty) {
-                                    exerciseForSub = exercises.first;
-                                    modeName = exercises.first.mode?.modeName;
-                                    break;
-                                  }
-                                }
-                              }
-                            }
+                            final relatedExercises = listExercise.where(
+                                  (ex) => ex.subCategory.any((s) => s.id == subCategoryId),
+                            ).toList();
 
-                            if (exerciseForSub != null && modeName != null) {
-                              finalList.add(e);
-                            }
+                            if (relatedExercises.isEmpty) continue;
+
+                            final modeName = levelBySubCategoryId[subCategoryId] ?? 'Unknown';
+
+                            finalListWithLevel.add((e, modeName));
                           }
 
-                          if (finalList.isEmpty) {
+                          if (finalListWithLevel.isEmpty) {
                             return const SizedBox.shrink();
                           }
 
@@ -126,19 +143,19 @@ class ExerciseListCategoryPopular extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 10),
                             child: ExercisePopularList(
                               categoryName: categoryName,
-                              level: modeName!,
                               onPressed: (e) {
+                                final level = finalListWithLevel.firstWhere((pair) => pair.$1 == e).$2;
                                 AppNavigator.push(
                                   context,
                                   ExerciseBySubCategoryView(
                                     subCategoryId: e.subCategory!.id,
-                                    level: modeName!,
+                                    level: level,
                                     image: e.subCategory!.subCategoryImage,
                                   ),
                                 );
                               },
                               duration: durationBySubCategory,
-                              list: finalList,
+                              list: finalListWithLevel,
                             ),
                           );
                         }).toList(),

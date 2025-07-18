@@ -9,6 +9,7 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<BmiService>(BmiServiceImpl());
   sl.registerSingleton<MealService>(MealServiceImpl());
   sl.registerSingleton<ExerciseService>(ExerciseServiceImpl());
+
   // Repositories
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
   sl.registerSingleton<BmiRepository>(BmiRepositoryImpl());
@@ -23,7 +24,8 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<IsLoggedUsecase>(IsLoggedUsecase());
   sl.registerSingleton<VerifyUsecase>(VerifyUsecase());
   sl.registerSingleton<LogoutUsecase>(LogoutUsecase());
-
+  sl.registerSingleton<GetUserByUsernameUseCase>(GetUserByUsernameUseCase());
+  sl.registerSingleton<EnsureValidTokenUsecase>(EnsureValidTokenUsecase());
   // BMI
   sl.registerSingleton<GetAllDataByUserUseCase>(GetAllDataByUserUseCase());
   sl.registerSingleton<GetAllGoalByUserUseCase>(GetAllGoalByUserUseCase());
@@ -65,6 +67,7 @@ Future<void> initializeDependencies() async {
       GetExerciseCategoryUseCase());
   sl.registerSingleton<StartExerciseUseCase>(StartExerciseUseCase());
   sl.registerSingleton<ScheduleExerciseUseCase>(ScheduleExerciseUseCase());
+  sl.registerSingleton<GetSessionResetBatchUseCase>(GetSessionResetBatchUseCase());
 
 
   sl.registerLazySingleton<ExerciseScheduleCubit>(

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.Project4.models.meal.MealsModel;
+import com.example.Project4.entity.meal.MealsModel;
 
 @Repository
 public interface MealsRepository extends JpaRepository<MealsModel,Integer> {

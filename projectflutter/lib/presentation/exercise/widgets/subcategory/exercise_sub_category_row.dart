@@ -28,7 +28,7 @@ class ExerciseSubcategoryRow extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: media.width * 0.08,
-            backgroundImage: AssetImage(image),
+            backgroundImage: NetworkImage(image),
             backgroundColor: Colors.transparent,
           ),
           SizedBox(
@@ -64,7 +64,7 @@ class ExerciseSubcategoryRow extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '$level ',
+                      '$level',
                       style: TextStyle(
                         color: AppColors.gray,
                         fontSize: AppFontSize.value14Text(context),

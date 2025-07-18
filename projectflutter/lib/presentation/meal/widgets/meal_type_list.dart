@@ -146,12 +146,14 @@ class MealTypeList extends StatelessWidget {
           final subCategoryName = item.subCategoryName;
           final kcal = kcalBySubCategory[subCategoryName] ?? 0;
           final totalFood = foodBySubCategory[subCategoryName] ?? 0;
+          final subCategoryImage = item.subCategoryImage;
           return Padding(
               padding: const EdgeInsets.only(right: 10),
               child: MealSubCategoryCardPlan(
                   subCategoryId: item.id,
                   subCategoryName: item.subCategoryName,
                   description: item.description,
+                  subCategoryImage: subCategoryImage,
                   kcal: kcal,
                   totalFood: totalFood));
         },

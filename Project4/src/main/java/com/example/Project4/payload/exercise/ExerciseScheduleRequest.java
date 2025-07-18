@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 public class ExerciseScheduleRequest {
-    private int user;
+    private String user;
     private int subCategory;
     private LocalDateTime scheduleTime;
 }

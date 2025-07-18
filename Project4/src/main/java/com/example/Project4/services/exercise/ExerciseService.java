@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.example.Project4.payload.exercise.ExerciseFavoriteRequest;
 import com.example.Project4.payload.exercise.ExerciseScheduleRequest;
-import com.example.Project4.payload.exercise.ExerciseSessionRequest;
+import com.example.Project4.payload.exercise.ExerciseSessionBatchRequest;
 import com.example.Project4.payload.exercise.ExerciseUpdateScheduleRequest;
 import com.example.Project4.dto.exercise.EquipmentsDTO;
 import com.example.Project4.dto.exercise.ExerciseCategoryDTO;
@@ -48,7 +48,7 @@ public interface ExerciseService {
     void deleteAllExerciseScheduleByTime();
 
     // Schedule
-    ExerciseProgressDTO startExercise(ExerciseSessionRequest req);
+    ExerciseProgressDTO startMultipleExercises(ExerciseSessionBatchRequest req);
 
     List<ExerciseScheduleDTO> getAllScheduleByUserId(int userId);
 
@@ -68,6 +68,8 @@ public interface ExerciseService {
     void removeFavorite(int favoriteId);
 
     void removeExerciseFavorite(int subCategoryId);
+    int getResetBatchBySubCategory(int userId, int subCategoryId);
+
 
     // Search
     List<ExerciseSubCategoryDTO> searchBySubCategoryName(String subCategoryName);

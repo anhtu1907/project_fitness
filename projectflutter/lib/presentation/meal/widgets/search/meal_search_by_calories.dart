@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/domain/meal/entity/meals.dart';
@@ -76,7 +77,9 @@ class MealSearchByCalories extends StatelessWidget {
                   for (var meal in mealList) {
                     for (var sub in meal.subCategory) {
                       final subCategoryName = sub.subCategoryName;
-                      groupedSubCategory.putIfAbsent(subCategoryName, () => []).add(meal);
+                      groupedSubCategory
+                          .putIfAbsent(subCategoryName, () => [])
+                          .add(meal);
                     }
                   }
                   Map<String, double> kcalBySubCategory = {};
@@ -104,19 +107,24 @@ class MealSearchByCalories extends StatelessWidget {
                               return subCatKcal >= minCalo &&
                                   subCatKcal <= maxCalo;
                             }).toList();
-                            final filteredKcalBySubCategory = <String, double>{};
+                            final filteredKcalBySubCategory =
+                                <String, double>{};
                             for (var subCat in filteredList) {
                               final subCatName = subCat.subCategoryName;
-                              final meals = groupedSubCategory[subCatName] ?? [];
-                              final kcal = meals.fold(0.0, (sum, item) => sum + item.kcal);
+                              final meals =
+                                  groupedSubCategory[subCatName] ?? [];
+                              final kcal = meals.fold(
+                                  0.0, (sum, item) => sum + item.kcal);
                               filteredKcalBySubCategory[subCatName] = kcal;
                             }
 
                             final filteredFoodBySubCategory = <String, int>{};
                             for (var subCat in filteredList) {
                               final subCatName = subCat.subCategoryName;
-                              final meals = groupedSubCategory[subCatName] ?? [];
-                              filteredFoodBySubCategory[subCatName] = meals.length;
+                              final meals =
+                                  groupedSubCategory[subCatName] ?? [];
+                              filteredFoodBySubCategory[subCatName] =
+                                  meals.length;
                             }
                             AppNavigator.push(
                                 context,
@@ -130,9 +138,8 @@ class MealSearchByCalories extends StatelessWidget {
                               margin: const EdgeInsets.only(right: 15),
                               width: media.width * 0.4,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: colors[index % colors.length]
-                              ),
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: colors[index % colors.length]),
                               alignment: Alignment.center,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
@@ -141,11 +148,11 @@ class MealSearchByCalories extends StatelessWidget {
                                   fit: StackFit.expand,
                                   children: [
                                     Positioned.fill(
-                                      child: Image.network(
-                                        imageCalories[index % imageCalories.length],
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                                        child: SwitchImageType.buildImage(
+                                      imageCalories[
+                                          index % imageCalories.length],
+                                      fit: BoxFit.cover,
+                                    )),
                                     // LỚP MỜ OVERLAY
                                     Positioned.fill(
                                       child: Container(
@@ -153,7 +160,8 @@ class MealSearchByCalories extends StatelessWidget {
                                       ),
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         const Icon(
                                           Icons.restaurant,
@@ -165,7 +173,9 @@ class MealSearchByCalories extends StatelessWidget {
                                         Text(
                                           calo,
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: AppFontSize.body(context)),
+                                              color: Colors.white,
+                                              fontSize:
+                                                  AppFontSize.body(context)),
                                         ),
                                       ],
                                     ),

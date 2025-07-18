@@ -1,6 +1,6 @@
 class SigninRequest {
-  String? email;
+  String? username;
   String? password;
 
-  SigninRequest({this.email, this.password});
+  SigninRequest({this.username, this.password});
 }

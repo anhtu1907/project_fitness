@@ -21,15 +21,21 @@ class _SettingPlanPageState extends State<SettingPlanPage> {
         title: Text('Adjust Plan',
             style: TextStyle(fontSize: AppFontSize.heading2(context))),
         onPressed: () {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(true);
         },
       ),
       body: Center(
         child: Column(
           children: [
             const TimePlanSetting(),
-            SizedBox(height: media.height * 0.02,),
-            const OtherPlanSetting()
+            SizedBox(
+              height: media.height * 0.02,
+            ),
+            OtherPlanSetting(
+              onApply: () {
+                Navigator.of(context).pop(true);
+              },
+            )
           ],
         ),
       ),

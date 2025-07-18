@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 
 class MealSubCategoryRow extends StatelessWidget {
@@ -24,7 +25,7 @@ class MealSubCategoryRow extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           ClipRRect(
-            child: Image.asset(
+            child: SwitchImageType.buildImage(
               image,
               width: 100,
               height: 100,

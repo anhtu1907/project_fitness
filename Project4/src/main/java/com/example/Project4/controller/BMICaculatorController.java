@@ -1,5 +1,7 @@
 package com.example.Project4.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Project4.dto.bmi.PersonalHealthDTO;
+import com.example.Project4.dto.bmi.PersonalHealthGoalDTO;
 import com.example.Project4.payload.bmi.PersonHealDataRequest;
 import com.example.Project4.payload.bmi.PersonTargetGoalRequest;
-import com.example.Project4.services.bmi.BmiService;
+import com.example.Project4.service.bmi.BmiService;
 
 @RestController
 @RequestMapping("/api/bmi")
@@ -21,9 +25,10 @@ public class BMICaculatorController {
     private BmiService bmiService;
 
     @GetMapping("/health/{userId}")
-    public ResponseEntity<?> getDataByUserId(@PathVariable int userId) {
+    public ResponseEntity<?> getDataByUserId(@PathVariable String userId) {
+        List<PersonalHealthDTO> healths = bmiService.getDataByUserId(userId);
         try {
-            return ResponseEntity.status(200).body(bmiService.getDataByUserId(userId));
+            return ResponseEntity.status(200).body(healths);
         } catch (RuntimeException err) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
         } catch (Exception err) {
@@ -32,9 +37,10 @@ public class BMICaculatorController {
     }
 
     @GetMapping("/goal/{userId}")
-    public ResponseEntity<?> getGoalByUserId(@PathVariable int userId) {
+    public ResponseEntity<?> getGoalByUserId(@PathVariable String userId) {
+         List<PersonalHealthGoalDTO> goals = bmiService.getGoalByUserId(userId);
         try {
-            return ResponseEntity.status(200).body(bmiService.getGoalByUserId(userId));
+            return ResponseEntity.status(200).body(goals);
         } catch (RuntimeException err) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
         } catch (Exception err) {
@@ -44,7 +50,7 @@ public class BMICaculatorController {
     
 
     @PostMapping("/save/{userId}")
-    public ResponseEntity<?> saveData(@RequestBody PersonHealDataRequest dto, @PathVariable int userId) {
+    public ResponseEntity<?> saveData(@RequestBody PersonHealDataRequest dto, @PathVariable String userId) {
         try {
             return ResponseEntity.status(201).body(bmiService.saveData(dto, userId));
         } catch (RuntimeException e) {
@@ -56,7 +62,7 @@ public class BMICaculatorController {
     }
 
     @PostMapping("/update/{userId}")
-    public ResponseEntity<?> updateData(@RequestBody PersonTargetGoalRequest req, @PathVariable int userId) {
+    public ResponseEntity<?> updateData(@RequestBody PersonTargetGoalRequest req, @PathVariable String userId) {
         try {
             return ResponseEntity.status(201).body(bmiService.updateData(req, userId));
         } catch (RuntimeException e) {
@@ -68,7 +74,7 @@ public class BMICaculatorController {
     }
 
     @PostMapping("/goal/save/{userId}")
-    public ResponseEntity<?> saveGoal(@RequestBody PersonTargetGoalRequest req, @PathVariable int userId) {
+    public ResponseEntity<?> saveGoal(@RequestBody PersonTargetGoalRequest req, @PathVariable String userId) {
         try {
             return ResponseEntity.status(201).body(bmiService.saveGoal(req, userId));
         } catch (RuntimeException e) {
@@ -80,7 +86,7 @@ public class BMICaculatorController {
     }
 
     @PostMapping("/goal/update/{userId}")
-    public ResponseEntity<?> updateGoal(@RequestBody PersonTargetGoalRequest req, @PathVariable int userId) {
+    public ResponseEntity<?> updateGoal(@RequestBody PersonTargetGoalRequest req, @PathVariable String userId) {
         try {
             return ResponseEntity.status(201).body(bmiService.updateGoal(req, userId));
         } catch (RuntimeException e) {

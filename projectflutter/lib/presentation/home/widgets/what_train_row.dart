@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/round_button_workout.dart';
 import 'package:projectflutter/core/data/exercise_sub_category_image.dart';
@@ -41,16 +42,16 @@ class WhatTrainRow extends StatelessWidget {
             final Map<String, List<ExercisesEntity>> groupedExercises = {};
 
             for (var exercise in listExercise) {
-              if (exercise.mode == null) continue;
+              if (exercise.modes == null) continue;
 
               for (var sub in exercise.subCategory) {
-                final key = '${sub.id}-${exercise.mode!.id}';
+                final key = '${sub.id}-${exercise.modes.first.id}';
                 groupedExercises.putIfAbsent(key, () => []).add(exercise);
               }
             }
             Map<String, List<ExercisesEntity>> groupedCategory = {};
             for (var exercise in state.entity) {
-              for(var sub in exercise.subCategory){
+              for (var sub in exercise.subCategory) {
                 final categoryName = sub.subCategoryName;
                 if (groupedCategory.containsKey(categoryName)) {
                   groupedCategory[categoryName]!.add(exercise);
@@ -58,7 +59,6 @@ class WhatTrainRow extends StatelessWidget {
                   groupedCategory[categoryName] = [exercise];
                 }
               }
-
             }
             return SafeArea(
               child: SingleChildScrollView(
@@ -78,7 +78,7 @@ class WhatTrainRow extends StatelessWidget {
                         final exercises = groupedExercises[key];
                         if (exercises != null && exercises.isNotEmpty) {
                           exerciseForSub = exercises.first;
-                          modeName = exercises.first.mode?.modeName;
+                          modeName = exercises.first.modes.first.modeName;
                           break;
                         }
                       }
@@ -173,7 +173,7 @@ class WhatTrainRow extends StatelessWidget {
                             const SizedBox(width: 15),
                             ClipRRect(
                               borderRadius: BorderRadius.circular(30),
-                              child: Image.asset(
+                              child: SwitchImageType.buildImage(
                                 exerciseSubCategory[subCategoryId].toString(),
                                 width: 90,
                                 height: 90,

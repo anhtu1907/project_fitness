@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
 
@@ -37,7 +38,7 @@ class MealNutritionsRow extends StatelessWidget {
               const SizedBox(
                 width: 8,
               ),
-              Image.asset(
+              SwitchImageType.buildImage(
                 image,
                 width: 20,
                 height: 20,

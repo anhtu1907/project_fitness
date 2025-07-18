@@ -47,6 +47,7 @@ class MealSubCategoryListPage extends StatelessWidget {
                 child: MealSubCategoryCard(
                     subCategoryId: total[index].id,
                     subCategoryName: total[index].subCategoryName,
+                    subCategoryImage: total[index].subCategoryImage,
                     description: total[index].description,
                     kcal: kcal[total[index].subCategoryName] ?? 0,
                     totalFood: totalFood[total[index].subCategoryName] ?? 0),

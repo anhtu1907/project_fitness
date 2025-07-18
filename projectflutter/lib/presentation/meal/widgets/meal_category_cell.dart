@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/domain/meal/entity/meal_category.dart';
@@ -49,18 +50,17 @@ class MealCategoryCell extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(17.5),
               child: Container(
-                decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(17.5)),
-                child: Image.network(
-                  category.categoryImage == ''
-                      ? imageList[index % imageList.length]
-                      : category.categoryImage,
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.cover,
-                ),
-              ),
+                  decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(17.5)),
+                  child: SwitchImageType.buildImage(
+                    category.categoryImage == ''
+                        ? imageList[index % imageList.length]
+                        : category.categoryImage,
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                  )),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),

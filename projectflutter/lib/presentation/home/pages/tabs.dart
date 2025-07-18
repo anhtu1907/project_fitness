@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/common/helper/bottomnavigator/app_bottom_navigator.dart';
-// import 'package:projectflutter/core/config/assets/app_image.dart';
-// import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/presentation/exercise/pages/exercises_view.dart';
 import 'package:projectflutter/presentation/exercise/pages/suggest/plan_exercise.dart';
 import 'package:projectflutter/presentation/home/bloc/tab_display_cubit.dart';

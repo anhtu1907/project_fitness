@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -25,7 +26,7 @@ class MealScheduleRow extends StatelessWidget {
         children: [
           ClipRRect(
             // borderRadius: BorderRadius.circular(30),
-            child: Image.network(
+            child: SwitchImageType.buildImage(
               entity.meal.mealImage == ''
                   ? AppImages.meat
                   : entity.meal.mealImage,
@@ -88,7 +89,7 @@ class MealScheduleRow extends StatelessWidget {
                 child: Text('Delete'),
               ),
             ],
-            icon: Image.asset(
+            icon: SwitchImageType.buildImage(
               AppImages.moreV,
               width: 30,
               height: 30,

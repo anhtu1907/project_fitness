@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/data/exercises_image_gif.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -15,7 +16,7 @@ class ExerciseDetailsPage extends StatelessWidget {
     var media = MediaQuery.of(context).size;
     return Scaffold(
         appBar: BasicAppBar(
-          onPressed: (){
+          onPressed: () {
             Navigator.of(context).pop();
           },
         ),
@@ -27,18 +28,17 @@ class ExerciseDetailsPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: media.width,
-                        height: media.width * 0.43,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Image.network(
-                          exercises.exerciseImage,
                           width: media.width,
                           height: media.width * 0.43,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: SwitchImageType.buildImage(
+                            exercises.exerciseImage,
+                            width: media.width,
+                            height: media.width * 0.43,
+                            fit: BoxFit.contain,
+                          )),
                       SizedBox(
                         height: media.width * 0.05,
                       ),

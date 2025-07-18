@@ -100,8 +100,17 @@ class ExerciseSearchByEquipment extends StatelessWidget {
                                         e.equipment?.equipmentName ==
                                         equipment.equipmentName)
                                     .toList();
-                                final subCategories = <ExerciseSubCategoryModel>[];
+                                final Map<int, Set<String>> modeBySubCategoryId = {};
 
+                                for (var exercise in filteredExercises) {
+                                  for (var sub in exercise.subCategory) {
+                                    modeBySubCategoryId.putIfAbsent(sub.id, () => {});
+                                    modeBySubCategoryId[sub.id]!.addAll(
+                                      exercise.modes.map((mode) => mode.modeName),
+                                    );
+                                  }
+                                }
+                                final subCategories = <ExerciseSubCategoryModel>[];
                                 for (final exercise in filteredExercises) {
                                   for (final sub in exercise.subCategory) {
                                     if (!subCategories.any((e) => e.id == sub.id)) {
@@ -109,15 +118,26 @@ class ExerciseSearchByEquipment extends StatelessWidget {
                                     }
                                   }
                                 }
-                                final level = filteredExercises.isNotEmpty
-                                    ? filteredExercises.first.mode?.modeName ?? ''
-                                    : '';
+
+                                final Map<int, String> levelBySubCategoryId = {};
+                                const ordered = ['Beginner', 'Intermediate', 'Advanced', 'Stretch'];
+
+                                for (final sub in subCategories) {
+                                  final modes = modeBySubCategoryId[sub.id];
+                                  if (modes != null && modes.isNotEmpty) {
+                                    levelBySubCategoryId[sub.id] = ordered.firstWhere(
+                                          (m) => modes.contains(m),
+                                      orElse: () => modes.first,
+                                    );
+                                  }
+                                }
+
                                 AppNavigator.push(
                                   context,
                                   ExerciseSubCategoryListByEquipment(
                                     categoryName: equipment.equipmentName,
                                     duration: durationBySubCategory,
-                                    level: level,
+                                    level: levelBySubCategoryId,
                                     total: subCategories.toList(),
                                   ),
                                 );

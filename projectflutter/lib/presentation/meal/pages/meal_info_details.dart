@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/common/api/shared_preference_service.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/widget/button/round_button.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -66,7 +67,7 @@ class MealInfoDetails extends StatelessWidget {
                       flexibleSpace: Stack(
                         fit: StackFit.expand,
                         children: [
-                          Image.network(
+                          SwitchImageType.buildImage(
                             state.entity.mealImage,
                             fit: BoxFit.cover,
                           ),
@@ -180,7 +181,7 @@ class MealInfoDetails extends StatelessWidget {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
-                                              Image.asset(
+                                              SwitchImageType.buildImage(
                                                 nutritionArr[index %
                                                         nutritionArr.length]
                                                     .image,

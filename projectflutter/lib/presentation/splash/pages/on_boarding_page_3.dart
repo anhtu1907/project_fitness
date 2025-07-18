@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -23,7 +24,7 @@ class OnBoardingPage3 extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
+                SwitchImageType.buildImage(
                   AppImages.on3,
                   width: media.width,
                   fit: BoxFit.fitWidth,
@@ -45,7 +46,10 @@ class OnBoardingPage3 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
                     "Let's start a healthy lifestyle with us, we can determine your diet every day. healthy eating is fun",
-                    style: TextStyle(color: AppColors.gray, fontSize: AppFontSize.body(context),),
+                    style: TextStyle(
+                      color: AppColors.gray,
+                      fontSize: AppFontSize.body(context),
+                    ),
                   ),
                 ),
               ],

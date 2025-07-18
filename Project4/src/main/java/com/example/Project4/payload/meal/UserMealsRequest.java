@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserMealsRequest {
-    private int user;
+    private String user;
     private List<Integer> meal;
     private LocalDateTime created;
 }

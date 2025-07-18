@@ -30,18 +30,29 @@ class ExerciseUserModel {
   }
 
   factory ExerciseUserModel.fromMap(Map<String, dynamic> map) {
+    DateTime? parsedCreatedAt;
+    if (map['createdAt'] is List && (map['createdAt'] as List).length >= 6) {
+      final list = map['createdAt'] as List;
+      parsedCreatedAt = DateTime(
+        list[0], // year
+        list[1], // month
+        list[2], // day
+        list[3], // hour
+        list[4], // minute
+        list[5], // second
+      );
+    }
     return ExerciseUserModel(
-      id: map['id'] as int,
-      user: map['user'] != null
-          ? UserSimpleDTO.fromMap(map['user'] as Map<String, dynamic>)
-          : null,
-      session: map['session'] != null
-          ? ExerciseSessionModel.fromMap(map['session'] as Map<String, dynamic>)
-          : null,
-      kcal: map['kcal'] as double,
-      createdAt:
-          map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
-    );
+        id: map['id'] as int,
+        user: map['user'] != null
+            ? UserSimpleDTO.fromMap(map['user'] as Map<String, dynamic>)
+            : null,
+        session: map['session'] != null
+            ? ExerciseSessionModel.fromMap(
+                map['session'] as Map<String, dynamic>)
+            : null,
+        kcal: map['kcal'] as double,
+        createdAt: parsedCreatedAt);
   }
 
   String toJson() => json.encode(toMap());

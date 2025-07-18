@@ -5,6 +5,12 @@ import 'package:projectflutter/data/exercise/model/exercise_mode_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_sub_category_model.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
 
+import 'dart:convert';
+import 'package:projectflutter/data/exercise/model/equipments_model.dart';
+import 'package:projectflutter/data/exercise/model/exercise_mode_model.dart';
+import 'package:projectflutter/data/exercise/model/exercise_sub_category_model.dart';
+import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
+
 class ExercisesModel {
   final int id;
   final String exerciseName;
@@ -14,7 +20,7 @@ class ExercisesModel {
   final double kcal;
   final List<ExerciseSubCategoryModel> subCategory;
   final EquipmentsModel? equipment;
-  final ExerciseModeModel? mode;
+  final List<ExerciseModeModel> modes;
 
   ExercisesModel({
     required this.id,
@@ -25,8 +31,9 @@ class ExercisesModel {
     required this.kcal,
     required this.subCategory,
     required this.equipment,
-    required this.mode,
+    required this.modes,
   });
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
@@ -36,38 +43,39 @@ class ExercisesModel {
       'duration': duration,
       'kcal': kcal,
       'subCategory': subCategory.map((e) => e.toMap()).toList(),
-      'equipment': equipment,
-      'mode': mode,
+      'equipment': equipment?.toMap(),
+      'modes': modes.map((e) => e.toMap()).toList(),
     };
   }
 
   factory ExercisesModel.fromMap(Map<String, dynamic> map) {
     return ExercisesModel(
       id: map['id'] as int,
-      exerciseName: map['exerciseName'] as String,
+      exerciseName: map['exerciseName'] ?? '',
       exerciseImage: map['exerciseImage'] ?? '',
-      description: map['description'] as String,
+      description: map['description'] ?? '',
       duration: map['duration'] as int,
-      kcal: map['kcal'] as double,
+      kcal: map['kcal']?.toDouble() ?? 0.0,
       subCategory: (map['subCategory'] as List<dynamic>?)
-              ?.map((e) =>
-                  ExerciseSubCategoryModel.fromMap(e as Map<String, dynamic>))
-              .toList() ??
+          ?.map((e) => ExerciseSubCategoryModel.fromMap(e))
+          .toList() ??
           [],
       equipment: map['equipment'] != null
-          ? EquipmentsModel.fromMap(map['equipment'] as Map<String, dynamic>)
+          ? EquipmentsModel.fromMap(map['equipment'])
           : null,
-      mode: map['mode'] != null
-          ? ExerciseModeModel.fromMap(map['mode'] as Map<String, dynamic>)
-          : null,
+      modes: (map['modes'] as List<dynamic>?)
+          ?.map((e) => ExerciseModeModel.fromMap(e))
+          .toList() ??
+          [],
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory ExercisesModel.fromJson(String source) =>
-      ExercisesModel.fromMap(json.decode(source) as Map<String, dynamic>);
+      ExercisesModel.fromMap(json.decode(source));
 }
+
 
 extension ExercisesXModel on ExercisesModel {
   ExercisesEntity toEntity() {
@@ -80,7 +88,7 @@ extension ExercisesXModel on ExercisesModel {
       kcal: kcal,
       subCategory: subCategory,
       equipment: equipment,
-      mode: mode,
+      modes: modes,
     );
   }
 }

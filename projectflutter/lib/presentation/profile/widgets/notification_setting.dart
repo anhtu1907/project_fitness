@@ -1,5 +1,6 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,7 +39,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
+          SwitchImageType.buildImage(
             AppImages.pNotification,
             height: 15,
             width: 15,

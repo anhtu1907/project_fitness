@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.example.Project4.models.exercise.EquipmentsModel;
+import com.example.Project4.entity.exercise.EquipmentsModel;
 
 public interface EquipmentsRepository extends JpaRepository<EquipmentsModel, Integer> {
     @Query("SELECT e.equipment FROM ExercisesModel e WHERE e.id = :exerciseId")

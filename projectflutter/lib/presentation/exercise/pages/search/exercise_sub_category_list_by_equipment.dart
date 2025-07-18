@@ -11,7 +11,7 @@ class ExerciseSubCategoryListByEquipment extends StatelessWidget {
   final List<ExerciseSubCategoryModel> total;
   final String categoryName;
   final Map<String, int> duration;
-  final String level;
+  final Map<int, String> level;
   const ExerciseSubCategoryListByEquipment(
       {super.key,
       required this.categoryName,
@@ -53,21 +53,24 @@ class ExerciseSubCategoryListByEquipment extends StatelessWidget {
           child: ListView.builder(
             itemCount: total.length,
             itemBuilder: (context, index) {
-              return ExerciseSubcategoryRow(
-                  image: total[index].subCategoryImage,
-                  name: total[index].subCategoryName,
-                  duration: _formatDuration(
-                      duration[total[index].subCategoryName] ?? 0),
-                  level: level,
-                  onPressed: () {
-                    AppNavigator.push(
-                        context,
-                        ExerciseBySubCategoryView(
-                          subCategoryId: total[index].id,
-                          level: level,
-                          image: total[index].subCategoryImage,
-                        ));
-                  });
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: ExerciseSubcategoryRow(
+                    image: total[index].subCategoryImage,
+                    name: total[index].subCategoryName,
+                    duration: _formatDuration(
+                        duration[total[index].subCategoryName] ?? 0),
+                    level: level[total[index].id] ?? 'Unknown',
+                    onPressed: () {
+                      AppNavigator.push(
+                          context,
+                          ExerciseBySubCategoryView(
+                            subCategoryId: total[index].id,
+                            level: level[total[index].id] ?? 'Unknown',
+                            image: total[index].subCategoryImage,
+                          ));
+                    }),
+              );
             },
           )),
     );

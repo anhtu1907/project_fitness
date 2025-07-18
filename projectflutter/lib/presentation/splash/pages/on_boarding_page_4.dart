@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -24,7 +25,7 @@ class OnBoardingPage4 extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
+                SwitchImageType.buildImage(
                   AppImages.on4,
                   width: media.width,
                   fit: BoxFit.fitWidth,
@@ -46,7 +47,9 @@ class OnBoardingPage4 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
                     "Improve the quality of your sleep with us, good quality sleep can bring a good mood in the morning",
-                    style: TextStyle(color: AppColors.gray, fontSize: AppFontSize.body(context)),
+                    style: TextStyle(
+                        color: AppColors.gray,
+                        fontSize: AppFontSize.body(context)),
                   ),
                 ),
               ],

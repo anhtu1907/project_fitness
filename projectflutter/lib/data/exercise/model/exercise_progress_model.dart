@@ -30,6 +30,18 @@ class ExerciseProgressModel {
   }
 
   factory ExerciseProgressModel.fromMap(Map<String, dynamic> map) {
+    DateTime? parsedLastUpdated;
+    if (map['lastUpdated'] is List && (map['lastUpdated'] as List).length >= 6) {
+      final list = map['lastUpdated'] as List;
+      parsedLastUpdated = DateTime(
+        list[0],
+        list[1],
+        list[2],
+        list[3],
+        list[4],
+        list[5],
+      );
+    }
     return ExerciseProgressModel(
       id: map['id'] as int,
       user: map['user'] != null
@@ -40,9 +52,7 @@ class ExerciseProgressModel {
               map['session'] as Map<String, dynamic>)
           : null,
       progress: map['progress'] as double,
-      lastUpdated: map['lastUpdated'] != null
-          ? DateTime.parse(map['lastUpdated'])
-          : null,
+      lastUpdated: parsedLastUpdated,
     );
   }
 

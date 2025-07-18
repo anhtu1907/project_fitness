@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/data/exercise/request/exercise_schedule_request.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -153,17 +154,16 @@ class _SelectDateScheduleState extends State<SelectDateSchedule> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: 30,
-              height: 30,
-              alignment: Alignment.center,
-              child: Image.asset(
-                widget.icon,
-                width: 22,
-                height: 22,
-                fit: BoxFit.contain,
-                color: AppColors.black,
-              ),
-            ),
+                width: 30,
+                height: 30,
+                alignment: Alignment.center,
+                child: SwitchImageType.buildImage(
+                  widget.icon,
+                  width: 22,
+                  height: 22,
+                  fit: BoxFit.contain,
+                  color: AppColors.black,
+                )),
             const SizedBox(width: 6),
             Expanded(
               child: Text(

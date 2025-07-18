@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:projectflutter/data/auth/request/register_request.dart';
 import 'package:projectflutter/data/auth/request/signin_request.dart';
@@ -22,29 +24,61 @@ class AuthRepositoryImpl extends AuthRepository {
     return await sl<AuthService>().sendEmailResetPassword(email);
   }
 
-  @override
-  Future<Either> getUser() async {
-    var user = await sl<AuthService>().getUser();
-    return user.fold((error) {
-      return Left(error);
-    }, (data) {
-      return Right(UserModel.fromJson(data)
-          .toEntity()); // Chuyển đổi dữ liệu từ map thành đối tượng UserModel(id:...,firstname:...)
-    }); // toEntity giúp tách biệt tầng data và domain để code dễ bảo trì, dễ test
-  }
+
 
   @override
   Future<bool> isLoggedIn() async {
     return await sl<AuthService>().isLoggedIn();
   }
 
-  @override
-  Future<Either> verfiy(String pinCode) async {
-    return await sl<AuthService>().verfiy(pinCode);
-  }
 
   @override
   Future<void> logout() async {
     await sl<AuthService>().logout();
+  }
+
+  @override
+  Future<Either> refreshToken() async {
+    return sl<AuthService>().refreshToken();
+  }
+
+  @override
+  Future<Either> getByUsername() async {
+    var user = await sl<AuthService>().getByUsername();
+    return user.fold(
+          (error) => Left(error),
+          (data) {
+
+        final decoded = json.decode(data);
+        final userMap = decoded['data'];
+        final userEntity = UserModel.fromMap(userMap).toEntity();
+        return Right(userEntity);
+      },
+    );
+  }
+
+  @override
+  Future<Either> getUser() async {
+    var user = await sl<AuthService>().getUser();
+    return user.fold(
+          (error) => Left(error),
+          (data) {
+        final decoded = json.decode(data);
+        final userMap = decoded['data'];
+        final userEntity = UserModel.fromMap(userMap).toEntity();
+        return Right(userEntity);
+      },
+    );
+  }
+
+  @override
+  Future<bool> ensureValidToken() async {
+    return await sl<AuthService>().ensureValidToken();
+  }
+
+  @override
+  Future<Either> introspectToken() {
+    // TODO: implement introspectToken
+    throw UnimplementedError();
   }
 }

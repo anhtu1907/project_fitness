@@ -15,7 +15,7 @@
   }
 
   class _TimeBottomSheetState extends State<TimeBottomSheet> {
-    late bool isScheduled;
+    bool isScheduled = false;
     List<bool> selectedDays = List.generate(7, (_) => false);
     final List<String> weekdays = [
       'Monday',

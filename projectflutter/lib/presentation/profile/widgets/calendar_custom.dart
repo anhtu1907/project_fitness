@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:calendar_agenda/calendar_agenda.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 
@@ -38,7 +39,7 @@ class _CalendarCustomState extends State<CalendarCustom> {
           appbar: false,
           selectedDayPosition: SelectedDayPosition.right,
           leading: IconButton(
-            icon: Image.asset(
+            icon: SwitchImageType.buildImage(
               AppImages.arrowLeft,
               width: 15,
               height: 15,
@@ -46,7 +47,7 @@ class _CalendarCustomState extends State<CalendarCustom> {
             onPressed: () {},
           ),
           training: IconButton(
-            icon: Image.asset(
+            icon: SwitchImageType.buildImage(
               AppImages.arrowRight,
               width: 15,
               height: 15,

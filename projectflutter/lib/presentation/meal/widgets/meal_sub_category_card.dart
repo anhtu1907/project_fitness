@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/round_button.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -13,6 +14,7 @@ class MealSubCategoryCard extends StatelessWidget {
   final int subCategoryId;
   final String subCategoryName;
   final String description;
+  final String subCategoryImage;
   final double kcal;
   final int totalFood;
 
@@ -21,6 +23,7 @@ class MealSubCategoryCard extends StatelessWidget {
       required this.subCategoryId,
       required this.subCategoryName,
       required this.description,
+      required this.subCategoryImage,
       required this.kcal,
       required this.totalFood});
 
@@ -44,11 +47,10 @@ class MealSubCategoryCard extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: Image.asset(
-                mealSubCategoryImage[subCategoryId].toString(),
-                fit: BoxFit.cover,
-              ),
-            ),
+                child: SwitchImageType.buildImage(
+              subCategoryImage,
+              fit: BoxFit.cover,
+            )),
             Positioned.fill(
               child: Container(
                 decoration:
@@ -76,11 +78,13 @@ class MealSubCategoryCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: media.height * 0.01,),
+                    SizedBox(
+                      height: media.height * 0.01,
+                    ),
                     IntrinsicWidth(
                       child: Container(
-                        padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.4),
                           borderRadius: BorderRadius.circular(20),

@@ -1,74 +1,65 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
-import 'package:projectflutter/data/bmi/model/bmi.dart';
-import 'package:projectflutter/data/bmi/model/bmi_goal.dart';
 import 'package:projectflutter/domain/auth/entity/user.dart';
 
 class UserModel {
-  final int id;
+  final String id;
   final String username;
-  final String firstname;
-  final String lastname;
+  final String firstName;
+  final String lastName;
   final String email;
   final String password;
   final DateTime? dob;
   final int gender;
   final String phone;
-  final String token;
-  final String pinCode;
-  final bool active;
-  final DateTime? createdAt;
+  final String address;
 
   UserModel(
       {required this.id,
         required this.username,
-        required this.firstname,
-        required this.lastname,
+        required this.firstName,
+        required this.lastName,
         required this.email,
         required this.password,
         required this.dob,
         required this.gender,
         required this.phone,
-        required this.token,
-        required this.pinCode,
-        required this.active,
-        required this.createdAt});
+        required this.address});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
       'username': username,
-      'firstname': firstname,
-      'lastname': lastname,
+      'firstName': firstName,
+      'lastName': lastName,
       'email': email,
       'password': password,
       'dob': dob,
       'gender': gender,
       'phone': phone,
-      'token': token,
-      'pinCode': pinCode,
-      'active': active,
-      'createdAt': createdAt!.toIso8601String()
+      'address': address
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
+    DateTime? parsedDob;
+    if (map['dob'] is List && (map['dob'] as List).length >= 3) {
+      final dobList = map['dob'] as List;
+      final year = dobList[0] as int;
+      final month = dobList[1] as int;
+      final day = dobList[2] as int;
+      parsedDob = DateTime(year, month, day);
+    }
     return UserModel(
-        id: map['id'] as int,
-        username: map['username'] as String,
-        firstname: map['firstname'] as String,
-        lastname: map['lastname'] as String,
-        email: map['email'] as String,
-        password: map['password'] as String,
-        dob: map['dob'] != null ? DateTime.parse(map['dob']) : null,
-        gender: map['gender'] as int,
-        phone: map['phone'] as String,
-        token: map['token'] ?? '',
-        pinCode: map['pinCode'] ?? '',
-        active: map['active'] as bool,
-        createdAt:
-            map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null);
+        id: map['id']  ?? '',
+        username: map['username'] ?? '',
+        firstName: map['firstName']  ?? '',
+        lastName: map['lastName']  ?? '',
+        email: map['email'] ?? '',
+        password: map['password'] ?? '',
+        dob: parsedDob,
+        gender: map['gender'] != null ? map['gender'] as int : 0,
+        phone: map['phone']  ?? '',
+        address: map['address']  ?? '');
   }
 
   String toJson() => json.encode(toMap());
@@ -78,20 +69,18 @@ class UserModel {
 }
 
 extension UserXModel on UserModel {
+
   UserEntity toEntity() {
     return UserEntity(
         id: id,
         username: username,
-        firstname: firstname,
-        lastname: lastname,
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         password: password,
         dob: dob!,
         gender: gender,
         phone: phone,
-        token: token,
-        pinCode: pinCode,
-        active: active,
-        createdAt: createdAt!);
+        address: address);
   }
 }

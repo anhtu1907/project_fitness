@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
@@ -146,9 +147,8 @@ class _ActivityStatusState extends State<ActivityStatus> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         color: AppColors.primaryColor2.withOpacity(0.3),
-                        border: Border.all(
-                          color: AppColors.gray.withOpacity(0.15)
-                        ),
+                        border:
+                            Border.all(color: AppColors.gray.withOpacity(0.15)),
                         borderRadius: BorderRadius.circular(30)),
                     child: Column(
                       children: [
@@ -178,17 +178,18 @@ class _ActivityStatusState extends State<ActivityStatus> {
                                           '${totalKcal.toStringAsFixed(0)} kcal',
                                           style: TextStyle(
                                               color: AppColors.primaryColor1,
-                                              fontSize: AppFontSize.body(context),
+                                              fontSize:
+                                                  AppFontSize.body(context),
                                               fontWeight: FontWeight.w700),
                                         ),
                                         SizedBox(
                                           width: media.width * 0.01,
                                         ),
-                                        Image.asset(
+                                        SwitchImageType.buildImage(
                                           AppImages.fire,
                                           width: 25,
                                           height: 25,
-                                        ),
+                                        )
                                       ],
                                     )
                                   ],
@@ -219,7 +220,7 @@ class _ActivityStatusState extends State<ActivityStatus> {
                                     ),
                                   ],
                                   child: Container(
-                                    width: media.width *0.25,
+                                    width: media.width * 0.25,
                                     height: media.width * 0.1,
                                     decoration: BoxDecoration(
                                         color: AppColors.primaryColor1,
@@ -233,7 +234,8 @@ class _ActivityStatusState extends State<ActivityStatus> {
                                           selectedTime,
                                           style: TextStyle(
                                               color: AppColors.white,
-                                              fontSize: AppFontSize.body(context),
+                                              fontSize:
+                                                  AppFontSize.body(context),
                                               fontWeight: FontWeight.bold),
                                         ),
                                         const SizedBox(

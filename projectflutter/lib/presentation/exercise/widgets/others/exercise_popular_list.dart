@@ -12,15 +12,13 @@ import 'package:projectflutter/presentation/exercise/widgets/subcategory/exercis
 class ExercisePopularList extends StatelessWidget {
   final String categoryName;
   final void Function(ExerciseSubCategoryProgramEntity) onPressed;
-  final List<ExerciseSubCategoryProgramEntity> list;
+  final List<(ExerciseSubCategoryProgramEntity, String)> list;
   final Map<String, int> duration;
-  final String level;
   const ExercisePopularList(
       {super.key,
       required this.categoryName,
       required this.onPressed,
       required this.duration,
-      required this.level,
       required this.list});
 
   @override
@@ -53,7 +51,6 @@ class ExercisePopularList extends StatelessWidget {
                     ExerciseSubCategoryProgramListPage(
                         categoryName: categoryName,
                         duration: duration,
-                        level: level,
                         total: list));
               },
               child: Text(
@@ -66,15 +63,17 @@ class ExercisePopularList extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: list.take(3).map((item) {
+          final sub = item.$1;
+          final mode = item.$2;
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: ExerciseSubcategoryRow(
-              image: item.subCategory!.subCategoryImage,
-              name: item.subCategory!.subCategoryName,
+              image: sub.subCategory!.subCategoryImage,
+              name: sub.subCategory!.subCategoryName,
               duration: _formatDuration(
-                  duration[item.subCategory!.subCategoryName] ?? 0),
-              level: level,
-              onPressed: () => onPressed(item),
+                  duration[sub.subCategory!.subCategoryName] ?? 0),
+              level: mode,
+              onPressed: () => onPressed(sub),
             ),
           );
         }).toList(),

@@ -13,14 +13,11 @@ class CheckBmiCubit extends Cubit<CheckBmiState> {
     print("Start checkBmi...");
     try {
       final getData = await sl<GetAllDataByUserUseCase>().call();
-      print("getData completed: $getData");
       getData.fold(
             (l) {
-          print("Fold left: $l");
           emit(BmiNotExists());
         },
             (r) {
-          print("Fold right: $r");
           if (r.isEmpty) {
             emit(BmiNotExists());
           } else {
@@ -29,7 +26,6 @@ class CheckBmiCubit extends Cubit<CheckBmiState> {
         },
       );
     } catch (error) {
-      print("Catch error: $error");
       emit(BmiError(errorMessage: error.toString()));
     }
   }

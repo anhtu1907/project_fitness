@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 
 class WorkoutHistory extends StatelessWidget {
@@ -31,7 +32,7 @@ class WorkoutHistory extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(30),
-            child: Image.asset(
+            child: SwitchImageType.buildImage(
               image,
               width: 60,
               height: 60,

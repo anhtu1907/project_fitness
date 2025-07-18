@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
@@ -10,7 +11,7 @@ class MealSubCategoryItem extends StatelessWidget {
   final String image;
   const MealSubCategoryItem(
       {super.key,
-        required this.subCategoryId,
+      required this.subCategoryId,
       required this.typeName,
       required this.image});
 
@@ -44,7 +45,7 @@ class MealSubCategoryItem extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(imageSize / 2),
-                  child: Image.asset(
+                  child: SwitchImageType.buildImage(
                     image,
                     fit: BoxFit.cover,
                   ),

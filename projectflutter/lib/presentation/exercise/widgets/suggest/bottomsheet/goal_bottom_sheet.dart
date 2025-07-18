@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
 
@@ -18,7 +19,7 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
   late int selectedIndex;
 
   final List<String> goals = [
-    'Loss Weight',
+    'Lose Weight',
     'Build Muscle',
     'Keep Fit',
   ];
@@ -67,7 +68,8 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
                     child: Stack(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 12),
                           margin: const EdgeInsets.only(top: 8),
                           decoration: BoxDecoration(
                             color: isSelected
@@ -93,7 +95,7 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
                                       : Colors.black87,
                                 ),
                               ),
-                              Image.asset(
+                              SwitchImageType.buildImage(
                                 _getImageForGoal(goal),
                                 width: 80,
                                 height: 80,
@@ -127,7 +129,7 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                      Navigator.pop(context, selectedIndex);
+                    Navigator.pop(context, selectedIndex);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryColor3,

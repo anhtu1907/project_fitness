@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/common/widget/button/basic_button.dart';
@@ -18,7 +19,7 @@ class SentEmailPage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(AppImages.sentEmail),
+          SwitchImageType.buildImage(AppImages.sentEmail),
           const SizedBox(
             height: 15,
           ),
@@ -29,7 +30,7 @@ class SentEmailPage extends StatelessWidget {
           BasicButton(
               title: 'Return to Login',
               onPressed: () {
-                AppNavigator.pushAndRemoveUntil(context, SigninPage());
+                AppNavigator.pushAndRemoveUntil(context, const SigninPage());
               })
         ],
       ),

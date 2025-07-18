@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -21,14 +22,13 @@ class MealRow extends StatelessWidget {
       child: Row(
         children: [
           ClipRRect(
-            // borderRadius: BorderRadius.circular(30),
-            child: Image.network(
-              entity.mealImage == '' ? AppImages.vegetable : entity.mealImage,
-              width: 60,
-              height: 60,
-              fit: BoxFit.cover,
-            ),
-          ),
+              // borderRadius: BorderRadius.circular(30),
+              child: SwitchImageType.buildImage(
+            entity.mealImage == '' ? AppImages.vegetable : entity.mealImage,
+            width: 60,
+            height: 60,
+            fit: BoxFit.cover,
+          )),
           const SizedBox(
             width: 15,
           ),
@@ -56,7 +56,7 @@ class MealRow extends StatelessWidget {
             onPressed: () {
               AppNavigator.push(context, MealInfoDetails(mealId: entity.id));
             },
-            icon: Image.asset(
+            icon: SwitchImageType.buildImage(
               AppImages.nextIcon,
               width: 30,
               height: 30,

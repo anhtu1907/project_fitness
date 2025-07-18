@@ -17,15 +17,7 @@ class _FocusAreaBottomSheetState extends State<FocusAreaBottomSheet> {
   late List<bool> selectedAreas;
 
   late int selectedAreaIndex;
-  final List<String> bodyArea = [
-    'Arm',
-    'Shoulder',
-    'Chest',
-    'Core',
-    'Butt & Leg',
-    'Back',
-    'Full Body'
-  ];
+  List<String> bodyArea = ['Arm', 'Shoulder', 'Chest', 'Core','Butt & Leg','Back','Full Body'];
   @override
   void initState() {
     super.initState();

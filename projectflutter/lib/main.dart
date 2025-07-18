@@ -5,10 +5,10 @@ import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'export.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized(); // Flutter call
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown
@@ -27,7 +27,6 @@ Future<void> main() async {
     await notificationService.requestExactAlarmPermission();
   }
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-
 
   // final prefs = await SharedPreferences.getInstance();
   // await prefs.remove('onboarding_done');
@@ -63,8 +62,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => SplashCubit()..appstarted(),
           ),
-          BlocProvider.value(
-            value: sl<ExerciseScheduleCubit>()..loadScheduleandNotification(),
+          BlocProvider(
+            create: (context) => ExerciseScheduleCubit()..loadScheduleandNotification(),
           ),
           BlocProvider(
             create: (context) => ButtonExerciseCubit(),

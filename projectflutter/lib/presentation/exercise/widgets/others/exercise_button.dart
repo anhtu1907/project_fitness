@@ -12,31 +12,29 @@ class ExerciseButton extends StatelessWidget {
   final List<ExercisesEntity> exercises;
   final double kcal;
   final int subCategoryId;
+  final bool markAsDayCompleted;
+  final int? day;
+  final int? duration;
   const ExerciseButton(
       {super.key,
       required this.exercises,
       required this.kcal,
+        required this.duration,
+        this.day,
+        this.markAsDayCompleted = false,
       required this.subCategoryId});
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) =>
-            ButtonExerciseCubit()..checkExerciseState(subCategoryId),
+        create: (context) => ButtonExerciseCubit(),
         child: BlocBuilder<ButtonExerciseCubit, ButtonExerciseState>(
           builder: (context, state) {
-            if (state is ButtonInitialize) {
-              return startButton(context, exercises);
-            } else if (state is ButtonRestart) {
-              return resetButton(context, exercises);
-            } else if (state is ButtonContinue) {
-              return continueButton(context, exercises);
-            }
-            return Container();
+            return _startButton(context, exercises);
           },
         ));
   }
 
-  Widget startButton(BuildContext context, List<ExercisesEntity> exercises) {
+  Widget _startButton(BuildContext context, List<ExercisesEntity> exercises) {
     return Positioned(
       bottom: 15,
       left: 0,
@@ -47,16 +45,20 @@ class ExerciseButton extends StatelessWidget {
           width: 200,
           height: 48,
           child: ElevatedButton.icon(
-            onPressed: () {
-              AppNavigator.push(
-                context,
-                ExerciseStart(
-                  exercises: exercises,
-                  kcal: kcal,
-                  currentIndex: 0,
-                  subCategoryId: subCategoryId,
-                ),
-              );
+            onPressed: () async {
+
+              if (context.mounted) {
+                AppNavigator.push(
+                  context,
+                  ExerciseStart(
+                    exercises: exercises,
+                    kcal: kcal,
+                    markAsDayCompleted: markAsDayCompleted,
+                    day: day,
+                    subCategoryId: subCategoryId,
+                  ),
+                );
+              }
             },
             icon: const Icon(Icons.play_arrow, color: Colors.white),
             label: const Text(
@@ -79,115 +81,4 @@ class ExerciseButton extends StatelessWidget {
       ),
     );
   }
-
-  Widget resetButton(BuildContext context, List<ExercisesEntity> exercises) {
-    return Positioned(
-      bottom: 15,
-      left: 0,
-      right: 0,
-      child: Align(
-        alignment: Alignment.center,
-        child: SizedBox(
-          width: 200,
-          height: 48,
-          child: ElevatedButton.icon(
-            onPressed: () async {
-              await context
-                  .read<ButtonExerciseCubit>()
-                  .incrementResetBatch(subCategoryId);
-              final resetBatch =
-                  await context.read<ButtonExerciseCubit>().getResetBatch();
-              if (context.mounted) {
-                AppNavigator.push(
-                  context,
-                  ExerciseStart(
-                    exercises: exercises,
-                    currentIndex: 0,
-                    kcal: kcal,
-                    subCategoryId: subCategoryId,
-                    resetBatch: resetBatch,
-                  ),
-                );
-              }
-            },
-            icon: Icon(Icons.replay, color: AppColors.whiteWorkout),
-            label: Text(
-              'Restart',
-              style: TextStyle(
-                color: AppColors.whiteWorkout,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.obesitysecond,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
-              elevation: 4,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget continueButton(BuildContext context, List<ExercisesEntity> exercises) {
-    return Positioned(
-      bottom: 15,
-      left: 0,
-      right: 0,
-      child: Align(
-        alignment: Alignment.center,
-        child: SizedBox(
-          width: 200,
-          height: 48,
-          child: ElevatedButton.icon(
-            onPressed: () async {
-              var shouldContinue = await ShowDialog.shouldContinue(
-                  context, 'Continue?', 'Are you sure want to continue?');
-              if (shouldContinue == true) {
-                var currentIndex = await context
-                    .read<ButtonExerciseCubit>()
-                    .getNextExerciseIndex(exercises);
-                final resetBatch = await context
-                    .read<ButtonExerciseCubit>()
-                    .getResetBatchBySubCategory(subCategoryId);
-                if (context.mounted && currentIndex != null) {
-                  AppNavigator.push(
-                    context,
-                    ExerciseStart(
-                      exercises: exercises,
-                      kcal: kcal,
-                      subCategoryId: subCategoryId,
-                      currentIndex: currentIndex,
-                      resetBatch: resetBatch!,
-                    ),
-                  );
-                }
-              }
-            },
-            icon: Icon(Icons.arrow_forward, color: AppColors.whiteWorkout),
-            label: Text(
-              'Continue',
-              style: TextStyle(
-                color: AppColors.whiteWorkout,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryWorkout,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
-              elevation: 4,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-
 }

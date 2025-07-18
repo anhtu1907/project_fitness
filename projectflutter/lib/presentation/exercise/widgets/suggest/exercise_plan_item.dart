@@ -1,167 +1,119 @@
-// exercise_plan_item.dart (hoặc ở cuối file cũ trước cũng được)
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:projectflutter/core/config/themes/app_color.dart';
-import 'package:projectflutter/core/config/themes/app_font_size.dart';
-import 'package:projectflutter/domain/exercise/entity/equipments_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_sub_category_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
-import 'package:projectflutter/presentation/exercise/widgets/suggest/dash_line_painter.dart';
-import 'package:projectflutter/presentation/exercise/widgets/suggest/exercise_plan_card.dart';
+import 'package:projectflutter/presentation/exercise/widgets/suggest/exercise_plan_day_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ExercisePlanItem extends StatefulWidget {
   final Map<int, List<ExercisesEntity>> groupedSubCategory;
   final Map<int, int> durationBySubCategory;
   final Map<int, double> kcalBySubCategory;
   final List<ExerciseSubCategoryEntity> subCategories;
-
-  const ExercisePlanItem({
-    super.key,
-    required this.groupedSubCategory,
-    required this.durationBySubCategory,
-    required this.kcalBySubCategory,
-    required this.subCategories,
-  });
+  final List<bool> selectedDays;
+  final Map<int, bool> isCompleted;
+  final Map<int, String> levelBySubCategoryId;
+  const ExercisePlanItem(
+      {super.key,
+      required this.groupedSubCategory,
+      required this.durationBySubCategory,
+      required this.kcalBySubCategory,
+      required this.subCategories,
+        required this.isCompleted,
+        required this.levelBySubCategoryId,
+      required this.selectedDays});
 
   @override
   State<ExercisePlanItem> createState() => _ExercisePlanItemState();
 }
 
 class _ExercisePlanItemState extends State<ExercisePlanItem> {
-  int extractDaysFromProgramName(String name) {
-    final match =
-    RegExp(r'(\d+)\s*days?', caseSensitive: false).firstMatch(name);
-    if (match != null) {
-      return int.tryParse(match.group(1)!) ?? 0;
+  late final int totalDays = 28;
+  Future<DateTime?> _loadStartDate() async {
+    final prefs = await SharedPreferences.getInstance();
+    final startDateString = prefs.getString('plan_start_date');
+    if (startDateString != null) {
+      return DateTime.parse(startDateString);
+    } else {
+      final now = DateTime.now();
+      await prefs.setString('plan_start_date', now.toIso8601String());
+      return now;
     }
-    return 0;
-  }
-
-  var programName = '28 days';
-  late int totalDays;
-
-  @override
-  void initState() {
-    super.initState();
-    totalDays = extractDaysFromProgramName(programName);
   }
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
-    final today = DateTime.now();
-    return ListView.builder(
-      itemCount: widget.subCategories.length,
-      padding: const EdgeInsets.all(30),
-      itemBuilder: (context, index) {
-        final day = index + 1;
-        final itemDate = today.add(Duration(days: index));
-        final isToday = itemDate.day == today.day &&
-            itemDate.month == today.month &&
-            itemDate.year == today.year;
-        final itemDateFormatted =
-        DateFormat("MMM dd, EEE").format(itemDate);
-        final isLast = index == totalDays - 1;
-        final isUpcoming =
-        itemDate.isAtSameMomentAs(today.add(const Duration(days: 1)));
-        String _formatDuration(int seconds) {
-          final duration = Duration(seconds: seconds);
-          String twoDigits(int n) => n.toString().padLeft(2, '0');
-          final minutes = twoDigits(duration.inMinutes.remainder(60));
-          final secs = twoDigits(duration.inSeconds.remainder(60));
-          return "$minutes:$secs";
+    return FutureBuilder<DateTime?>(
+      future: _loadStartDate(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
         }
-        final isFirstDay = index == 0;
-        final subCategory = widget.subCategories[index];
-        final duration = widget.durationBySubCategory[subCategory.id] ?? 0;
-        final kcal = widget.kcalBySubCategory[subCategory.id] ?? 0.0;
-        final imagePath = subCategory.subCategoryImage;
-        final sub = widget.subCategories[index];
-        final subCategoryId = sub.id;
 
-        final exercises = widget.groupedSubCategory[subCategoryId] ?? [];
-        final level = exercises.firstWhere(
-              (e) => e.mode != null,
-          orElse: () => exercises.first,
-        ).mode?.modeName ?? 'Unknown';
+        final startDate = snapshot.data!;
+        final now = DateTime.now();
+        final daysPassed = now.difference(startDate).inDays;
+        final todayDate = startDate.add(Duration(days: daysPassed));
 
-        return IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Column(
-                mainAxisAlignment: isLast ? MainAxisAlignment.center : MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: media.width * 0.06,
-                    height: media.height * 0.06,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: isToday ? AppColors.white : Colors.grey.shade300,
-                        width: 4,
-                      ),
-                      boxShadow: isToday
-                          ? [
-                        BoxShadow(
-                          color: AppColors.primaryColor3.withOpacity(0.4),
-                          blurRadius: 10,
-                          spreadRadius: 5,
-                        ),
-                      ]
-                          : [],
-                      color: isToday ? AppColors.primaryColor3 : Colors.white,
-                    ),
-                  ),
-                  if (!isLast)
-                    Expanded(
-                      child: CustomPaint(
-                        painter: DashedLinePainter(
-                          color: Colors.grey.withOpacity(0.5),
-                        ),
-                        child: Container(width: 2),
-                      ),
-                    ),
-                ],
-              ),
-              SizedBox(width: media.width * 0.06),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (isToday || isUpcoming)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 4),
-                        child: Text(
-                          isToday ? 'Today' : 'Upcoming',
-                          style: TextStyle(
-                            color: isToday ? AppColors.black : Colors.grey,
-                            fontWeight: FontWeight.bold,
-                            fontSize: AppFontSize.value20Text(context),
-                          ),
-                        ),
-                      ),
-                    SizedBox(height: media.height * 0.01),
-                    ExercisePlanCard(
-                      itemDateFormatted: itemDateFormatted,
-                      day: day,
-                      isToday: isToday,
-                      imagePath: imagePath,
-                      isUpcoming: isUpcoming,
-                      isFirstDay: isFirstDay,
-                      subCategoryId: subCategoryId,
-                      level: level,
-                      duration: _formatDuration(duration),
-                      kcal: kcal,
+        final List<Widget> planItems = [];
+        int? currentWeek;
+        int actualDayCount = 0;
 
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+        for (int index = 0; index < widget.subCategories.length; index++) {
+          final itemDate = startDate.add(Duration(days: index));
+          final weekdayIndex = itemDate.weekday - 1;
+
+          if (!widget.selectedDays[weekdayIndex]) continue;
+
+          actualDayCount++;
+          final startOfWeek = startDate.subtract(Duration(days: startDate.weekday - 1));
+          final weekNumber = ((itemDate.difference(startOfWeek).inDays) ~/ 7) + 1;
+
+          final isLast = index == totalDays - 1;
+          final isFirstDay = actualDayCount == 1;
+          final showWeekHeader = currentWeek != weekNumber;
+          currentWeek = weekNumber;
+
+          final subCategory = widget.subCategories[index];
+          final subCategoryId = subCategory.id;
+          final imagePath = subCategory.subCategoryImage;
+          final duration =
+          _formatDuration(widget.durationBySubCategory[subCategoryId] ?? 0);
+          final kcal = widget.kcalBySubCategory[subCategoryId] ?? 0.0;
+          final level = widget.levelBySubCategoryId[subCategoryId] ?? 'Unknown';
+
+          planItems.add(
+            ExercisePlanDayItem(
+              itemDate: itemDate,
+              todayDate: todayDate,
+              actualDay: actualDayCount,
+              isFirstDay: isFirstDay,
+              isLast: isLast,
+              showWeekHeader: showWeekHeader,
+              isCompleted: widget.isCompleted,
+              weekNumber: weekNumber,
+              level: level,
+              duration: duration,
+              kcal: kcal,
+              imagePath: imagePath,
+              subCategoryId: subCategoryId,
+            ),
+          );
+        }
+
+        return ListView(
+          padding: const EdgeInsets.all(30),
+          children: planItems,
         );
       },
     );
+  }
+  //
+  // bool _isSameDate(DateTime a, DateTime b) =>
+  //     a.day == b.day && a.month == b.month && a.year == b.year;
+
+  String _formatDuration(int seconds) {
+    final duration = Duration(seconds: seconds);
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    return "${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}";
   }
 }

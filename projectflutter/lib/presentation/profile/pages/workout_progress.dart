@@ -116,8 +116,7 @@ class WorkoutProgressPage extends StatelessWidget {
                               var duration = (list.fold(
                                           0,
                                           (sum, item) => sum += item
-                                              .session!.exercise!.duration) /
-                                      60)
+                                              .session!.exercise!.duration))
                                   .floor();
                               final firstSub = list.first;
                               final subCategoryOfSession =
@@ -152,57 +151,28 @@ class WorkoutProgressPage extends StatelessWidget {
                                     progress: progressRatio,
                                     kcal: totalKcal,
                                     onPressed: () async {
-                                      if (progressRatio * 100 < 100) {
-                                        final prefs = await SharedPreferences
-                                            .getInstance();
-                                        prefs.setBool('overlay', true);
-                                        var shouldContinue =
-                                            await ShowDialog.shouldContinue(
-                                                context,
-                                                'Continue?',
-                                                'Are you sure want to continue?');
-                                        if (shouldContinue == true) {
-                                          final filteredExercises = exerciseList
-                                              .where((e) => e.subCategory.any(
-                                                  (sub) =>
-                                                      sub.id == subCategoryId))
-                                              .toList();
-                                          var currentIndex = await context
-                                              .read<ButtonExerciseCubit>()
-                                              .getNextExerciseIndex(
-                                                  filteredExercises);
-                                          if (context.mounted &&
-                                              currentIndex != null) {
-                                            AppNavigator.push(
+                                      if (progressRatio * 100 == 100) {
+
+                                          var shouldContinue =
+                                          await ShowDialog.shouldContinue(
                                               context,
-                                              ExerciseStart(
-                                                  exercises: filteredExercises,
-                                                  kcal: totalKcal,
-                                                  subCategoryId: subCategoryId,
-                                                  currentIndex: currentIndex),
-                                            );
-                                          }
-                                        }
-                                      } else {
-                                        var shouldContinue =
-                                            await ShowDialog.shouldContinue(
+                                              'Continue?',
+                                              'Are you sure want to move result?');
+                                          if (shouldContinue == true) {
+                                            if (context.mounted) {
+                                              AppNavigator.push(
                                                 context,
-                                                'Continue?',
-                                                'Are you sure want to move result?');
-                                        if (shouldContinue == true) {
-                                          if (context.mounted) {
-                                            AppNavigator.push(
-                                              context,
-                                              ExerciseResultPage(
-                                                  resetBatch: resetBatch,
-                                                  totalExercise: totalExercise,
-                                                  kcal: totalKcal,
-                                                  duration: duration),
-                                            );
+                                                ExerciseResultPage(
+                                                    resetBatch: resetBatch,
+                                                    totalExercise: totalExercise,
+                                                    kcal: totalKcal,
+                                                    duration: duration),
+                                              );
+                                            }
                                           }
                                         }
                                       }
-                                    });
+                                    );
                               });
                             }).toList(),
                           ),

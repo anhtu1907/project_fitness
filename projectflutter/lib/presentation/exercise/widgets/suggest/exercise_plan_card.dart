@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
@@ -7,40 +8,55 @@ import 'package:projectflutter/presentation/exercise/pages/exercise_by_sub_categ
 class ExercisePlanCard extends StatelessWidget {
   final String itemDateFormatted;
   final int day;
-  final bool isToday;
   final bool isUpcoming;
   final bool isFirstDay;
   final String duration;
   final double kcal;
+  final DateTime itemDate;
+  final DateTime todayDate;
+  final bool isUnlocked;
   final String imagePath;
   final int subCategoryId;
   final String level;
+  final bool isCompleted;
 
   const ExercisePlanCard({
     super.key,
     required this.itemDateFormatted,
     required this.day,
-    required this.isToday,
     required this.isUpcoming,
     required this.isFirstDay,
     required this.duration,
     required this.kcal,
     required this.imagePath,
+    required this.itemDate,
+    required this.todayDate,
+    required this.isUnlocked,
     required this.subCategoryId,
+    required this.isCompleted,
     required this.level,
   });
 
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
-
+    final isInThePastOrToday = itemDate.isBefore(todayDate.add(const Duration(days: 1)));
+    final realUnlock = isUnlocked && isInThePastOrToday;
     return GestureDetector(
-      onTap: () {
-        AppNavigator.push(
-            context,
-            ExerciseBySubCategoryView(
-                subCategoryId: subCategoryId, image: imagePath, level: level));
-      },
+      onTap:(realUnlock && !isCompleted)
+          ? () {
+              AppNavigator.push(
+                context,
+                ExerciseBySubCategoryView(
+                  subCategoryId: subCategoryId,
+                  image: imagePath,
+                  day: day,
+                  markAsDayCompleted: true,
+                  level: level,
+                ),
+              );
+            }
+          : null,
       child: Container(
         margin: EdgeInsets.only(bottom: isFirstDay ? 16 : 0),
         decoration: BoxDecoration(
@@ -77,7 +93,7 @@ class ExercisePlanCard extends StatelessWidget {
                         'Day $day',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: isToday
+                            fontSize: realUnlock
                                 ? AppFontSize.value30Text(context)
                                 : AppFontSize.value24Text(context)),
                       ),
@@ -114,12 +130,11 @@ class ExercisePlanCard extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(
-                          imagePath,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          borderRadius: BorderRadius.circular(20),
+                          child: SwitchImageType.buildImage(
+                            imagePath,
+                            fit: BoxFit.cover,
+                          )),
                     ),
                   ),
                 ),
@@ -132,22 +147,30 @@ class ExercisePlanCard extends StatelessWidget {
                 width: double.infinity,
                 height: media.height * 0.06,
                 child: ElevatedButton(
-                  onPressed: () {
-                    AppNavigator.push(
-                        context,
-                        ExerciseBySubCategoryView(
-                            subCategoryId: subCategoryId, image: imagePath, level: level));
-                  },
+                  onPressed: (realUnlock && !isCompleted)
+                      ? ()  {
+                          AppNavigator.push(
+                            context,
+                            ExerciseBySubCategoryView(
+                              subCategoryId: subCategoryId,
+                              image: imagePath,
+                              day: day,
+                              markAsDayCompleted: true,
+                              level: level,
+                            ),
+                          );
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isToday
+                    backgroundColor: (realUnlock && !isCompleted)
                         ? AppColors.primaryColor3
                         : AppColors.gray.withOpacity(0.5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text('Start Now',
-                      style: TextStyle(color: Colors.white)),
+                  child: Text(isCompleted ?'Completed' : 'Start Now',
+                      style: const TextStyle(color: Colors.white)),
                 ),
               ),
             ),

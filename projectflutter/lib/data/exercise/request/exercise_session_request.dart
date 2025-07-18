@@ -9,4 +9,12 @@ class ExerciseSessionRequest {
       required this.duration,
       required this.subCategoryId,
       required this.resetBatch});
+  Map<String, dynamic> toJson() {
+    return {
+      'exerciseId': exerciseId,
+      'duration': duration,
+      'subCategoryId': subCategoryId,
+      'resetBatch': resetBatch,
+    };
+  }
 }

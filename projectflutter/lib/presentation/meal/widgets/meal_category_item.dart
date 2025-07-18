@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/data/meal_category.dart';
@@ -46,18 +47,15 @@ class MealCategoryItem extends StatelessWidget {
                 height: imageSize,
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
-                  border: Border.all(
-                    color: AppColors.black.withOpacity(0.15)
-                  ),
+                  border: Border.all(color: AppColors.black.withOpacity(0.15)),
                   borderRadius: BorderRadius.circular(imageSize / 2),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(imageSize / 2),
-                  child: Image.asset(
-                    mealCategoryImage[total.first.category!.id].toString(),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                    borderRadius: BorderRadius.circular(imageSize / 2),
+                    child: SwitchImageType.buildImage(
+                      total.first.category!.categoryImage,
+                      fit: BoxFit.cover,
+                    )),
               ),
               SizedBox(height: height * 0.05),
               Text(

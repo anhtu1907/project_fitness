@@ -5,17 +5,10 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.Project4.payload.meal.UserMealsRequest;
-import com.example.Project4.services.meal.MealService;
+import com.example.Project4.service.meal.MealService;
 
 @RestController
 @RequestMapping("/api/meal")
@@ -62,7 +55,7 @@ public class MealController {
     }
 
     @GetMapping("/record/{userId}")
-    public ResponseEntity<?> getRecordMeal(@PathVariable int userId) {
+    public ResponseEntity<?> getRecordMeal(@PathVariable String userId) {
         return ResponseEntity.status(200).body(mealService.getRecordMeal(userId));
     }
 
@@ -73,7 +66,7 @@ public class MealController {
     }
 
     @DeleteMapping("/record/{userId}/all/{targetDate}")
-    public ResponseEntity<?> deleteAllRecordMeal(@PathVariable int userId,
+    public ResponseEntity<?> deleteAllRecordMeal(@PathVariable String userId,
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate targetDate) {
         mealService.deleteAllRecordMeal(userId, targetDate);
         return ResponseEntity.status(204).build();

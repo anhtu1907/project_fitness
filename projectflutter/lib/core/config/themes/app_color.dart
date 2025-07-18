@@ -68,7 +68,7 @@ class AppColors {
   static Color get primaryColor3 => const Color(0xff0D5EA6);
   static Color get primaryColor4 => const Color(0xff578FCA);
 
-  static Color get kcalColor => const Color(0xFF4300FF);
+  static Color get kcalColor => const Color(0xFFF7374F);
 
   // Secondary
   static Color get secondaryColor1 => const Color(0xffC58BF2);

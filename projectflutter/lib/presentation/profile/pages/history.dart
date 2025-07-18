@@ -65,18 +65,18 @@ class HistoryPage extends StatelessWidget {
                         Map<String, List<ExerciseUserEntity>>
                             groupedCategoryResetBatch = {};
                         for (var history in state.listHistory) {
-                          final resetBatch = history.session!.resetBatch;
-                          final subCategories = history.session!.exercise!.subCategory;
+                          final resetBatch = history.session?.resetBatch;
+                          final subCategory = history.session?.subCategory;
 
-                          for (var sub in subCategories) {
-                            final subCategoryName = sub.subCategoryName;
-                            final key = '$subCategoryName-$resetBatch';
+                          if (subCategory == null || resetBatch == null) continue;
 
-                            if (groupedCategoryResetBatch.containsKey(key)) {
-                              groupedCategoryResetBatch[key]!.add(history);
-                            } else {
-                              groupedCategoryResetBatch[key] = [history];
-                            }
+                          final subCategoryName = subCategory.subCategoryName;
+                          final key = '$subCategoryName-$resetBatch';
+
+                          if (groupedCategoryResetBatch.containsKey(key)) {
+                            groupedCategoryResetBatch[key]!.add(history);
+                          } else {
+                            groupedCategoryResetBatch[key] = [history];
                           }
                         }
 

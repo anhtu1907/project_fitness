@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
@@ -15,7 +16,7 @@ class PersonalDataPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:  BasicAppBar(
+        appBar: BasicAppBar(
           hideBack: false,
           title: Text(
             "Personal Data",
@@ -23,7 +24,7 @@ class PersonalDataPage extends StatelessWidget {
                 fontSize: AppFontSize.titleAppBar(context),
                 fontWeight: FontWeight.w700),
           ),
-          onPressed: (){
+          onPressed: () {
             Navigator.of(context).pop();
           },
         ),
@@ -99,7 +100,7 @@ class PersonalDataPage extends StatelessWidget {
   Widget _avatarProfile(UserEntity user) {
     return ClipRRect(
         borderRadius: BorderRadius.circular(40),
-        child: Image.asset(
+        child: SwitchImageType.buildImage(
           user.gender == 1 ? AppImages.male : AppImages.female,
           width: 100,
           height: 100,
@@ -116,12 +117,12 @@ class PersonalDataPage extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.person),
           title: const Text('First Name'),
-          subtitle: Text(user.firstname),
+          subtitle: Text(user.firstName),
         ),
         ListTile(
           leading: const Icon(Icons.account_circle),
           title: const Text('Last Name'),
-          subtitle: Text(user.lastname),
+          subtitle: Text(user.lastName),
         ),
         ListTile(
           leading: const Icon(Icons.calendar_today),

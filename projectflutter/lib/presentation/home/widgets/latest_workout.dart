@@ -104,10 +104,9 @@ class LatestWorkout extends StatelessWidget {
                         children: sortedEntries.take(2).map((entry) {
                           final list = entry.value;
                           var duration = (list.fold(
-                                      0,
-                                      (sum, item) => sum +=
-                                          item.session!.exercise!.duration) /
-                                  60)
+                              0,
+                                  (sum, item) => sum += item
+                                  .session!.exercise!.duration))
                               .floor();
                           final firstSub = list.first;
                           final subCategoryOfSession = firstSub.session!.subCategory;
@@ -138,36 +137,8 @@ class LatestWorkout extends StatelessWidget {
                                 progress: progressRatio,
                                 kcal: totalKcal,
                                 onPressed: () async {
-                                  if (progressRatio * 100 < 100) {
-                                    var shouldContinue =
-                                        await ShowDialog.shouldContinue(
-                                            context,
-                                            'Continue?',
-                                            'Are you sure want to continue?');
-                                    if (shouldContinue == true) {
-                                      final prefs =
-                                          await SharedPreferences.getInstance();
-                                      prefs.setBool('overlay', true);
-                                      final filteredExercises = exerciseList.where((e) {
-                                        return e.subCategory.any((sub) => sub.id == subCategoryId);
-                                      }).toList();
-                                      var currentIndex = await context
-                                          .read<ButtonExerciseCubit>()
-                                          .getNextExerciseIndex(
-                                              filteredExercises);
-                                      if (context.mounted &&
-                                          currentIndex != null) {
-                                        AppNavigator.push(
-                                          context,
-                                          ExerciseStart(
-                                              exercises: filteredExercises,
-                                              kcal: totalKcal,
-                                              subCategoryId: subCategoryId,
-                                              currentIndex: currentIndex),
-                                        );
-                                      }
-                                    }
-                                  } else {
+                                  if (progressRatio * 100 == 100) {
+
                                     var shouldContinue =
                                         await ShowDialog.shouldContinue(
                                             context,
@@ -186,7 +157,8 @@ class LatestWorkout extends StatelessWidget {
                                       }
                                     }
                                   }
-                                });
+                                }
+                            );
                           });
                         }).toList(),
                       ),

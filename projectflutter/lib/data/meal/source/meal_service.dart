@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:projectflutter/common/api/base_api.dart';
 import 'package:projectflutter/common/api/shared_preference_service.dart';
+import 'package:projectflutter/common/api/token_request_helper.dart';
 import 'package:projectflutter/data/meal/request/user_meal_request.dart';
 
 abstract class MealService {
@@ -23,10 +24,20 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> getAllCategory() async {
     try {
-      Uri url = Uri.parse("$baseAPI/api/meal/category");
-      final response = await http.get(url);
+      final response = await sendRequestWithAutoRefresh((token) {
+        Uri url = Uri.parse("$baseAPI/api/meal/category");
+        return http.get(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        );
+      });
       if (response.statusCode == 404) {
-        return const Left('Category not found');
+        return const Left(
+          'Category not found',
+        );
       }
       List<dynamic> responseData =
           jsonDecode(response.body); // Decode thành List
@@ -39,8 +50,16 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> getAllMeal() async {
     try {
-      Uri url = Uri.parse("$baseAPI/api/meal");
-      final response = await http.get(url);
+      final response = await sendRequestWithAutoRefresh((token) {
+        Uri url = Uri.parse("$baseAPI/api/meal");
+        return http.get(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        );
+      });
       if (response.statusCode == 404) {
         return const Left('Meals not found');
       }
@@ -54,8 +73,16 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> getAllSubCategory() async {
     try {
-      Uri url = Uri.parse("$baseAPI/api/meal/category/sub");
-      final response = await http.get(url);
+      final response = await sendRequestWithAutoRefresh((token) {
+        Uri url = Uri.parse("$baseAPI/api/meal/category/sub");
+        return http.get(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        );
+      });
       if (response.statusCode == 404) {
         return const Left('Sub Category not found');
       }
@@ -69,9 +96,16 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> getMealBySubCategory(int subCategoryId) async {
     try {
-      final Uri url =
-          Uri.parse("$baseAPI/api/meal/category/sub/$subCategoryId");
-      final response = await http.get(url);
+      final response = await sendRequestWithAutoRefresh((token) {
+        Uri url = Uri.parse("$baseAPI/api/meal/category/sub/$subCategoryId");
+        return http.get(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        );
+      });
       if (response.statusCode == 404) {
         return const Left('Meal by category not found');
       }
@@ -85,8 +119,16 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> getMealById(int mealId) async {
     try {
-      Uri url = Uri.parse("$baseAPI/api/meal/$mealId");
-      final response = await http.get(url);
+      final response = await sendRequestWithAutoRefresh((token) {
+        Uri url = Uri.parse("$baseAPI/api/meal/$mealId");
+        return http.get(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        );
+      });
       if (response.statusCode == 404) {
         return const Left('Meal not found');
       }
@@ -100,8 +142,16 @@ class MealServiceImpl extends MealService {
   Future<Either> getAllRecordMeal() async {
     try {
       final userId = SharedPreferenceService.userId;
-      Uri url = Uri.parse("$baseAPI/api/meal/record/$userId");
-      final response = await http.get(url);
+      final response = await sendRequestWithAutoRefresh((token) {
+        Uri url = Uri.parse("$baseAPI/api/meal/record/$userId");
+        return http.get(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        );
+      });
       if (response.statusCode == 404) {
         return const Left('No record for user');
       }
@@ -117,14 +167,19 @@ class MealServiceImpl extends MealService {
   Future<Either> saveRecordMeal(UserMealRequest req) async {
     try {
       final userId = SharedPreferenceService.userId;
-      Uri url = Uri.parse("$baseAPI/api/meal/save/record");
-      final response = await http.post(url,
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode({
-            'user': userId,
-            'meal': req.meal,
-            'created': req.created.toIso8601String()
-          }));
+      final response = await sendRequestWithAutoRefresh((token) {
+        Uri url = Uri.parse("$baseAPI/api/meal/save/record");
+        return http.post(url,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+            body: json.encode({
+              'user': userId,
+              'meal': req.meal,
+              'created': req.created.toIso8601String()
+            }));
+      });
       return Right(response.body);
     } catch (err) {
       return Left('Error Message: $err');
@@ -133,8 +188,16 @@ class MealServiceImpl extends MealService {
 
   @override
   Future<void> deteleRecordMeal(int recordId) async {
-    Uri url = Uri.parse("$baseAPI/api/meal/record/$recordId");
-    final response = await http.delete(url);
+    final response = await sendRequestWithAutoRefresh((token) {
+      Uri url = Uri.parse("$baseAPI/api/meal/record/$recordId");
+      return http.delete(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+    });
     if (response.statusCode == 204) {
       print("Record deleted successfully.");
     } else {
@@ -146,9 +209,17 @@ class MealServiceImpl extends MealService {
   Future<void> deteleAllRecordMeal(DateTime targetDate) async {
     final userId = SharedPreferenceService.userId;
     final formattedDate = targetDate.toIso8601String().split('T').first;
-    print('Formatted Date: $formattedDate');
-    Uri url = Uri.parse("$baseAPI/api/meal/record/$userId/all/$formattedDate");
-    final response = await http.delete(url);
+    final response = await sendRequestWithAutoRefresh((token) {
+      Uri url =
+          Uri.parse("$baseAPI/api/meal/record/$userId/all/$formattedDate");
+      return http.delete(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+    });
     if (response.statusCode == 204) {
       print("Record deleted successfully.");
     } else {
@@ -159,8 +230,16 @@ class MealServiceImpl extends MealService {
   @override
   Future<Either> searchByMealName(String mealName) async {
     try {
-      Uri url = Uri.parse("$baseAPI/api/meal/search?mealName=$mealName");
-      final response = await http.get(url);
+      final response = await sendRequestWithAutoRefresh((token) {
+        Uri url = Uri.parse("$baseAPI/api/meal/search?mealName=$mealName");
+        return http.get(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        );
+      });
       if (response.statusCode == 404) {
         return Left('No meal by $mealName');
       }

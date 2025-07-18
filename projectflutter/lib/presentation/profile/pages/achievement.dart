@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/common/widget/appbar/app_bar.dart';
-import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/core/data/exercise_sub_category_image.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_progress_entity.dart';
@@ -104,8 +103,7 @@ class AchievementPage extends StatelessWidget {
 
                     Map<int, double> percentPerSubcategory = {};
                     countExercise.forEach((subCategoryId, value) {
-                      final subCategory = value['subCategory'] as dynamic;
-                      final subCategoryName = subCategory.subCategoryName;
+                      // final subCategory = value['subCategory'] as dynamic;
                       final totalExercise = countExerciseNumber[subCategoryId]!;
 
                       final groupProgressList = groupedSubCategoryResetBatch.entries
@@ -115,7 +113,9 @@ class AchievementPage extends StatelessWidget {
 
                       final completedCount = groupProgressList.length;
 
-                      final percent = totalExercise == 0.0 ? 0.0 : completedCount / totalExercise;
+                      final percent = totalExercise == 0
+                          ? 0.0
+                          : (completedCount / totalExercise).clamp(0.0, 1.0);
                       percentPerSubcategory[subCategoryId] = percent;
                     });
                     final sortedEntries = countExercise.entries.toList()

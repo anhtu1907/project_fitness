@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.stereotype.Repository;
 
-import com.example.Project4.models.exercise.ExerciseProgressModel;
+import com.example.Project4.entity.exercise.ExerciseProgressModel;
 
 @Repository
 public interface ExerciseProgressRepository extends JpaRepository<ExerciseProgressModel, Integer> {
-    List<ExerciseProgressModel> findAllProgressByUserId(int userId);
+    List<ExerciseProgressModel> findAllProgressByUserId(String userId);
 }

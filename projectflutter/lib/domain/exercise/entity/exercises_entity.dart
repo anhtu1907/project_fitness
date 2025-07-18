@@ -11,7 +11,7 @@ class ExercisesEntity {
   final double kcal;
   final List<ExerciseSubCategoryModel> subCategory;
   final EquipmentsModel? equipment;
-  final ExerciseModeModel? mode;
+  final List<ExerciseModeModel> modes;
 
   ExercisesEntity({
     required this.id,
@@ -22,6 +22,19 @@ class ExercisesEntity {
     required this.kcal,
     required this.subCategory,
     required this.equipment,
-    required this.mode,
+    required this.modes,
   });
+  factory ExercisesEntity.empty() {
+    return ExercisesEntity(
+      id: -1,
+      exerciseName: '',
+      exerciseImage: '',
+      description: '',
+      duration: 0,
+      kcal: 0,
+      subCategory: [],
+      equipment: null,
+      modes: [],
+    );
+  }
 }

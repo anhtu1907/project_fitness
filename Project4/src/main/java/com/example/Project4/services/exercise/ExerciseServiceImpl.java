@@ -3,7 +3,6 @@ package com.example.Project4.services.exercise;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.Project4.payload.exercise.ExerciseFavoriteRequest;
 import com.example.Project4.payload.exercise.ExerciseScheduleRequest;
+import com.example.Project4.payload.exercise.ExerciseSessionBatchRequest;
 import com.example.Project4.payload.exercise.ExerciseSessionRequest;
 import com.example.Project4.payload.exercise.ExerciseUpdateScheduleRequest;
 import com.example.Project4.dto.exercise.EquipmentsDTO;
@@ -133,71 +133,72 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public ExerciseProgressDTO startExercise(ExerciseSessionRequest req) {
-        ExercisesModel exercises = exercisesRepository.findById(req.getExerciseId())
-                .orElseThrow(() -> new RuntimeException("Exercise not found"));
+public ExerciseProgressDTO startMultipleExercises(ExerciseSessionBatchRequest req) {
+    UserModel user = userRepository.findById(req.getUserId())
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserModel user = userRepository.findById(req.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        List<ExerciseSessionModel> existingSession = exerciseSessionRepository
-                .findByUserAndExerciseAndResetBatch(req.getUserId(), req.getExerciseId(), req.getResetBatch());
-        ExerciseSubCategoryModel subCategory = exerciseSubCategoryRepository
-                .findById(req.getSubCategoryId())
-                .orElseThrow(() -> new RuntimeException("SubCategory not found"));
-        if (!existingSession.isEmpty()) {
-            throw new RuntimeException(
-                    "You have already performed this exercise in the current rest batch. Please reset the batch to continue.");
-        }
+    ExerciseSubCategoryModel subCategory = exerciseSubCategoryRepository
+            .findById(req.getSubCategoryId())
+            .orElseThrow(() -> new RuntimeException("SubCategory not found"));
 
-        Set<ExerciseSubCategoryModel> subCategories = exercises.getSubCategory();
-        double totalProgress = 0.0;
-        int count = 0;
-        // Tạo mới ExerciseSession
-        ExerciseSessionModel newSession = new ExerciseSessionModel();
-        newSession.setUser(user);
-        newSession.setExercise(exercises);
-        newSession.setKcal(exercises.getKcal());
-        newSession.setSubCategory(subCategory);
-        newSession.setDuration(req.getDuration());
-        newSession.setResetBatch(req.getResetBatch());
-        newSession.setCreatedAt(LocalDateTime.now());
-        exerciseSessionRepository.save(newSession);
+    ExerciseProgressModel lastProgressModel = null;
 
-        // Tạo mới ExerciseUser
+    for (ExerciseSessionRequest sessionReq : req.getSessions()) {
+        ExercisesModel exercise = exercisesRepository.findById(sessionReq.getExerciseId())
+                .orElseThrow(() -> new RuntimeException("Exercise not found: " + sessionReq.getExerciseId()));
+
+        boolean exists = !exerciseSessionRepository
+                .findByUserAndExerciseAndResetBatch(user.getId(), exercise.getId(), req.getResetBatch())
+                .isEmpty();
+
+        if (exists) continue;
+
+        // ❗️Tính completed trước khi thêm bài mới
+        long total = exercisesRepository.countBySubCategoryId(subCategory.getId());
+        long completedBefore = exerciseSessionRepository.countByUserIdAndSubCategoryIdAndResetBatch(
+                req.getUserId(), subCategory.getId(), req.getResetBatch());
+
+        double progress = (total > 0)
+                ? ((double) (completedBefore + 1) / total) * 100
+                : 0.0;
+
+        // Tạo session
+        ExerciseSessionModel session = new ExerciseSessionModel();
+        session.setUser(user);
+        session.setExercise(exercise);
+        session.setSubCategory(subCategory);
+        session.setDuration(sessionReq.getDuration());
+        session.setResetBatch(req.getResetBatch());
+        session.setKcal(exercise.getKcal());
+        session.setCreatedAt(LocalDateTime.now());
+        exerciseSessionRepository.save(session);
+
+        // Tạo exercise user
         ExerciseUserModel exerciseUser = new ExerciseUserModel();
         exerciseUser.setUser(user);
-        exerciseUser.setSession(newSession);
-        exerciseUser.setKcal(newSession.getKcal());
+        exerciseUser.setSession(session);
+        exerciseUser.setKcal(session.getKcal());
         exerciseUser.setCreatedAt(LocalDateTime.now());
         exerciseUserRepository.save(exerciseUser);
 
-        // Tạo mới ExerciseProgress
-        ExerciseProgressModel exerciseProgress = new ExerciseProgressModel();
-        exerciseProgress.setUser(user);
-        exerciseProgress.setExercise(newSession);
+        // Lưu progress tương ứng
+        ExerciseProgressModel progressModel = new ExerciseProgressModel();
+        progressModel.setUser(user);
+        progressModel.setExercise(session);
+        progressModel.setProgress(progress);
+        progressModel.setLastUpdated(LocalDateTime.now());
+        exerciseProgressRepository.save(progressModel);
 
-        for (ExerciseSubCategoryModel subCat : subCategories) {
-            long totalExerciseInCategory = exercisesRepository.countBySubCategoryId(subCat.getId());
-            long completedExercisesInCategory = exerciseSessionRepository
-                    .countByUserIdAndSubCategoryIdAndResetBatch(req.getUserId(), subCat.getId(),
-                            req.getResetBatch());
-
-            double progressPercent = 0.0;
-            if (totalExerciseInCategory > 0) {
-                progressPercent = ((double) completedExercisesInCategory / totalExerciseInCategory) * 100;
-            }
-
-            totalProgress += progressPercent;
-            count++;
-        }
-        double progress = count > 0 ? totalProgress / count : 0.0;
-
-        exerciseProgress.setProgress(progress);
-        exerciseProgress.setLastUpdated(LocalDateTime.now());
-        exerciseProgressRepository.save(exerciseProgress);
-
-        return ExerciseMapper.toExerciseProgressDto(exerciseProgress);
+        lastProgressModel = progressModel;
     }
+
+    if (lastProgressModel != null) {
+        return ExerciseMapper.toExerciseProgressDto(lastProgressModel);
+    } else {
+        throw new RuntimeException("No new sessions created");
+    }
+}
+
 
     @Override
     public List<ExerciseScheduleDTO> getAllScheduleByUserId(int userId) {
@@ -352,9 +353,18 @@ public class ExerciseServiceImpl implements ExerciseService {
         return equipmentRepository.findAll().stream().map(ExerciseMapper::toEquipmentsDto).collect(Collectors.toList());
     }
 
-    // @Override
-    // public List<EquipmentsDTO> getAllExerciseEquipment() {
-    //     return equipmentRepository.getAllExerciseEquipment().stream().map(ExerciseMapper::toEquipmentsDto)
-    //             .collect(Collectors.toList());
-    // }
+    @Override
+    public int getResetBatchBySubCategory(int userId, int subCategoryId) {
+        int batch = 0;
+        int maxBatch = 1000;
+        while (batch < maxBatch) {
+            long completedCount = exerciseSessionRepository.countCompletedInSubCategory(userId, subCategoryId, batch);
+            long totalExercises = exercisesRepository.countBySubCategoryId(subCategoryId);
+            if (completedCount < totalExercises) {
+                return batch;
+            }
+            batch++;
+        }
+        throw new RuntimeException("Too many resetBatch loops. Check data integrity.");
+    }
 }

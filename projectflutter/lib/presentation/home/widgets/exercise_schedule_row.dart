@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -13,36 +14,32 @@ import 'package:projectflutter/presentation/home/bloc/exercise_schedule_cubit.da
 class ExerciseScheduleRow extends StatelessWidget {
   final ExerciseScheduleEntity entity;
   final String level;
-  const ExerciseScheduleRow({super.key, required this.entity, required this.level});
+  const ExerciseScheduleRow(
+      {super.key, required this.entity, required this.level});
 
   @override
   Widget build(BuildContext context) {
     String _formattedDate =
         DateFormat("dd/MM/yyy").format(entity.scheduleTime!);
     String _formattedTime = DateFormat("HH:mm").format(entity.scheduleTime!);
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-              color: AppColors.gray.withOpacity(0.2),
-              width: 1
-          ),
+          border: Border.all(color: AppColors.gray.withOpacity(0.2), width: 1),
           boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 2)]),
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: Image.asset(
-              entity.subCategory!.subCategoryImage,
-              width: 70,
-              height: 70,
-              fit: BoxFit.cover,
-            ),
-          ),
+              borderRadius: BorderRadius.circular(30),
+              child: SwitchImageType.buildImage(
+                entity.subCategory!.subCategoryImage,
+                width: 70,
+                height: 70,
+                fit: BoxFit.cover,
+              )),
           const SizedBox(
             width: 15,
           ),
@@ -145,7 +142,7 @@ class ExerciseScheduleRow extends StatelessWidget {
                 child: Text('Delete'),
               ),
             ],
-            icon: Image.asset(
+            icon: SwitchImageType.buildImage(
               AppImages.moreV,
               width: 30,
               height: 30,

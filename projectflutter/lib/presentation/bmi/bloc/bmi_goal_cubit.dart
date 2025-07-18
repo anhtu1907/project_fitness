@@ -43,26 +43,40 @@ class BmiGoalCubit extends Cubit<BmiGoalState> {
       return 'Please try input target weight of field';
     }
     final prefs = await SharedPreferences.getInstance();
-    final bmiJson =
-        prefs.getString('bmi_latest') ?? prefs.getString('bmi_exist');
+    final latest = prefs.getString('bmi_latest');
+    final exist = prefs.getString('bmi_exist');
+    String? bmiJson;
+    if (latest != null && latest.trim().isNotEmpty) {
+      bmiJson = latest;
+    } else if (exist != null && exist.trim().isNotEmpty) {
+      bmiJson = exist;
+    }
+
     if (bmiJson == null) {
       return 'BMI data not found';
     }
+
     final bmiData = jsonDecode(bmiJson);
 
-    // Kiểm tra kiểu của bmi
     double? currentWeight;
-    if (bmiData is Map && bmiData.containsKey('weight')) {
-      currentWeight = (bmiData['weight'] as num).toDouble();
-    } else if (bmiData is num) {
-      currentWeight = bmiData.toDouble();
-    } else {
-      return 'BMI data format is not recognized';
+
+    try {
+      if (bmiData is List && bmiData.isNotEmpty) {
+        final first = bmiData.first;
+        if (first is Map<String, dynamic> && first.containsKey('weight')) {
+          currentWeight = (first['weight'] as num).toDouble();
+        }
+      } else if (bmiData is Map<String, dynamic> && bmiData.containsKey('weight')) {
+        currentWeight = (bmiData['weight'] as num).toDouble();
+      } else if (bmiData is num) {
+        currentWeight = bmiData.toDouble();
+      }
+    } catch (e) {
+      return 'BMI data format is not recognized: $e';
     }
     if (currentWeight == null) {
-      return 'Weight data not found';
+      return 'BMI data format is not recognized';
     }
-    print('Current Weight : $currentWeight');
     final option = state.selectedOption!;
     final bool isValid = switch (option) {
       'Muscle Gain' => doubleWeight > currentWeight,

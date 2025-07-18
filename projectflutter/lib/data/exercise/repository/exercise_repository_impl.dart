@@ -10,7 +10,7 @@ import 'package:projectflutter/data/exercise/model/favorites_model.dart';
 import 'package:projectflutter/data/exercise/request/exercise_favorite_request.dart';
 import 'package:projectflutter/data/exercise/request/exercise_schedule_request.dart';
 import 'package:projectflutter/data/exercise/model/exercise_session_model.dart';
-import 'package:projectflutter/data/exercise/request/exercise_session_request.dart';
+import 'package:projectflutter/data/exercise/request/exercise_session_batch_request.dart';
 import 'package:projectflutter/data/exercise/model/exercise_sub_category_model.dart';
 import 'package:projectflutter/data/exercise/model/exercise_user_model.dart';
 import 'package:projectflutter/data/exercise/model/exercises_model.dart';
@@ -33,6 +33,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ExerciseRepositoryImpl extends ExerciseRepository {
   // Exercise
+
+  @override
+  Future<int?> getResetBatchBySubCategory(int subCategoryId) async {
+    return await  sl<ExerciseService>().getResetBatchBySubCategory(subCategoryId);
+  }
   @override
   Future<Either> getAllSubCategory() async {
     var subCategory = await sl<ExerciseService>().getAllSubCategory();
@@ -175,8 +180,8 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
   }
 
   @override
-  Future<Either> startExercise(ExerciseSessionRequest req) async {
-    return await sl<ExerciseService>().startExercise(req);
+  Future<Either> startMultipleExercises(ExerciseSessionBatchRequest req) async {
+    return await sl<ExerciseService>().startMultipleExercises(req);
   }
 
   // Schedule
@@ -345,18 +350,4 @@ class ExerciseRepositoryImpl extends ExerciseRepository {
     });
   }
 
-  // @override
-  // Future<Either> getAllExerciseEquipment() async {
-  //   var equipments = await sl<ExerciseService>().getAllExerciseEquipment();
-  //   return equipments.fold((err) {
-  //     return Left(err);
-  //   }, (data) {
-  //     List<EquipmentsModel> models =
-  //         (data as List).map((e) => EquipmentsModel.fromMap(e)).toList();
-  //     List<EquipmentsEntity> entities =
-  //         models.map((m) => m.toEntity()).toList();
-  //
-  //     return Right(entities);
-  //   });
-  // }
 }

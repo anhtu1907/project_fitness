@@ -38,7 +38,7 @@ class Header extends StatelessWidget {
                       style: TextStyle(color: AppColors.gray, fontSize:  AppFontSize.welcomeText(context)),
                     ),
                     Text(
-                      '${state.user.firstname} ${state.user.lastname}',
+                      '${state.user.firstName} ${state.user.lastName}',
                       style:  TextStyle(
                           color: Colors.black,
                           fontSize: AppFontSize.nameText(context),

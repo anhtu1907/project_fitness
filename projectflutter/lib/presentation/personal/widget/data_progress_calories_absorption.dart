@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
@@ -102,7 +103,6 @@ class _DataProgressCaloriesAbsorptionState
                             colorIndex = 3;
                           }
 
-
                           return SingleChildScrollView(
                               child: Container(
                             padding: const EdgeInsets.all(8),
@@ -120,7 +120,8 @@ class _DataProgressCaloriesAbsorptionState
                                   'Intake',
                                   style: TextStyle(
                                       color: AppColors.black,
-                                      fontSize: AppFontSize.value20Text(context),
+                                      fontSize:
+                                          AppFontSize.value20Text(context),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
@@ -139,7 +140,7 @@ class _DataProgressCaloriesAbsorptionState
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Image.asset(
+                                          SwitchImageType.buildImage(
                                             AppImages.fat,
                                             width: 25,
                                           ),

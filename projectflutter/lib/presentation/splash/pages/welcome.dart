@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/basic_button.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
@@ -45,7 +46,7 @@ class _WelcomePageState extends State<WelcomePage> {
             SizedBox(
               height: media.width * 0.1,
             ),
-            Image.asset(
+            SwitchImageType.buildImage(
               AppImages.welcome,
               width: media.width * 0.75,
               fit: BoxFit.fitWidth,
@@ -61,7 +62,9 @@ class _WelcomePageState extends State<WelcomePage> {
             Text(
               "You are all set now, let’s reach your\ngoals together with us",
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.gray, fontSize: AppFontSize.caption(context)),
+              style: TextStyle(
+                  color: AppColors.gray,
+                  fontSize: AppFontSize.caption(context)),
             ),
             const Spacer(),
             Padding(

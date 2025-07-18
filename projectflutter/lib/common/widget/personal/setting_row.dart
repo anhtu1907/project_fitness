@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 
@@ -22,7 +23,7 @@ class SettingRow extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(
+            SwitchImageType.buildImage(
               imageIcon,
               height: 15,
               width: 15,
@@ -36,12 +37,12 @@ class SettingRow extends StatelessWidget {
               title,
               style: TextStyle(color: AppColors.black, fontSize: 12),
             )),
-            Image.asset(
+            SwitchImageType.buildImage(
               AppImages.pNext,
               height: 12,
               width: 12,
               fit: BoxFit.contain,
-            ),
+            )
           ],
         ),
       ),

@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_all_equipment.dart';
 import 'package:projectflutter/domain/exercise/usecase/get_equipment_by_sub_id.dart';
-import 'package:projectflutter/domain/exercise/usecase/get_exercise_equipment.dart';
 import 'package:projectflutter/presentation/exercise/bloc/exercise_equipment_state.dart';
 import 'package:projectflutter/service_locator.dart';
 

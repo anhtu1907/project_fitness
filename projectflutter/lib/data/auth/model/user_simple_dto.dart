@@ -1,7 +1,7 @@
  import 'dart:convert';
 
 class UserSimpleDTO {
-  final int id;
+  final String id;
   final String firstName;
   final String lastName;
 
@@ -21,7 +21,7 @@ class UserSimpleDTO {
 
   factory UserSimpleDTO.fromMap(Map<String, dynamic> map) {
     return UserSimpleDTO(
-      id: map['id'] as int,
+      id: map['id'] as String,
       firstName: map['firstName'] as String? ?? '',
       lastName: map['lastName'] as String? ?? '',
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/round_button.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
@@ -34,7 +35,7 @@ class MealCategoryGrid extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.network(
+          SwitchImageType.buildImage(
             meal.mealImage == '' ? AppImages.snack : meal.mealImage,
             width: 60,
             height: 60,

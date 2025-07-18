@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
+import 'package:projectflutter/core/config/themes/app_font_size.dart';
 
 class TitleSubTitleCellTime extends StatelessWidget {
   final dynamic value;
@@ -35,11 +36,11 @@ class TitleSubTitleCellTime extends StatelessWidget {
             style: TextStyle(
                 color: AppColors.primaryColor1,
                 fontWeight: FontWeight.bold,
-                fontSize: 18),
+                fontSize: AppFontSize.value16Text(context)),
           ),
           Text(
             subtitle,
-            style: TextStyle(color: AppColors.black, fontSize: 15),
+            style: TextStyle(color: AppColors.black, fontSize: AppFontSize.value14Text(context)),
           )
         ],
       ),

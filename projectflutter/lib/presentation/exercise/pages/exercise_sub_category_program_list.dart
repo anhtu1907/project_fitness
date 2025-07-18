@@ -8,15 +8,13 @@ import 'package:projectflutter/presentation/exercise/pages/exercise_by_sub_categ
 import 'package:projectflutter/presentation/exercise/widgets/subcategory/exercise_sub_category_row.dart';
 
 class ExerciseSubCategoryProgramListPage extends StatelessWidget {
-  final List<ExerciseSubCategoryProgramEntity> total;
+  final List<(ExerciseSubCategoryProgramEntity, String)> total;
   final String categoryName;
   final Map<String, int> duration;
-  final String level;
   const ExerciseSubCategoryProgramListPage(
       {super.key,
       required this.categoryName,
       required this.duration,
-      required this.level,
       required this.total});
 
   @override
@@ -51,21 +49,23 @@ class ExerciseSubCategoryProgramListPage extends StatelessWidget {
           child: ListView.builder(
             itemCount: total.length,
             itemBuilder: (context, index) {
+              final sub = total[index].$1;
+              final mode = total[index].$2;
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: ExerciseSubcategoryRow(
-                    image: total[index].subCategory!.subCategoryImage,
-                    name: total[index].subCategory!.subCategoryName,
+                    image: sub.subCategory!.subCategoryImage,
+                    name:sub.subCategory!.subCategoryName,
                     duration: _formatDuration(
-                        duration[total[index].subCategory!.subCategoryName] ?? 0),
-                    level: level,
+                        duration[sub.subCategory!.subCategoryName] ?? 0),
+                    level: mode,
                     onPressed: () {
                       AppNavigator.push(
                           context,
                           ExerciseBySubCategoryView(
-                            subCategoryId: total[index].subCategory!.id,
-                            level: level,
-                            image: total[index].subCategory!.subCategoryImage,
+                            subCategoryId: sub.subCategory!.id,
+                            level: mode,
+                            image: sub.subCategory!.subCategoryImage,
                           ));
                     }),
               );

@@ -1,6 +1,6 @@
 package com.example.Project4.exception;
 
-import com.example.Project4.payload.auth.response.ApiResponse;
+import com.example.Project4.dto.auth.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

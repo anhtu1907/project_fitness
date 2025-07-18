@@ -71,14 +71,23 @@ class MealBySubCategory extends StatelessWidget {
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: entry.value.length,
                             itemBuilder: (context, index) {
-                              return MealGridItem(meal: entry.value[index]);
+                              final mealItem = MealGridItem(meal: entry.value[index]);
+                              return entry.value.length == 1
+                                  ? Align(
+                                alignment: Alignment.center,
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.6,
+                                  child: mealItem,
+                                ),
+                              )
+                                  : mealItem;
                             },
                             gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
+                                 SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount:  entry.value.length == 1 ? 1 : 2,
                                     crossAxisSpacing: 10,
                                     mainAxisSpacing: 10,
-                                    childAspectRatio: 1),
+                                   childAspectRatio: entry.value.length == 1 ? 1.8 : 1,),
                           ),
                         ],
                       );

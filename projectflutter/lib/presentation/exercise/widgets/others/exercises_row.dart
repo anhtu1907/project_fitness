@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
 
@@ -18,12 +19,11 @@ class ExercisesRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String _formatDuration(int seconds) {
-      final duration = Duration(seconds: seconds);
       String twoDigits(int n) => n.toString().padLeft(2, '0');
-      final minutes = twoDigits(duration.inMinutes.remainder(60));
-      final secs = twoDigits(duration.inSeconds.remainder(60));
-      return "$minutes:$secs";
+      final duration = Duration(seconds: seconds);
+      return "${twoDigits(duration.inMinutes)}:${twoDigits(duration.inSeconds.remainder(60))}";
     }
+
     var media = MediaQuery.of(context).size;
     return Material(
       child: InkWell(
@@ -34,14 +34,13 @@ class ExercisesRow extends StatelessWidget {
           child: Row(
             children: [
               ClipRRect(
-                child: Image.network(
-                  image,
-                  width: media.width * 0.2,
-                  height: media.height * 0.1,
-                  fit: BoxFit.contain,
-                ),
-              ),
-               SizedBox(
+                  child: SwitchImageType.buildImage(
+                image,
+                width: media.width * 0.2,
+                height: media.height * 0.1,
+                fit: BoxFit.contain,
+              )),
+              SizedBox(
                 width: media.width * 0.04,
               ),
               Expanded(

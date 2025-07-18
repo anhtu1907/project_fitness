@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
@@ -92,7 +92,7 @@ class ExerciseSearchByGoal extends StatelessWidget {
                       if (state is SubCategoryProgramLoaded) {
                         final programs = state.entity;
                         List goals = [
-                          'Loss Weight',
+                          'Lose Weight',
                           'Build Muscle',
                           'Keep Fit'
                         ];
@@ -118,25 +118,36 @@ class ExerciseSearchByGoal extends StatelessWidget {
                                       .where((e) => e.subCategory != null)
                                       .map((e) => e.subCategory!.id)
                                       .toSet();
-                                  ExercisesEntity? exerciseForGoal;
+                                  final modeBySubCategoryId = extractModesBySubCategoryId(
+                                    exercises: exerciseList,
+                                    subCategoryFilterIds: subCategoryIds,
+                                  );
 
-                                  for (final exercise in exerciseList) {
-                                    for (final sub in exercise.subCategory) {
-                                      if (subCategoryIds.contains(sub.id)) {
-                                        exerciseForGoal = exercise;
-                                        break;
-                                      }
+                                  final Map<int, String> levelBySubCategoryId = {};
+                                  const ordered = ['Beginner', 'Intermediate', 'Advanced', 'Stretch'];
+
+                                  for (final subId in subCategoryIds) {
+                                    final modes = modeBySubCategoryId[subId];
+                                    if (modes != null && modes.isNotEmpty) {
+                                      levelBySubCategoryId[subId] = ordered.firstWhere(
+                                            (m) => modes.contains(m),
+                                        orElse: () => modes.first,
+                                      );
                                     }
-                                    if (exerciseForGoal != null) break;
                                   }
 
-                                  final exerciseId = exerciseForGoal?.id ?? 0;
-                                  final level = exerciseForGoal?.mode?.modeName ?? "";
+                                  int exerciseId = 0;
+                                  for (final exercise in exerciseList) {
+                                    if (exercise.subCategory.any((sub) => subCategoryIds.contains(sub.id))) {
+                                      exerciseId = exercise.id;
+                                      break;
+                                    }
+                                  }
                                   AppNavigator.push(
                                       context,
                                       ExerciseSubCategoryListByGoalPage(
                                           categoryName: goal,
-                                          level: level,
+                                          level: levelBySubCategoryId,
                                           exerciseId: exerciseId,
                                           duration: durationBySubCategory,
                                           total: filteredList));
@@ -148,8 +159,8 @@ class ExerciseSearchByGoal extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
                                     border: Border.all(
-                                        color: AppColors.black.withOpacity(0.25)
-                                    ),
+                                        color:
+                                            AppColors.black.withOpacity(0.25)),
                                     color: const Color(0xff3674B5)
                                         .withOpacity(0.6),
                                   ),
@@ -157,7 +168,7 @@ class ExerciseSearchByGoal extends StatelessWidget {
                                   child: Stack(
                                     alignment: Alignment.center,
                                     children: [
-                                      Image.asset(
+                                      SwitchImageType.buildImage(
                                         imageGoal[index % imageGoal.length],
                                         width: media.width * 0.5,
                                         height: media.height * 0.1,
@@ -168,7 +179,8 @@ class ExerciseSearchByGoal extends StatelessWidget {
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: AppFontSize.value22Text(context),
+                                          fontSize:
+                                              AppFontSize.value22Text(context),
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -192,5 +204,24 @@ class ExerciseSearchByGoal extends StatelessWidget {
         },
       ),
     );
+  }
+  Map<int, Set<String>> extractModesBySubCategoryId({
+    required List<ExercisesEntity> exercises,
+    required Set<int> subCategoryFilterIds,
+  }) {
+    final Map<int, Set<String>> result = {};
+
+    for (final exercise in exercises) {
+      if (exercise.subCategory.length == 1) {
+        final sub = exercise.subCategory.first;
+
+        if (subCategoryFilterIds.contains(sub.id)) {
+          result.putIfAbsent(sub.id, () => <String>{});
+          result[sub.id]!.addAll(exercise.modes.map((m) => m.modeName));
+        }
+      }
+    }
+
+    return result;
   }
 }

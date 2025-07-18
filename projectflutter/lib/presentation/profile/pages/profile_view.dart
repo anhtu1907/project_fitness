@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:projectflutter/common/api/shared_preference_service.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
@@ -19,151 +18,132 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
+    final media = MediaQuery.of(context).size;
+
     return Scaffold(
       body: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-                create: (context) =>
-                UserInfoDisplayCubit()
-                  ..displayUserInfo()),
-            BlocProvider(create: (context) =>
-            HealthCubit()
-              ..getDataHealth()),
-          ],
-          child: BlocBuilder<UserInfoDisplayCubit, UserInfoDisplayState>(
-            builder: (context, state) {
-              if (state is UserInfoLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (state is UserInfoLoaded) {
-                final user = state.user;
-                final formatedDate =
-                DateFormat('dd/MM/yyyy').format(user.createdAt!);
-                return BlocBuilder<HealthCubit, HealthState>(
+        providers: [
+          BlocProvider(
+              create: (_) => UserInfoDisplayCubit()..displayUserInfo()),
+          BlocProvider(create: (_) => HealthCubit()..getDataHealth()),
+        ],
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                /// User Info Section
+                BlocBuilder<UserInfoDisplayCubit, UserInfoDisplayState>(
                   builder: (context, state) {
-                    if (state is LoadedHealthFailure) {
-                      return Center(
-                        child: Text(state.errorMessage),
-                      );
+                    if (state is UserInfoLoading) {
+                      return const Center(child: CircularProgressIndicator());
                     }
-                    if (state is HealthLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (state is HealthLoaded) {
-                      final health = state.bmi;
-                      final userId = SharedPreferenceService.userId;
-                      final currentUserHealth =
-                      health.where((e) => e.user!.id == userId).toList();
-                      return SafeArea(
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    AvatarItem(user: user,),
-                                    SizedBox(
-                                      width: media.width * 0.03,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${user.firstname} ${user.lastname}',
-                                          style: TextStyle(
-                                              color: AppColors.black,
-                                              fontSize: AppFontSize.value16Text(context),
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          'Joined on: $formatedDate',
-                                          style: TextStyle(
-                                              color: AppColors.gray,
-                                              fontSize: AppFontSize.value14Text(context),
-                                              fontWeight: FontWeight.normal),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: media.height * 0.02,
-                                ),
-                                const LogoutButton(),
-                                SizedBox(
-                                  height: media.height * 0.025,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TitleSubtitleCell(
-                                        value: currentUserHealth.first.height
-                                            .toStringAsFixed(0),
-                                        subtitle: "Height",
-                                        unit: "cm",
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: media.width * 0.04,
-                                    ),
-                                    Expanded(
-                                      child: TitleSubtitleCell(
-                                        value: currentUserHealth.last.weight
-                                            .toStringAsFixed(0),
-                                        subtitle: "Weight",
-                                        unit: "kg",
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: media.width * 0.04,
-                                    ),
-                                    Expanded(
-                                      child: TitleSubtitleCell(
-                                        value: currentUserHealth.last.bmi
-                                            .toStringAsFixed(1),
-                                        subtitle: "BMI",
-                                        unit: "kg/m²",
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: media.height * 0.025,
-                                ),
-                                const AccountSetting(),
-                                SizedBox(
-                                  height: media.height * 0.025,
-                                ),
-                                const OtherSetting(),
 
-                              ],
+                    if (state is UserInfoLoaded) {
+                      final user = state.user;
+                      return Row(
+                        children: [
+                          AvatarItem(user: user),
+                          SizedBox(width: media.width * 0.03),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${user.firstName} ${user.lastName}',
+                                style: TextStyle(
+                                  color: AppColors.black,
+                                  fontSize: AppFontSize.value16Text(context),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      );
+                    }
+
+                    return const Center(
+                        child: Text("Failed to load user info"));
+                  },
+                ),
+
+                SizedBox(height: media.height * 0.02),
+                const LogoutButton(),
+                SizedBox(height: media.height * 0.025),
+
+                /// Health Info Section
+                BlocBuilder<HealthCubit, HealthState>(
+                  builder: (context, state) {
+                    if (state is HealthLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (state is LoadedHealthFailure) {
+                      return Center(child: Text(state.errorMessage));
+                    }
+
+                    if (state is HealthLoaded) {
+                      final healthList = state.bmi;
+                      final userId = SharedPreferenceService.userId;
+                      if (userId == null || healthList.isEmpty) {
+                        return const Text("No health data available");
+                      }
+
+                      final currentUserHealth = healthList
+                          .where((e) => e.user?.id == userId)
+                          .toList();
+
+                      if (currentUserHealth.isEmpty) {
+                        return const Text("No health data for this user");
+                      }
+
+                      final latestHealth = currentUserHealth.last;
+
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: TitleSubtitleCell(
+                              value: latestHealth.height.toStringAsFixed(0),
+                              subtitle: "Height",
+                              unit: "cm",
                             ),
                           ),
-                        ),
+                          SizedBox(width: media.width * 0.04),
+                          Expanded(
+                            child: TitleSubtitleCell(
+                              value: latestHealth.weight.toStringAsFixed(0),
+                              subtitle: "Weight",
+                              unit: "kg",
+                            ),
+                          ),
+                          SizedBox(width: media.width * 0.04),
+                          Expanded(
+                            child: TitleSubtitleCell(
+                              value: latestHealth.bmi.toStringAsFixed(1),
+                              subtitle: "BMI",
+                              unit: "kg/m²",
+                            ),
+                          ),
+                        ],
                       );
                     }
-                    return Container();
+
+                    return const SizedBox(); // Fallback
                   },
-                );
-              }
-              return Container();
-            },
-          )),
+                ),
+
+                SizedBox(height: media.height * 0.025),
+                const AccountSetting(),
+                SizedBox(height: media.height * 0.025),
+                const OtherSetting(),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
-
-
 }
 
 class AccoutSetting {

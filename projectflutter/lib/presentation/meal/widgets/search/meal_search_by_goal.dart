@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/domain/meal/entity/meal_sub_category.dart';
@@ -97,31 +98,36 @@ class MealSearchByGoal extends StatelessWidget {
                         return GestureDetector(
                             onTap: () {
                               final filteredList = mealSubList
-                                  .where((subCat) => subCat.subCategoryName == goal)
+                                  .where((subCat) =>
+                                      subCat.subCategoryName == goal)
                                   .toList();
-                              final filteredKcalBySubCategory = <String, double>{};
+                              final filteredKcalBySubCategory =
+                                  <String, double>{};
                               for (var subCat in filteredList) {
                                 final subCatName = subCat.subCategoryName;
-                                final meals = groupedSubCategory[subCatName] ?? [];
-                                final kcal = meals.fold(0.0, (sum, item) => sum + item.kcal);
+                                final meals =
+                                    groupedSubCategory[subCatName] ?? [];
+                                final kcal = meals.fold(
+                                    0.0, (sum, item) => sum + item.kcal);
                                 filteredKcalBySubCategory[subCatName] = kcal;
                               }
 
                               final filteredFoodBySubCategory = <String, int>{};
                               for (var subCat in filteredList) {
                                 final subCatName = subCat.subCategoryName;
-                                final meals = groupedSubCategory[subCatName] ?? [];
-                                filteredFoodBySubCategory[subCatName] = meals.length;
+                                final meals =
+                                    groupedSubCategory[subCatName] ?? [];
+                                filteredFoodBySubCategory[subCatName] =
+                                    meals.length;
                               }
                               if (filteredList.isNotEmpty) {
                                 AppNavigator.push(
-                                  context,
+                                    context,
                                     MealSubCategoryPlanListPage(
-                                    total: filteredList,
-                                    categoryName: goal,
-                                    kcal: filteredKcalBySubCategory,
-                                    totalFood: filteredFoodBySubCategory)
-                                );
+                                        total: filteredList,
+                                        categoryName: goal,
+                                        kcal: filteredKcalBySubCategory,
+                                        totalFood: filteredFoodBySubCategory));
                               }
                             },
                             child: Container(
@@ -140,11 +146,10 @@ class MealSearchByGoal extends StatelessWidget {
                                   fit: StackFit.expand,
                                   children: [
                                     Positioned.fill(
-                                      child: Image.network(
-                                        imageGoal[index % imageGoal.length],
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                                        child: SwitchImageType.buildImage(
+                                      imageGoal[index % imageGoal.length],
+                                      fit: BoxFit.cover,
+                                    )),
                                     // LỚP MỜ OVERLAY
                                     Positioned.fill(
                                       child: Container(

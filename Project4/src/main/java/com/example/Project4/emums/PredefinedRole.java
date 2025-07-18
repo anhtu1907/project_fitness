@@ -1,5 +1,4 @@
 package com.example.Project4.emums;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -7,14 +7,14 @@ import 'package:projectflutter/domain/auth/usecase/signin_usecase.dart';
 
 class SinginButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
-  final TextEditingController emailController;
+  final TextEditingController usernameController;
   final TextEditingController passwordController;
   final void Function(AutovalidateMode mode)? onValidateModeChanged;
 
   const SinginButton({
     super.key,
     required this.formKey,
-    required this.emailController,
+    required this.usernameController,
     required this.passwordController,
     this.onValidateModeChanged,
   });
@@ -30,7 +30,7 @@ class SinginButton extends StatelessWidget {
           context.read<ButtonStateCubit>().execute(
             usecase: SigninUseCase(),
             params: SigninRequest(
-              email: emailController.text,
+              username: usernameController.text,
               password: passwordController.text,
             ),
           );

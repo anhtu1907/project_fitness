@@ -10,10 +10,10 @@ import com.example.Project4.dto.meal.MealTimeDTO;
 import com.example.Project4.dto.meal.MealsDTO;
 import com.example.Project4.dto.meal.UserMealDTO;
 import com.example.Project4.dto.meal.UserSimpleDTO;
-import com.example.Project4.models.meal.MealCategoryModel;
-import com.example.Project4.models.meal.MealSubCategoryModel;
-import com.example.Project4.models.meal.MealsModel;
-import com.example.Project4.models.meal.UserMealsModel;
+import com.example.Project4.entity.meal.MealCategoryModel;
+import com.example.Project4.entity.meal.MealSubCategoryModel;
+import com.example.Project4.entity.meal.MealsModel;
+import com.example.Project4.entity.meal.UserMealsModel;
 
 public class MealMapper {
     public static MealSubCategoryDTO toSubCategoryDto(MealSubCategoryModel entity) {
@@ -26,6 +26,7 @@ public class MealMapper {
         if (entity.getCategory() != null) {
             MealCategoryDTO categoryDto = new MealCategoryDTO();
             categoryDto.setId(entity.getCategory().getId());
+            categoryDto.setCategoryImage(entity.getCategory().getCategoryImage());
             categoryDto.setCategoryName(entity.getCategory().getCategoryName());
             dto.setCategory(categoryDto);
         } else {
@@ -87,8 +88,8 @@ public class MealMapper {
         if (entity.getUser() != null) {
             userDto = new UserSimpleDTO(
                     entity.getUser().getId(),
-                    entity.getUser().getFirstname(),
-                    entity.getUser().getLastname());
+                    entity.getUser().getFirstName(),
+                    entity.getUser().getLastName());
         }
 
         MealsDTO mealDto = null;

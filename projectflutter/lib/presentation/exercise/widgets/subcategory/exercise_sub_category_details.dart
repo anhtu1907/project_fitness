@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projectflutter/common/api/shared_preference_service.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/domain/exercise/entity/equipments_entity.dart';
@@ -93,7 +94,11 @@ class _ExerciseSubCategoryDetailsState
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
-
+    final uniqueEquipments = widget.equipments.toSet().toList()
+      ..retainWhere((e) =>
+          widget.equipments
+              .indexWhere((x) => x.equipmentName == e.equipmentName) ==
+          widget.equipments.indexOf(e));
     return NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
@@ -106,7 +111,7 @@ class _ExerciseSubCategoryDetailsState
               flexibleSpace: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.asset(
+                  SwitchImageType.buildImage(
                     widget.image,
                     fit: BoxFit.cover,
                   ),
@@ -215,12 +220,10 @@ class _ExerciseSubCategoryDetailsState
                           fontSize: 18,
                           fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
-                      height: media.width * 0.05,
-                    ),
+                    SizedBox(height: media.width * 0.05),
                     Wrap(
                       spacing: 15,
-                      children: widget.equipments.map((equipment) {
+                      children: uniqueEquipments.map((equipment) {
                         return ExerciseEquipmentItem(
                           image: equipment.equipmentImage,
                           equipmentName: equipment.equipmentName,
@@ -329,7 +332,6 @@ class _ExerciseSubCategoryDetailsState
 
   void _removeFavorite() async {
     sl<RemoveExerciseFavoriteUseCase>().call(params: widget.subCategoryId);
-    print('SubCategory ID: ${widget.subCategoryId}');
     setState(() {
       _isSaveFavorite = false;
     });

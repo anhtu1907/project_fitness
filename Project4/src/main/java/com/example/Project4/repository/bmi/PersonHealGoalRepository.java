@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.Project4.models.bmi.PersonHealGoalModel;
+import com.example.Project4.entity.bmi.PersonHealGoalModel;
 
 @Repository
 public interface PersonHealGoalRepository extends JpaRepository<PersonHealGoalModel, Integer>{
-    PersonHealGoalModel findTopByUserIdOrderByCreatedAtDesc(int userId);
-    List<PersonHealGoalModel> findAllGoalByUserId(int userId);
+    PersonHealGoalModel findTopByUserIdOrderByCreatedAtDesc(String userId);
+    List<PersonHealGoalModel> findAllGoalByUserId(String userId);
 }

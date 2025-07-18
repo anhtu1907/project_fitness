@@ -17,6 +17,7 @@ class SignupButton extends StatelessWidget {
   final TextEditingController passwordController;
   final TextEditingController dobController;
   final TextEditingController phoneController;
+  final TextEditingController addressController;
   final SecureStorage secureStorage;
   final void Function(AutovalidateMode mode)? onValidateModeChanged;
 
@@ -31,6 +32,7 @@ class SignupButton extends StatelessWidget {
     required this.dobController,
     required this.phoneController,
     required this.secureStorage,
+    required this.addressController,
     this.onValidateModeChanged,
   });
 
@@ -41,7 +43,7 @@ class SignupButton extends StatelessWidget {
       onPressed: () async {
         onValidateModeChanged?.call(AutovalidateMode.always);
 
-        await secureStorage.writeSecureData('email', emailController.text);
+        await secureStorage.writeSecureData('username', usernameController.text);
         await secureStorage.writeSecureData('password', passwordController.text);
 
         if (formKey.currentState!.validate()) {
@@ -56,6 +58,7 @@ class SignupButton extends StatelessWidget {
               email: emailController.text,
               password: passwordController.text,
               dob: DateFormat('yyyy-MM-dd').parse(dobController.text),
+              address: addressController.text,
               gender: genderIndex,
               phone: phoneController.text,
             ),

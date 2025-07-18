@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/round_button.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
-import 'package:projectflutter/core/data/meal_sub_category.dart';
 import 'package:projectflutter/data/meal/request/user_meal_request.dart';
 import 'package:projectflutter/domain/meal/entity/meals.dart';
 import 'package:projectflutter/domain/meal/usecase/get_meal_by_sub_category.dart';
@@ -14,6 +14,7 @@ import 'package:projectflutter/presentation/meal/pages/meal_by_sub_category.dart
 class MealSubCategoryCardPlan extends StatelessWidget {
   final int subCategoryId;
   final String subCategoryName;
+  final String subCategoryImage;
   final String description;
   final double kcal;
   final int totalFood;
@@ -23,6 +24,7 @@ class MealSubCategoryCardPlan extends StatelessWidget {
       required this.subCategoryId,
       required this.subCategoryName,
       required this.description,
+      required this.subCategoryImage,
       required this.kcal,
       required this.totalFood});
 
@@ -46,11 +48,10 @@ class MealSubCategoryCardPlan extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: Image.asset(
-                mealSubCategoryImage[subCategoryId].toString(),
-                fit: BoxFit.cover,
-              ),
-            ),
+                child: SwitchImageType.buildImage(
+              subCategoryImage,
+              fit: BoxFit.cover,
+            )),
             Positioned.fill(
               child: Container(
                 decoration:
@@ -78,13 +79,15 @@ class MealSubCategoryCardPlan extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: media.height * 0.01,),
+                    SizedBox(
+                      height: media.height * 0.01,
+                    ),
                     IntrinsicWidth(
                       child: Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.4),
+                          color: Colors.black.withOpacity(0.6),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Row(

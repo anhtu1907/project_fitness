@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/data/exercise_sub_category_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -52,11 +53,10 @@ class ExerciseSubCategoryCard extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: Image.asset(
-                image,
-                fit: BoxFit.cover,
-              ),
-            ),
+                child: SwitchImageType.buildImage(
+              image,
+              fit: BoxFit.cover,
+            )),
             Positioned.fill(
                 child: Container(
               color: Colors.black.withOpacity(0.1),

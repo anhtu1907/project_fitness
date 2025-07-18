@@ -83,12 +83,7 @@ class _ExerciseSearchFieldState extends State<ExerciseSearchField> {
                 }
                 if (subCategoryState is SubCategoryLoaded) {
                   final subCategoryList = subCategoryState.entity;
-
-                  /// Lấy level của exercise đầu tiên để truyền vào ExerciseSearchPage
-                  final firstExercise = exerciseList.isNotEmpty
-                      ? exerciseList.first
-                      : null;
-                  final level = firstExercise?.mode?.modeName ?? '';
+                  final levelMap = getSubCategoryLevelMap(subCategoryList, exerciseList);
 
                   return GestureDetector(
                     onTap: () {
@@ -96,7 +91,7 @@ class _ExerciseSearchFieldState extends State<ExerciseSearchField> {
                         context,
                         ExerciseSearchPage(
                           subCategoryList: subCategoryList,
-                          level: level,
+                          level: levelMap,
                           duration: durationBySubCategory,
                         ),
                       );
@@ -130,5 +125,36 @@ class _ExerciseSearchFieldState extends State<ExerciseSearchField> {
         },
       ),
     );
+  }
+
+  Map<int, String> getSubCategoryLevelMap(
+      List<ExerciseSubCategoryEntity> subCategoryList,
+      List<ExercisesEntity> exerciseList) {
+    final Map<int, String> result = {};
+
+    for (var sub in subCategoryList) {
+      final subCategoryId = sub.id;
+
+      final relatedExercises = exerciseList
+          .where((ex) => ex.subCategory.any((s) => s.id == subCategoryId))
+          .toList();
+
+      if (relatedExercises.isNotEmpty) {
+        final modeNames = relatedExercises
+            .expand((ex) => ex.modes)
+            .map((m) => m.modeName)
+            .toList();
+
+        if (modeNames.isNotEmpty) {
+          result[subCategoryId] = modeNames.first;
+        } else {
+          result[subCategoryId] = 'Unknown';
+        }
+      } else {
+        result[subCategoryId] = 'Unknown';
+      }
+    }
+
+    return result;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/data/exercise_sub_category_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -15,13 +16,13 @@ class ExerciseNewCategory extends StatelessWidget {
   final int totalWorkout;
   const ExerciseNewCategory(
       {super.key,
-        required this.name,
-        required this.subCategoryId,
-        required this.level,
-        required this.subName,
-        required this.duration,
-        required this.totalWorkout,
-        required this.image});
+      required this.name,
+      required this.subCategoryId,
+      required this.level,
+      required this.subName,
+      required this.duration,
+      required this.totalWorkout,
+      required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,7 @@ class ExerciseNewCategory extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: Image.asset(
+              child: SwitchImageType.buildImage(
                 exerciseSubCategory[subCategoryId].toString(),
                 fit: BoxFit.cover,
               ),
@@ -67,9 +68,9 @@ class ExerciseNewCategory extends StatelessWidget {
               left: 0,
               right: 0,
               child: ExerciseItemTrait(
-    categoryName: name,
-    totalWorkout: totalWorkout,
-    duration: _formatDuration(duration)),
+                  categoryName: name,
+                  totalWorkout: totalWorkout,
+                  duration: _formatDuration(duration)),
             ),
           ],
         ),

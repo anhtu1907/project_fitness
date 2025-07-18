@@ -10,7 +10,8 @@ import 'package:projectflutter/presentation/exercise/widgets/suggest/bottomsheet
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OtherPlanSetting extends StatefulWidget {
-  const OtherPlanSetting({super.key});
+  final VoidCallback? onApply;
+  const OtherPlanSetting({super.key, this.onApply});
 
   @override
   State<OtherPlanSetting> createState() => _OtherPlanSettingState();
@@ -22,8 +23,6 @@ class _OtherPlanSettingState extends State<OtherPlanSetting> {
     super.initState();
     _loadPreferences();
   }
-
-
 
   Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
@@ -46,8 +45,8 @@ class _OtherPlanSettingState extends State<OtherPlanSetting> {
   List<String> difficulties = ['Beginner', 'Intermediate', 'Advanced'];
   List<String> durations = ['<10 min/day', '10-20 min/day', '20-30 min/day', '30-45 min/day'];
   List<bool> _selectedBodyAreas = List.generate(7, (i) => i == 6);
-  final List<String> bodyArea = ['Arm', 'Shoulder', 'Chest', 'Core','Butt & Leg','Back','Full Body'];
-  final List<String> goals = ['Loss Weight', 'Build Muscle', 'Keep Fit'];
+  List<String> bodyArea = ['Arm', 'Shoulder', 'Chest', 'Core','Butt & Leg','Back','Full Body'];
+  List<String> goals = ['Lose Weight', 'Build Muscle', 'Keep Fit'];
   String _selectedFocusAreaText = 'Full Body';
   int _selectedDifficultyIndex = 0;
   int _selectedDuraitonIndex = 0;
@@ -209,6 +208,7 @@ class _OtherPlanSettingState extends State<OtherPlanSetting> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
+                        widget.onApply!();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor3,

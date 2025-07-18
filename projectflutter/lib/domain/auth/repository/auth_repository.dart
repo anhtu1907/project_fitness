@@ -8,6 +8,9 @@ abstract class AuthRepository {
   Future<Either> sendEmailResetPassword(String email);
   Future<Either> getUser();
   Future<bool> isLoggedIn();
-  Future<Either> verfiy(String pinCode);
   Future<void> logout();
+  Future<Either> refreshToken();
+  Future<Either> getByUsername();
+  Future<Either> introspectToken();
+  Future<bool> ensureValidToken();
 }

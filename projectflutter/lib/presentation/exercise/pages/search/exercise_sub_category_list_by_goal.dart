@@ -11,7 +11,7 @@ class ExerciseSubCategoryListByGoalPage extends StatelessWidget {
   final List<ExerciseSubCategoryProgramEntity> total;
   final String categoryName;
   final Map<String, int> duration;
-  final String level;
+  final Map<int, String> level;
   final int exerciseId;
   const ExerciseSubCategoryListByGoalPage(
       {super.key,
@@ -52,21 +52,24 @@ class ExerciseSubCategoryListByGoalPage extends StatelessWidget {
           child: ListView.builder(
             itemCount: total.length,
             itemBuilder: (context, index) {
-              return ExerciseSubcategoryRow(
-                  image: total[index].subCategory!.subCategoryImage,
-                  name: total[index].subCategory!.subCategoryName,
-                  duration: _formatDuration(
-                      duration[total[index].subCategory!.subCategoryName] ?? 0),
-                  level: level,
-                  onPressed: () {
-                    AppNavigator.push(
-                        context,
-                        ExerciseBySubCategoryView(
-                          subCategoryId: total[index].subCategory!.id,
-                          level: level,
-                          image: total[index].subCategory!.subCategoryImage,
-                        ));
-                  });
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: ExerciseSubcategoryRow(
+                    image: total[index].subCategory!.subCategoryImage,
+                    name: total[index].subCategory!.subCategoryName,
+                    duration: _formatDuration(
+                        duration[total[index].subCategory!.subCategoryName] ?? 0),
+                    level: level[total[index].subCategory!.id] ?? 'Unknown',
+                    onPressed: () {
+                      AppNavigator.push(
+                          context,
+                          ExerciseBySubCategoryView(
+                            subCategoryId: total[index].subCategory!.id,
+                            level: level[total[index].subCategory!.id] ?? 'Unknown',
+                            image: total[index].subCategory!.subCategoryImage,
+                          ));
+                    }),
+              );
             },
           )),
     );

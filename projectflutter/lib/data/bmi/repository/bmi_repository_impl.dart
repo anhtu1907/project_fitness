@@ -41,25 +41,40 @@ class BmiRepositoryImpl extends BmiRepository {
 
   @override
   Future<Either> getAllDataByUserId() async {
-    var result = await sl<BmiService>().getAllDataByUserId();
-    return result.fold((err){
-      return Left(err);
-    }, (data) async{
-      List<BmiModel> models = (data as List).map((e) => BmiModel.fromMap(e)).toList();
-      List<BmiEntity> enitities = models.map((m) => m.toEntity()).toList();
-      return Right(enitities);
-    });
+    final result = await sl<BmiService>().getAllDataByUserId();
+
+    if (result.isLeft()) {
+      return Left(result.swap().getOrElse(() => 'Unknown error'));
+    }
+
+    final data = result.getOrElse(() => []);
+    try {
+      List<BmiModel> models = (data as List)
+          .map((e) => BmiModel.fromMap(e))
+          .toList();
+      List<BmiEntity> entities = models.map((m) => m.toEntity()).toList();
+      return Right(entities);
+    } catch (e) {
+      return Left('Mapping error: $e');
+    }
   }
 
   @override
   Future<Either> getAllGoalByUserId() async {
-    var result =  await sl<BmiService>().getAllGoalByUserId();
-    return result.fold((err){
-      return Left(err);
-    }, (data) async{
-      List<BmiGoalModel> models = (data as List).map((m) => BmiGoalModel.fromMap(m)).toList();
+    final result = await sl<BmiService>().getAllGoalByUserId();
+
+    if (result.isLeft()) {
+      return Left(result.swap().getOrElse(() => 'Unknown error'));
+    }
+
+    final data = result.getOrElse(() => []);
+    try {
+      List<BmiGoalModel> models = (data as List).map((e) =>
+          BmiGoalModel.fromMap(e)).toList();
       List<BmiGoalEntity> entities = models.map((m) => m.toEntity()).toList();
       return Right(entities);
-    });
+    } catch (e) {
+      return Left('Mapping error: $e');
+    }
   }
 }

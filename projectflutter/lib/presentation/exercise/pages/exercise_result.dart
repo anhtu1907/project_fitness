@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -6,20 +7,24 @@ import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/presentation/exercise/widgets/cell/title_sub_title_cell_time_result.dart';
 import 'package:projectflutter/presentation/home/pages/tabs.dart';
 import 'package:projectflutter/presentation/home/widgets/title_subtitle_cell.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ExerciseResultPage extends StatelessWidget {
-    final int resetBatch;
+  final int resetBatch;
   final int totalExercise;
   final double kcal;
   final int duration;
-
-  const ExerciseResultPage(
-      {super.key,
-      required this.resetBatch,
-      required this.totalExercise,
-      required this.kcal,
-      required this.duration});
+  final int? day;
+  final bool markAsDayCompleted;
+  const ExerciseResultPage({
+    super.key,
+    required this.resetBatch,
+    required this.totalExercise,
+    required this.kcal,
+    required this.duration,
+    this.day,
+    this.markAsDayCompleted = false,
+  });
   // const ExerciseResultPage({super.key});
 
   @override
@@ -43,7 +48,7 @@ class ExerciseResultPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
-                        child: Image.asset(
+                        child: SwitchImageType.buildImage(
                           AppImages.completeExercise,
                           width: width * 0.7,
                           fit: BoxFit.contain,
@@ -79,8 +84,8 @@ class ExerciseResultPage extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 25),
                       child: Column(
                         children: [
                           Row(
@@ -95,7 +100,7 @@ class ExerciseResultPage extends StatelessWidget {
                               SizedBox(width: width * 0.025),
                               Expanded(
                                 child: TitleSubtitleCell(
-                                  value: kcal,
+                                  value: kcal.toInt(),
                                   subtitle: "Burned",
                                   unit: "kcal",
                                 ),
@@ -112,9 +117,9 @@ class ExerciseResultPage extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(width: width * 0.025),
-                              const Expanded(
+                              Expanded(
                                 child: TitleSubtitleCell(
-                                  value: 0,
+                                  value: resetBatch,
                                   subtitle: "ResetBatch",
                                   unit: "",
                                 ),
@@ -135,8 +140,17 @@ class ExerciseResultPage extends StatelessWidget {
                     width: width * 0.8,
                     height: height * 0.06,
                     child: ElevatedButton(
-                      onPressed: () {
-                        AppNavigator.pushAndRemoveUntil(context, const TabsPage());
+                      onPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        if (markAsDayCompleted && day != null) {
+                          await prefs.setBool('day_${day}_completed', true);
+                        }
+                        if (day == 1 && !prefs.containsKey('plan_start_date')) {
+                          final today = DateTime.now();
+                          await prefs.setString('plan_start_date', today.toIso8601String());
+                        }
+                        AppNavigator.pushAndRemoveUntil(
+                            context, const TabsPage());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor1,

@@ -14,4 +14,5 @@ class ExerciseProgressEntity {
       required this.session,
       required this.progress,
       required this.lastUpdated});
+
 }

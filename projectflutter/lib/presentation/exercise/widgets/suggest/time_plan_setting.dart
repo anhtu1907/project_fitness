@@ -19,6 +19,7 @@ class _TimePlanSettingState extends State<TimePlanSetting> {
     super.initState();
     _loadSavedSchedule();
   }
+
   void _openTimeBottomSheet() async {
     final result = await AppBottomSheet.display(
       context,
@@ -31,7 +32,15 @@ class _TimePlanSettingState extends State<TimePlanSetting> {
         _selectedDays = List<bool>.from(result['selectedDays'] ?? []);
       });
     }
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isScheduled', _isScheduled);
+    await prefs.setStringList(
+      'selectedDays',
+      _selectedDays.map((e) => e.toString()).toList(),
+    );
   }
+
   Future<void> _loadSavedSchedule() async {
     final prefs = await SharedPreferences.getInstance();
     final savedSchedule = prefs.getBool('isScheduled');
@@ -44,7 +53,9 @@ class _TimePlanSettingState extends State<TimePlanSetting> {
       }
     });
   }
+
   String _buildSelectedDaysText(List<bool> selectedDays) {
+    if (!_isScheduled) return 'None Scheduled';
     final weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     final selected = <String>[];
 
@@ -52,7 +63,6 @@ class _TimePlanSettingState extends State<TimePlanSetting> {
       if (selectedDays[i]) selected.add(weekdays[i]);
     }
 
-    if (selected.isEmpty) return 'None Scheduled';
     if (selected.length == 7) return 'Every day';
     return selected.join(', ');
   }

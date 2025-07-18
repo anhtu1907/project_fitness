@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -94,7 +95,7 @@ class _EquipmentBottomSheetState extends State<EquipmentBottomSheet> {
       children: [
         Row(
           children: [
-            Image.asset(assetPath, width: 50, height: 50),
+            SwitchImageType.buildImage(assetPath, width: 50, height: 50),
             SizedBox(width: media.width * 0.05),
             Text(
               label,

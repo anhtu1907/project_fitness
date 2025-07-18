@@ -17,5 +17,5 @@ public class ExercisesDTO {
     private double kcal;
     private Set<ExerciseSubCategoryDTO> subCategory;
     private EquipmentsDTO equipment;
-    private ExerciseModeDTO mode;
+    private Set<ExerciseModeDTO> modes;
 }

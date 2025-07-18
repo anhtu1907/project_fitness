@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/domain/meal/entity/meals.dart';
@@ -53,11 +54,11 @@ class _MealSearchPageState extends State<MealSearchPage> {
                   borderRadius: BorderRadius.zero,
                   borderSide: BorderSide.none,
                 ),
-                enabledBorder:const OutlineInputBorder(
+                enabledBorder: const OutlineInputBorder(
                   borderRadius: BorderRadius.zero,
                   borderSide: BorderSide.none,
                 ),
-                focusedBorder:const OutlineInputBorder(
+                focusedBorder: const OutlineInputBorder(
                   borderRadius: BorderRadius.zero,
                   borderSide: BorderSide.none,
                 ),
@@ -96,14 +97,13 @@ class _MealSearchPageState extends State<MealSearchPage> {
                     final option = options.elementAt(index);
                     return ListTile(
                       leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          option.mealImage,
-                          width: media.width * 0.13,
-                          height: media.height * 0.065,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          borderRadius: BorderRadius.circular(12),
+                          child: SwitchImageType.buildImage(
+                            option.mealImage,
+                            width: media.width * 0.13,
+                            height: media.height * 0.065,
+                            fit: BoxFit.cover,
+                          )),
                       title: Text(option.mealName),
                       onTap: () => onSelected(option),
                     );

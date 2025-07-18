@@ -20,7 +20,7 @@ class ExerciseSessionModel {
       {required this.id,
       required this.user,
       required this.exercise,
-        required this.subCategory,
+      required this.subCategory,
       required this.kcal,
       required this.resetBatch,
       required this.duration,
@@ -39,6 +39,18 @@ class ExerciseSessionModel {
   }
 
   factory ExerciseSessionModel.fromMap(Map<String, dynamic> map) {
+    DateTime? parsedCreatedAt;
+    if (map['createdAt'] is List && (map['createdAt'] as List).length >= 6) {
+      final list = map['createdAt'] as List;
+      parsedCreatedAt = DateTime(
+        list[0], // year
+        list[1], // month
+        list[2], // day
+        list[3], // hour
+        list[4], // minute
+        list[5], // second
+      );
+    }
     return ExerciseSessionModel(
         id: map['id'] as int,
         user: map['user'] != null
@@ -48,13 +60,13 @@ class ExerciseSessionModel {
             ? ExercisesModel.fromMap(map['exercise'] as Map<String, dynamic>)
             : null,
         subCategory: map['subCategory'] != null
-            ? ExerciseSubCategoryModel.fromMap(map['subCategory'] as Map<String, dynamic>)
+            ? ExerciseSubCategoryModel.fromMap(
+                map['subCategory'] as Map<String, dynamic>)
             : null,
         kcal: map['kcal'] as double,
         resetBatch: map['resetBatch'] as int,
         duration: map['duration'] as int,
-        createdAt:
-            map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null);
+        createdAt: parsedCreatedAt);
   }
 
   String toJson() => json.encode(toMap());

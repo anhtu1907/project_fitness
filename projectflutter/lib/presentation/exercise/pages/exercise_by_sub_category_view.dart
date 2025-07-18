@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/data/exercise/model/equipments_model.dart';
+import 'package:projectflutter/domain/exercise/entity/equipments_entity.dart';
 import 'package:projectflutter/presentation/exercise/bloc/exercise_by_sub_category_cubit.dart';
 import 'package:projectflutter/presentation/exercise/bloc/exercise_by_sub_category_state.dart';
 import 'package:projectflutter/presentation/exercise/bloc/exercise_equipment_cubit.dart';
@@ -11,14 +13,19 @@ class ExerciseBySubCategoryView extends StatelessWidget {
   final int subCategoryId;
   final String image;
   final String level;
+  final bool markAsDayCompleted;
+  final int? day;
   const ExerciseBySubCategoryView(
       {super.key,
       required this.subCategoryId,
       required this.image,
+        this.day,
+        this.markAsDayCompleted = false,
         required this.level});
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: MultiBlocProvider(
         providers: [
@@ -74,7 +81,13 @@ class ExerciseBySubCategoryView extends StatelessWidget {
                   }
 
                   if (state is ExerciseEquipmentLoaded) {
-                    final equipments = state.entity;
+                    final List<EquipmentsEntity> equipmentList = exercises
+                        .map((e) => e.equipment)
+                        .where((e) => e != null)
+                        .map((e) => (e as EquipmentsModel).toEntity())
+                        .toSet()
+                        .toList();
+
                     return Stack(
                       children: [
                         ExerciseSubCategoryDetails(
@@ -87,11 +100,14 @@ class ExerciseBySubCategoryView extends StatelessWidget {
                           kcal: kcal,
                           image: image,
                           totalExercise: exercises.length,
-                          equipments: equipments,
+                          equipments: equipmentList,
                         ),
                         ExerciseButton(
                           exercises: exercises,
                           kcal: kcal,
+                          duration: totalDuration,
+                          markAsDayCompleted: markAsDayCompleted,
+                          day: day,
                           subCategoryId: subCategoryId,
                         )
                       ],

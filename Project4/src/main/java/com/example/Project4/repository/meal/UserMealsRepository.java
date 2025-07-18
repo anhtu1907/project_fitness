@@ -9,13 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.Project4.models.meal.UserMealsModel;
+import com.example.Project4.entity.meal.UserMealsModel;
 
 import jakarta.transaction.Transactional;
 
 @Repository
 public interface UserMealsRepository extends JpaRepository<UserMealsModel, Integer> {
-    List<UserMealsModel> findByUserId(int userId);
+    List<UserMealsModel> findByUserId(String userId);
 
     @Modifying
     @Transactional
@@ -24,5 +24,5 @@ public interface UserMealsRepository extends JpaRepository<UserMealsModel, Integ
     // void deleteAllByUserIdAndCreatedAtDate(@Param("userId") int userId,
     // @Param("targetDate") LocalDate targetDate);
     @Query(value = "DELETE FROM user_meals WHERE user_id = :userId AND DATE(created_at) = :targetDate", nativeQuery = true)
-    void deleteAllByUserIdAndCreatedAtDate(@Param("userId") int userId, @Param("targetDate") LocalDate targetDate);
+    void deleteAllByUserIdAndCreatedAtDate(@Param("userId") String userId, @Param("targetDate") LocalDate targetDate);
 }

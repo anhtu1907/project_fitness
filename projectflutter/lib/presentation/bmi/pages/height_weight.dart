@@ -4,6 +4,7 @@ import 'package:projectflutter/common/bloc/button/button_state.dart';
 import 'package:projectflutter/common/bloc/button/button_state_cubit.dart';
 import 'package:projectflutter/common/components/fields/height_weight_field.dart';
 import 'package:projectflutter/common/components/fields/suffix_item.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/basic_reactive_button.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
@@ -65,7 +66,7 @@ class _HeightWeightPageState extends State<HeightWeightPage> {
                             autovalidateMode: _autovalidateMode,
                             child: Column(
                               children: [
-                                Image.asset(
+                                SwitchImageType.buildImage(
                                   AppImages.on2,
                                   width: media.width,
                                   fit: BoxFit.fitWidth,

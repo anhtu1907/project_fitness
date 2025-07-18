@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
@@ -23,7 +24,7 @@ class OnBoardingPage1 extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
+                SwitchImageType.buildImage(
                   AppImages.on1,
                   width: media.width,
                   fit: BoxFit.fitWidth,
@@ -45,7 +46,9 @@ class OnBoardingPage1 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
                     "Don't worry if you have trouble determining your goals, We can help you determine your goals and track your goals",
-                    style: TextStyle(color: AppColors.gray, fontSize: AppFontSize.body(context)),
+                    style: TextStyle(
+                        color: AppColors.gray,
+                        fontSize: AppFontSize.body(context)),
                   ),
                 ),
               ],
@@ -80,7 +83,8 @@ class OnBoardingPage1 extends StatelessWidget {
                       color: AppColors.white,
                     ),
                     onPressed: () async {
-                      AppNavigator.pushReplacement(context, const OnBoardingPage2());
+                      AppNavigator.pushReplacement(
+                          context, const OnBoardingPage2());
                     },
                   ),
                 ),

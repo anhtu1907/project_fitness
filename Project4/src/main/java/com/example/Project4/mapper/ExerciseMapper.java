@@ -17,18 +17,19 @@ import com.example.Project4.dto.exercise.ExerciseUserDTO;
 import com.example.Project4.dto.exercise.ExercisesDTO;
 import com.example.Project4.dto.exercise.FavoritesDTO;
 import com.example.Project4.dto.meal.UserSimpleDTO;
-import com.example.Project4.models.exercise.EquipmentsModel;
-import com.example.Project4.models.exercise.ExerciseCategoryModel;
-import com.example.Project4.models.exercise.ExerciseFavoriteModel;
-import com.example.Project4.models.exercise.ExerciseProgramsModel;
-import com.example.Project4.models.exercise.ExerciseProgressModel;
-import com.example.Project4.models.exercise.ExerciseScheduleModel;
-import com.example.Project4.models.exercise.ExerciseSessionModel;
-import com.example.Project4.models.exercise.ExerciseSubCategoryModel;
-import com.example.Project4.models.exercise.ExerciseSubCategoryProgramModel;
-import com.example.Project4.models.exercise.ExerciseUserModel;
-import com.example.Project4.models.exercise.ExercisesModel;
-import com.example.Project4.models.exercise.FavoritesModel;
+import com.example.Project4.entity.exercise.EquipmentsModel;
+import com.example.Project4.entity.exercise.ExerciseCategoryModel;
+import com.example.Project4.entity.exercise.ExerciseFavoriteModel;
+import com.example.Project4.entity.exercise.ExerciseModeModel;
+import com.example.Project4.entity.exercise.ExerciseProgramsModel;
+import com.example.Project4.entity.exercise.ExerciseProgressModel;
+import com.example.Project4.entity.exercise.ExerciseScheduleModel;
+import com.example.Project4.entity.exercise.ExerciseSessionModel;
+import com.example.Project4.entity.exercise.ExerciseSubCategoryModel;
+import com.example.Project4.entity.exercise.ExerciseSubCategoryProgramModel;
+import com.example.Project4.entity.exercise.ExerciseUserModel;
+import com.example.Project4.entity.exercise.ExercisesModel;
+import com.example.Project4.entity.exercise.FavoritesModel;
 
 public class ExerciseMapper {
         public static ExercisesDTO toDto(ExercisesModel entity) {
@@ -53,11 +54,11 @@ public class ExerciseMapper {
                                                 entity.getEquipment().getEquipmentImage())
                                 : null);
 
-                dto.setMode(entity.getMode() != null
-                                ? new ExerciseModeDTO(
-                                                entity.getMode().getId(),
-                                                entity.getMode().getModeName())
-                                : null);
+                Set<ExerciseModeDTO> modeDtos = entity.getModes()
+                                .stream()
+                                .map(mode -> new ExerciseModeDTO(mode.getId(), mode.getModeName()))
+                                .collect(Collectors.toSet());
+                dto.setModes(modeDtos);
 
                 return dto;
         }
@@ -85,11 +86,11 @@ public class ExerciseMapper {
                                                 entity.getEquipment().getEquipmentImage())
                                 : null);
 
-                dto.setMode(entity.getMode() != null
-                                ? new ExerciseModeDTO(
-                                                entity.getMode().getId(),
-                                                entity.getMode().getModeName())
-                                : null);
+                Set<ExerciseModeDTO> modeDtos = entity.getModes()
+                                .stream()
+                                .map(mode -> new ExerciseModeDTO(mode.getId(), mode.getModeName()))
+                                .collect(Collectors.toSet());
+                dto.setModes(modeDtos);
 
                 return dto;
         }
@@ -154,8 +155,8 @@ public class ExerciseMapper {
                 if (entity.getUser() != null) {
                         userDto = new UserSimpleDTO(
                                         entity.getUser().getId(),
-                                        entity.getUser().getFirstname(),
-                                        entity.getUser().getLastname());
+                                        entity.getUser().getFirstName(),
+                                        entity.getUser().getLastName());
                 }
 
                 FavoritesDTO favoriteDto = null;
@@ -177,8 +178,8 @@ public class ExerciseMapper {
                 }
                 UserSimpleDTO userDto = null;
                 if (entity.getUser() != null) {
-                        userDto = new UserSimpleDTO(entity.getUser().getId(), entity.getUser().getFirstname(),
-                                        entity.getUser().getLastname());
+                        userDto = new UserSimpleDTO(entity.getUser().getId(), entity.getUser().getFirstName(),
+                                        entity.getUser().getLastName());
                 }
                 return new FavoritesDTO(entity.getId(), entity.getFavoriteName(), userDto);
         }
@@ -191,8 +192,8 @@ public class ExerciseMapper {
                 if (entity.getUser() != null) {
                         userDto = new UserSimpleDTO(
                                         entity.getUser().getId(),
-                                        entity.getUser().getFirstname(),
-                                        entity.getUser().getLastname());
+                                        entity.getUser().getFirstName(),
+                                        entity.getUser().getLastName());
                 }
 
                 ExercisesDTO exerciseDto = null;
@@ -224,8 +225,8 @@ public class ExerciseMapper {
                 if (entity.getUser() != null) {
                         userDto = new UserSimpleDTO(
                                         entity.getUser().getId(),
-                                        entity.getUser().getFirstname(),
-                                        entity.getUser().getLastname());
+                                        entity.getUser().getFirstName(),
+                                        entity.getUser().getLastName());
                 }
 
                 ExerciseSessionDTO sessionDto = null;
@@ -249,8 +250,8 @@ public class ExerciseMapper {
                 if (entity.getUser() != null) {
                         userDto = new UserSimpleDTO(
                                         entity.getUser().getId(),
-                                        entity.getUser().getFirstname(),
-                                        entity.getUser().getLastname());
+                                        entity.getUser().getFirstName(),
+                                        entity.getUser().getLastName());
                 }
 
                 ExerciseSessionDTO sessionDto = null;
@@ -275,8 +276,8 @@ public class ExerciseMapper {
                 if (entity.getUser() != null) {
                         userDto = new UserSimpleDTO(
                                         entity.getUser().getId(),
-                                        entity.getUser().getFirstname(),
-                                        entity.getUser().getLastname());
+                                        entity.getUser().getFirstName(),
+                                        entity.getUser().getLastName());
                 }
 
                 ExerciseSubCategoryDTO subCategoryDto = null;
@@ -291,12 +292,18 @@ public class ExerciseMapper {
                                 entity.getScheduleTime());
         }
 
-        public static EquipmentsDTO toEquipmentsDto(EquipmentsModel entity){
-                if(entity == null){
+        public static EquipmentsDTO toEquipmentsDto(EquipmentsModel entity) {
+                if (entity == null) {
                         return null;
                 }
                 return new EquipmentsDTO(entity.getId(), entity.getEquipmentName(), entity.getEquipmentImage());
         }
 
-        
+        public static ExerciseModeDTO toModeDto(ExerciseModeModel entity) {
+                if (entity == null) {
+                        return null;
+                }
+                return new ExerciseModeDTO(entity.getId(), entity.getModeName());
+        }
+
 }

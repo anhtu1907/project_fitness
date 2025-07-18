@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/round_button.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
@@ -38,7 +39,7 @@ class BmiReview extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Image.asset(
+                  SwitchImageType.buildImage(
                     AppImages.bgDots,
                     height: media.width * 0.4,
                     fit: BoxFit.fitHeight,
@@ -76,8 +77,7 @@ class BmiReview extends StatelessWidget {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
                               ),
-                            if (health.last.bmi >= 25 &&
-                                health.last.bmi < 29.9)
+                            if (health.last.bmi >= 25 && health.last.bmi < 29.9)
                               Text(
                                 'You have a overweight',
                                 style: TextStyle(

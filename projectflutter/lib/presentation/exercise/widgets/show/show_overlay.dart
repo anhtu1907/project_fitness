@@ -8,15 +8,11 @@ class ShowOverlay extends StatefulWidget {
       required this.exercises,
       required this.currentStep,
       required this.totalSteps,
-      required this.startExercise,
-      required this.onPressed,
       required this.showOverlay,
       required this.countDown});
   final List<ExercisesEntity> exercises;
   final int currentStep;
   final int totalSteps;
-  final VoidCallback startExercise;
-  final VoidCallback onPressed;
   bool showOverlay;
   final int countDown;
   @override
@@ -64,22 +60,6 @@ class _ShowOverlayState extends State<ShowOverlay> {
                       TextStyle(color: AppColors.primaryColor1, fontSize: 20),
                 ),
               ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 40),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                ),
-                onPressed: widget.onPressed,
-                child: const Text('Start'),
-              ),
             ),
           ),
         ],

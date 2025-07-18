@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/common/widget/button/round_button.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
@@ -13,7 +14,6 @@ class MealGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
@@ -25,7 +25,7 @@ class MealGridItem extends StatelessWidget {
               BoxShadow(
                 blurRadius: 2,
                 color: AppColors.black.withOpacity(0.1),
-                spreadRadius: 2,
+                spreadRadius: 1,
               )
             ],
             borderRadius: BorderRadius.circular(30),
@@ -34,12 +34,14 @@ class MealGridItem extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                Image.network(
-                  meal.mealImage.isEmpty ? AppImages.snack : meal.mealImage,
-                  width: width * 0.3,
-                  height: width * 0.3,
-                  fit: BoxFit.contain,
-                ),
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: SwitchImageType.buildImage(
+                      meal.mealImage.isEmpty ? AppImages.snack : meal.mealImage,
+                      width: width * 0.3,
+                      height: width * 0.3,
+                      fit: BoxFit.contain,
+                    )),
                 const SizedBox(height: 10),
                 Text(
                   meal.mealName,
@@ -52,14 +54,16 @@ class MealGridItem extends StatelessWidget {
                 ),
                 Text(
                   "${meal.weight.toStringAsFixed(0)} gram | ${meal.kcal.toStringAsFixed(0)} kcal",
-                  style: TextStyle(color: AppColors.gray, fontSize: AppFontSize.content(context)),
+                  style: TextStyle(
+                      color: AppColors.gray,
+                      fontSize: AppFontSize.content(context)),
                 ),
                 const Spacer(),
                 SizedBox(
                   width: width * 0.5,
                   height: width * 0.2,
                   child: RoundButton(
-                    fontSize:  AppFontSize.content(context),
+                    fontSize: AppFontSize.content(context),
                     type: RoundButtonType.bgSGradient,
                     title: "View",
                     onPressed: () {

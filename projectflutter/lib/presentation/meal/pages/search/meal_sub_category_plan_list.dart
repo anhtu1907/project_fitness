@@ -50,6 +50,7 @@ class MealSubCategoryPlanListPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: MealSubCategoryCardPlan(
                     subCategoryId: total[index].id,
+                    subCategoryImage: total[index].subCategoryImage,
                     subCategoryName: total[index].subCategoryName,
                     description: total[index].description,
                     kcal: kcal[total[index].subCategoryName] ?? 0,

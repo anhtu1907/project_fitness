@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_sub_category_entity.dart';
@@ -13,7 +14,7 @@ import 'package:projectflutter/presentation/exercise/widgets/search/exercise_sea
 class ExerciseSearchPage extends StatefulWidget {
   final List<ExerciseSubCategoryEntity> subCategoryList;
   final Map<String, int> duration;
-  final String level;
+  final Map<int, String> level;
   const ExerciseSearchPage(
       {super.key,
       required this.subCategoryList,
@@ -47,11 +48,12 @@ class _ExerciseSearchPageState extends State<ExerciseSearchPage> {
           displayStringForOption: (ExerciseSubCategoryEntity option) =>
               option.subCategoryName,
           onSelected: (ExerciseSubCategoryEntity selection) {
+            final level = widget.level[selection.id] ?? 'Unknown';
             AppNavigator.push(
               context,
               ExerciseBySubCategoryView(
                 subCategoryId: selection.id,
-                level: widget.level,
+                level: level,
                 image: selection.subCategoryImage,
               ),
             );
@@ -90,12 +92,23 @@ class _ExerciseSearchPageState extends State<ExerciseSearchPage> {
               ),
               textInputAction: TextInputAction.search,
               onFieldSubmitted: (value) {
+                final matchedSubcategory = widget.subCategoryList.firstWhere(
+                    (e) =>
+                        e.subCategoryName.toLowerCase().trim() ==
+                        value.toLowerCase().trim(),
+                    orElse: () => ExerciseSubCategoryEntity(
+                        id: -1,
+                        subCategoryName: '',
+                        subCategoryImage: '',
+                        description: '',
+                        category: []));
+                final level = widget.level[matchedSubcategory.id] ?? 'Unknown';
                 AppNavigator.push(
                     context,
                     ExerciseSearchListPage(
                         subCategoryName: textEditingController.text,
                         duration: widget.duration,
-                        level: widget.level,
+                        level: level,
                         total: widget.subCategoryList));
               },
             );
@@ -114,7 +127,7 @@ class _ExerciseSearchPageState extends State<ExerciseSearchPage> {
                     return ListTile(
                       leading: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
+                        child: SwitchImageType.buildImage(
                           option.subCategoryImage,
                           width: media.width * 0.13,
                           height: media.height * 0.065,

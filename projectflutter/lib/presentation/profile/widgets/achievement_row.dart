@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 
@@ -30,14 +31,14 @@ class AchievementRow extends StatelessWidget {
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(30),
-            child: Image.asset(
-              image,
-              width: 60,
-              height: 60,
-              fit: BoxFit.cover,
-            ),
-          ),
+              borderRadius: BorderRadius.circular(30),
+              child: SwitchImageType.buildImage(
+                image,
+                width: 60,
+                height: 60,
+                fit: BoxFit.cover,
+                borderRadius: BorderRadius.circular(30),
+              )),
           const SizedBox(
             width: 10,
           ),
@@ -65,7 +66,7 @@ class AchievementRow extends StatelessWidget {
             radius: 35,
             lineWidth: 10,
             percent: percent,
-            center: Image.asset(
+            center: SwitchImageType.buildImage(
               AppImages.cup,
               width: 25,
               height: 25,

@@ -20,7 +20,7 @@ class SplashPage extends StatelessWidget {
           AppNavigator.pushReplacement(context, const OnBoardingPage1());
         }
         if (state is SkipOnBoarding) {
-          AppNavigator.pushReplacement(context, SigninPage());
+          AppNavigator.pushReplacement(context, const SigninPage());
         }
         if (state is Authenticated) {
           AppNavigator.pushReplacement(context, const CheckBmiPage());

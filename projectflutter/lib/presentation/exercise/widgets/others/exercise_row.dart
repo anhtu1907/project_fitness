@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectflutter/common/helper/image/switch_image_type.dart';
 import 'package:projectflutter/core/config/assets/app_image.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
@@ -25,7 +26,7 @@ class ExercisesRow extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(5),
-            child: Image.asset(
+            child: SwitchImageType.buildImage(
               AppImages.arm,
               width: 60,
               height: 60,
@@ -57,7 +58,7 @@ class ExercisesRow extends StatelessWidget {
           )),
           IconButton(
               onPressed: onPressed,
-              icon: Image.asset(
+              icon: SwitchImageType.buildImage(
                 "assets/images/next_go.png",
                 width: 20,
                 height: 20,

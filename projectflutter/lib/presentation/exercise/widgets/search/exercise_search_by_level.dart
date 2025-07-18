@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectflutter/common/helper/navigation/app_navigator.dart';
 import 'package:projectflutter/core/config/themes/app_color.dart';
 import 'package:projectflutter/core/config/themes/app_font_size.dart';
+import 'package:projectflutter/data/exercise/model/exercise_mode_model.dart';
 import 'package:projectflutter/domain/exercise/entity/exercise_sub_category_entity.dart';
 import 'package:projectflutter/domain/exercise/entity/exercises_entity.dart';
 import 'package:projectflutter/presentation/exercise/bloc/exercise_mode_cubit.dart';
@@ -19,6 +20,7 @@ class ExerciseSearchByLevel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -71,11 +73,6 @@ class ExerciseSearchByLevel extends StatelessWidget {
                           .add(exercise);
                     }
                   }
-                  Map<String, int> durationBySubCategory = {};
-                  groupedSubCategory.forEach((subCatName, exercises) {
-                    durationBySubCategory[subCatName] =
-                        exercises.fold(0, (sum, item) => sum += item.duration);
-                  });
                   return BlocBuilder<ExerciseModeCubit, ExerciseModeState>(
                     builder: (context, state) {
                       if (state is LoadExerciseModeFailure) {
@@ -90,39 +87,61 @@ class ExerciseSearchByLevel extends StatelessWidget {
                       }
                       if (state is ExerciseModeLoaded) {
                         final modes = state.entity;
+                        final List<String> level = ['Beginner', 'Intermediate','Advanced'];
                         return SizedBox(
                           height: media.height * 0.055,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: modes.length,
+                            itemCount: level.length,
                             itemBuilder: (context, index) {
-                              final mode = modes[index];
+                              final mode = level[index];
                               return GestureDetector(
                                 onTap: () {
-                                  final filteredList = exerciseList
-                                      .where((e) =>
-                                          e.mode!.modeName == mode.modeName)
-                                      .toList();
-                                  final List<ExerciseSubCategoryEntity> total = [];
-                                  final level = mode.modeName;
-                                  for (var exercise in filteredList) {
-                                    for (var sub in exercise.subCategory) {
-                                      final entity = subCategoryList.firstWhere(
-                                            (e) => e.id == sub.id
-                                      );
-                                      if (!total.contains(entity)) {
-                                        total.add(entity);
+                                  Map<int, Set<String>> modeBySubCategoryId = {};
+                                  for (var exercise in exerciseList) {
+                                    if (exercise.subCategory.length == 1) {
+                                      for (var sub in exercise.subCategory) {
+                                        modeBySubCategoryId.putIfAbsent(sub.id, () => {});
+                                        modeBySubCategoryId[sub.id]!.addAll(
+                                          exercise.modes.map((m) => m.modeName.toLowerCase()),
+                                        );
                                       }
                                     }
                                   }
+
+                                  final filteredSubCategories = subCategoryList.where((sub) {
+                                    final modes = modeBySubCategoryId[sub.id];
+                                    return modes != null && modes.contains(mode.toLowerCase());
+                                  }).toList();
+
+                                  final Map<String, int> durationBySubCategory = {};
+                                  for (var sub in filteredSubCategories) {
+                                    final exercisesInSub = exerciseList
+                                        .where((e) => e.subCategory.any((s) => s.id == sub.id))
+                                        .toList();
+                                    final duration = exercisesInSub.fold(0, (sum, e) => sum + e.duration);
+                                    durationBySubCategory[sub.subCategoryName] = duration;
+                                  }
+
+                                  final Map<int, String> levelBySubCategoryId = {};
+                                  const ordered = ['Beginner', 'Intermediate', 'Advanced', 'Stretch'];
+                                  for (final sub in filteredSubCategories) {
+                                    final modesSet = modeBySubCategoryId[sub.id];
+                                    if (modesSet != null && modesSet.isNotEmpty) {
+                                      levelBySubCategoryId[sub.id] = ordered.firstWhere(
+                                            (m) => modesSet.contains(m.toLowerCase()),
+                                        orElse: () => modesSet.first,
+                                      );
+                                    }
+                                  }
+
                                   AppNavigator.push(
                                       context,
                                       ExerciseSubCategoryListByLevelPage(
-                                          categoryName: mode.modeName,
+                                          categoryName: mode,
                                           duration: durationBySubCategory,
-                                          total: total,
-                                          level: level,
-                                          modeName: mode.modeName));
+                                          total: filteredSubCategories,
+                                          level: levelBySubCategoryId));
                                 },
                                 child: Container(
                                     margin: const EdgeInsets.only(right: 15),
@@ -150,7 +169,7 @@ class ExerciseSearchByLevel extends StatelessWidget {
                                             width: media.width * 0.02,
                                           ),
                                           Text(
-                                            mode.modeName,
+                                            mode,
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: AppFontSize.value14Text(context)),

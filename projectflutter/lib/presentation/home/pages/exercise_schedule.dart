@@ -88,7 +88,7 @@ class ExerciseSchedulePage extends StatelessWidget {
                         }
 
                         if (exerciseForSchedule != null) {
-                          levelName = exerciseForSchedule.mode?.modeName;
+                          levelName = exerciseForSchedule.modes.first.modeName;
                         }
 
                         return ExerciseScheduleRow(

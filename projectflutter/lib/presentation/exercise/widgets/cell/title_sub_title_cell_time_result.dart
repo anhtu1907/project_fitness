@@ -10,10 +10,10 @@ class TitleSubTitleCellTimeResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String _formatDuration(int minutes) {
+    String _formatDuration(int seconds) {
       String twoDigits(int n) => n.toString().padLeft(2, '0');
-      final mins = twoDigits(minutes);
-      return "$mins:00";
+      final duration = Duration(seconds: seconds);
+      return "${twoDigits(duration.inMinutes)}:${twoDigits(duration.inSeconds.remainder(60))}";
     }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
