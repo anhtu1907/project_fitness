@@ -1,0 +1,51 @@
+/* This file contains global CSS styles that apply to the entire application. */
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #3674b5;
+  --color-second: #3674b5;
+  --color-third: #a1e3f9;
+  --color-fourth: #d1f8ef;
+}
+
+:root {
+  /* Color Pattern */
+  /* --primary-color: #8e1616;
+  --second-color: #000000;
+  --third-color: #e8c999;
+  --four-color: #f8eedf; */
+
+  /* Color Basic */
+  /* --info: #3b82f6;
+  --warning: #f59e0b;
+  --success: #10b981;
+  --error: #ef4444; */
+
+  /* Font */
+  /* --font-family-roboto: "Roboto";
+  --font-family-sans: "Arial", sans-serif;
+  --font-family-serif: "Georgia", serif; */
+
+  /* Text */
+  /* --font-size-body: 16px;
+  --font-size-h1: 36px;
+  --font-size-h3: 22px; */
+}
+
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/*
+body {
+  font-family: var(--font-family-roboto);
+  height: 200vh;
+  position: relative;
+} */

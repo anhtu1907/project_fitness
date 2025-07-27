@@ -1,0 +1,39 @@
+{
+  "productId": "P001",
+  "name": "Adjustable Dumbbell",
+  "description": "Versatile dumbbell for strength training.",
+  "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b",
+  "price": 120,
+  "stock": 10,
+  "rating": 4.5,
+  "type": "equipment",
+  "equipment": {
+    "equipmentId": "EQ099",
+    "size": "Adjustable",
+    "color": "Black",
+    "gender": "Unisex",
+    "categories": [
+      {
+        "categoryId": "EC001",
+        "name": "Arms"
+      },
+      {
+        "categoryId": "EC002",
+        "name": "Body"
+      }
+    ]
+  },
+  "promotion": {
+    "promotionId": "PR03",
+    "name": "Summer Sale",
+    "discount": 20,
+    "startDate": "2025-06-01",
+    "endDate": "2025-07-15"
+  },
+  "supplier": {
+    "supplierId": "S003",
+    "name": "MusclePro Gear",
+    "type": "equipment",
+    "contact": "contact@musclepro.com"
+  }
+}

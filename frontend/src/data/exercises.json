@@ -1,0 +1,166 @@
+[
+  {
+    "category_id": 1,
+    "sub_category_id": 1,
+    "exercises": [
+      {
+        "exercise_name": "Burpees",
+        "exercise_image": "",
+        "description": "A full-body exercise that boosts cardio fitness and strengthens muscles.",
+        "duration": 60,
+        "total_kcal": 250
+      },
+      {
+        "exercise_name": "Mountain Climbers",
+        "exercise_image": "",
+        "description": "A cardio move that targets core, arms, and legs.",
+        "duration": 30,
+        "total_kcal": 240
+      },
+      {
+        "exercise_name": "Jumping Jacks",
+        "exercise_image": "",
+        "description": "A basic cardio move that increases heart rate and warms up the body.",
+        "duration": 30,
+        "total_kcal": 200
+      },
+      {
+        "exercise_name": "High Knees",
+        "exercise_image": "",
+        "description": "Cardio move that targets legs and core.",
+        "duration": 30,
+        "total_kcal": 300
+      },
+      {
+        "exercise_name": "Plank to Push-Up",
+        "exercise_image": "",
+        "description": "Works full body, especially chest, arms, and core.",
+        "duration": 30,
+        "total_kcal": 260
+      }
+    ]
+  },
+  {
+    "category_id": 2,
+    "sub_category_id": 2,
+    "exercises": [
+      {
+        "exercise_name": "Tricep Dips (Chair)",
+        "exercise_image": "",
+        "description": "Targets the triceps using bodyweight with a chair.",
+        "duration": 30,
+        "total_kcal": 120
+      },
+      {
+        "exercise_name": "Push-Ups",
+        "exercise_image": "",
+        "description": "Builds strength in arms, chest, and core.",
+        "duration": 30,
+        "total_kcal": 220
+      },
+      {
+        "exercise_name": "Diamond Push-Ups",
+        "exercise_image": "",
+        "description": "Variation that targets triceps more intensely.",
+        "duration": 30,
+        "total_kcal": 230
+      },
+      {
+        "exercise_name": "Arm Circles",
+        "exercise_image": "",
+        "description": "Warms up and tones shoulders and arms.",
+        "duration": 30,
+        "total_kcal": 80
+      },
+      {
+        "exercise_name": "Inchworms",
+        "exercise_image": "",
+        "description": "Strengthens arms and stretches hamstrings.",
+        "duration": 30,
+        "total_kcal": 100
+      }
+    ]
+  },
+  {
+    "category_id": 3,
+    "sub_category_id": 3,
+    "exercises": [
+      {
+        "exercise_name": "Squats",
+        "exercise_image": "",
+        "description": "A foundational lower body exercise working quads, hamstrings, and glutes.",
+        "duration": 30,
+        "total_kcal": 220
+      },
+      {
+        "exercise_name": "Lunges",
+        "exercise_image": "",
+        "description": "Targets glutes, quads, and hamstrings while improving balance.",
+        "duration": 30,
+        "total_kcal": 210
+      },
+      {
+        "exercise_name": "Glute Bridges",
+        "exercise_image": "",
+        "description": "Strengthens the glutes and core.",
+        "duration": 30,
+        "total_kcal": 180
+      },
+      {
+        "exercise_name": "Wall Sit",
+        "exercise_image": "",
+        "description": "Isometric lower body exercise that challenges quads and glutes.",
+        "duration": 30,
+        "total_kcal": 190
+      },
+      {
+        "exercise_name": "Donkey Kicks",
+        "exercise_image": "",
+        "description": "Targets glutes with a lifting motion.",
+        "duration": 30,
+        "total_kcal": 160
+      }
+    ]
+  },
+  {
+    "category_id": 4,
+    "sub_category_id": 4,
+    "exercises": [
+      {
+        "exercise_name": "Pike Push-Ups",
+        "exercise_image": "",
+        "description": "Builds shoulder strength using body weight.",
+        "duration": 30,
+        "total_kcal": 200
+      },
+      {
+        "exercise_name": "Arm Circles",
+        "exercise_image": "",
+        "description": "Shoulder warm-up and toning.",
+        "duration": 30,
+        "total_kcal": 80
+      },
+      {
+        "exercise_name": "Shoulder Taps",
+        "exercise_image": "",
+        "description": "Stabilizes shoulders and strengthens core.",
+        "duration": 30,
+        "total_kcal": 140
+      },
+      {
+        "exercise_name": "Reverse Plank",
+        "exercise_image": "",
+        "description": "Targets shoulders, core, and glutes.",
+        "duration": 30,
+        "total_kcal": 150
+      },
+      {
+        "exercise_name": "Plank to Downward Dog",
+        "exercise_image": "",
+        "description": "Activates shoulders and stretches hamstrings.",
+        "duration": 30,
+        "total_kcal": 160
+      }
+    ]
+  }
+]

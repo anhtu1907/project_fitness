@@ -1,0 +1,88 @@
+{
+  "exercise_mode": [
+    { "mode_name": "Beginner" },
+    { "mode_name": "Intermediate" },
+    { "mode_name": "Advanced" }
+  ],
+  "exercise_category": [
+    { "category_name": "Full Body", "category_image": "" },
+    { "category_name": "Arm", "category_image": "" },
+    { "category_name": "Butt & Leg", "category_image": "" },
+    { "category_name": "Shoulder", "category_image": "" },
+    { "category_name": "Back", "category_image": "" },
+    { "category_name": "Chest", "category_image": "" },
+    { "category_name": "Core", "category_image": "" }
+  ],
+  "exercise_sub_category": [
+    {
+      "sub_category_name": "Lose Fat (NO JUMPING)",
+      "sub_category_image": "",
+      "description": "No jumping! With aerobic exercises, it hits every part of your body and boosts your fat burning progress",
+      "category_id": 1,
+      "mode_id": 1
+    },
+    {
+      "sub_category_name": "Dumbbell Lose Arm Fat",
+      "sub_category_image": "",
+      "description": "Get toned arms with the intense workout, that hits your shoulders, biceps and triceps, sculpt your arm fast!",
+      "category_id": 2,
+      "mode_id": 1
+    },
+    {
+      "sub_category_name": "Quick Lower Body Shaper",
+      "sub_category_image": "",
+      "description": "Get those strong glutes and toned legs with this beginner Pilates exercise! This quick routine is tailored to strengthen and shape your lower body",
+      "category_id": 3,
+      "mode_id": 1
+    },
+    {
+      "sub_category_name": "Build Wider Shoulders",
+      "sub_category_image": "",
+      "description": "To get wider shoulders, you need to focus on exercising your front, middle and deltoids in isolation. It requires good control of your target muscles contraction",
+      "category_id": 4,
+      "mode_id": 1
+    },
+    {
+      "sub_category_name": "Strong Back Workout",
+      "sub_category_image": "",
+      "description": "Eager to build a strong, well-defined back? This unique Pilates session works every section of your back-upper, middle, and lower-sculpting muscles and relieving tension",
+      "category_id": 5,
+      "mode_id": 1
+    },
+    {
+      "sub_category_name": "Get Rid of Man Boobs HIIT",
+      "sub_category_image": "",
+      "description": "Pulling T-shirt again and again because of man boobs? This training targets chest fat, helping eliminate embarrassing man boobs. For beginners who are new to workout",
+      "category_id": 6,
+      "mode_id": 1
+    },
+    {
+      "sub_category_name": "Belly Fat Burner HIIT Beginner",
+      "sub_category_image": "",
+      "description": "Belly fat burning HIIT alternates intense exercises with less intense recovery periods",
+      "category_id": 7,
+      "mode_id": 1
+    },
+    {
+      "sub_category_name": "7 Days Exercise",
+      "sub_category_image": "",
+      "description": "No jumping! With aerobic exercises, it hits every part of your body and boosts your fat burning progress",
+      "category_id": 1,
+      "mode_id": 1
+    },
+    {
+      "sub_category_name": "14 Days Exercise",
+      "sub_category_image": "",
+      "description": "No jumping! With aerobic exercises, it hits every part of your body and boosts your fat burning progress",
+      "category_id": 1,
+      "mode_id": 2
+    },
+    {
+      "sub_category_name": "30 Days Exercise",
+      "sub_category_image": "",
+      "description": "No jumping! With aerobic exercises, it hits every part of your body and boosts your fat burning progress",
+      "category_id": 1,
+      "mode_id": 3
+    }
+  ]
+}

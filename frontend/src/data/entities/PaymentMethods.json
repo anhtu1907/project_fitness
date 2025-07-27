@@ -1,0 +1,20 @@
+[
+  {
+    "pmId": "PM001",
+    "name": "Credit Card",
+    "image": "/images/payments/creditcard.png",
+    "description": "Visa, Mastercard and others"
+  },
+  {
+    "pmId": "PM002",
+    "name": "Bank Transfer",
+    "image": "/images/payments/bank.png",
+    "description": "Domestic & international bank transfers"
+  },
+  {
+    "pmId": "PM003",
+    "name": "Cash on Delivery",
+    "image": "/images/payments/cash.png",
+    "description": "Pay when receiving the product"
+  }
+]

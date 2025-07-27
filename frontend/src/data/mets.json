@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Walking - Slow",
+    "min_speed": 0.0,
+    "max_speed": 3.0,
+    "met": 2
+  },
+  {
+    "name": "Walking - Moderate",
+    "min_speed": 3.1,
+    "max_speed": 4.5,
+    "met": 3
+  },
+  {
+    "name": "Walking - Brisk",
+    "min_speed": 4.6,
+    "max_speed": 5.5,
+    "met": 3.8
+  },
+  {
+    "name": "Running - Slow",
+    "min_speed": 5.6,
+    "max_speed": 7.0,
+    "met": 6
+  },
+  {
+    "name": "Running - Moderate",
+    "min_speed": 7.1,
+    "max_speed": 9.0,
+    "met": 8.3
+  },
+  {
+    "name": "Running - Fast",
+    "min_speed": 9.1,
+    "max_speed": 11.0,
+    "met": 11
+  },
+  {
+    "name": "Running - Very Fast",
+    "min_speed": 11.1,
+    "max_speed": 13.0,
+    "met": 12.8
+  }
+]

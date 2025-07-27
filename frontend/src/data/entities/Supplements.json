@@ -1,0 +1,16 @@
+[
+  {
+    "supplementId": "SUPL001",
+    "productId": "P102",
+    "size": "2 lbs",
+    "flavor": "Chocolate",
+    "ingredient": "Whey Protein, BCAA, Enzymes"
+  },
+  {
+    "supplementId": "SUPL002",
+    "productId": "P103",
+    "size": "1.5 lbs",
+    "flavor": "Vanilla",
+    "ingredient": "Whey Isolate, Glutamine"
+  }
+]

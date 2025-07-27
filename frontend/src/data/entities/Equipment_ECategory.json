@@ -1,0 +1,12 @@
+[
+  {
+    "eecId": "EEC001",
+    "equipmentId": "EQ001",
+    "eCategoryId": "ECAT01"
+  },
+  {
+    "eecId": "EEC002",
+    "equipmentId": "EQ001",
+    "eCategoryId": "ECAT03"
+  }
+]

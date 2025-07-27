@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "name": "Rogue Fitness",
+        "image": "https://robohash.org/mail@ashallendesign.co.uk",
+        "contact": "roguefitness@gmail.com",
+        "address": "123 Fitness St, Workout City, USA"
+    },
+    {
+        "id": 2,
+        "name": "Optimum Nutrition",
+        "image": "https://robohash.org/mail@ashallendesign.co.uk",
+        "contact": "op@gmail.com",
+        "address": "456 Nutrition Ave, Health Town, USA"
+    }
+]

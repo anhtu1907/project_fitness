@@ -1,0 +1,42 @@
+{
+  "productId": "P102",
+  "name": "Whey Protein Isolate",
+  "description": "High-quality protein supplement for muscle recovery.",
+  "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
+  "price": 49.99,
+  "stock": 85,
+  "rating": 4.8,
+  "promotion": {
+    "promotionId": "PROMO07",
+    "name": "Protein Week Discount",
+    "discount": 15,
+    "startDate": "2025-07-01",
+    "endDate": "2025-07-10"
+  },
+  "supplier": {
+    "supplierId": "SUP005",
+    "name": "FitLife Nutrition",
+    "type": "supplement",
+    "contact": "contact@fitlife.com",
+    "image": "/images/supplier-fitlife.png"
+  },
+  "type": "supplement",
+  "supplement": {
+    "supplementId": "SUPL078",
+    "size": "2 lbs",
+    "flavor": "Vanilla",
+    "ingredient": "Whey Isolate, BCAA, Digestive Enzymes",
+    "categories": [
+      {
+        "categoryId": "SCAT03",
+        "name": "High Protein",
+        "description": "Supplements with high protein content"
+      },
+      {
+        "categoryId": "SCAT08",
+        "name": "Post Workout",
+        "description": "Ideal to consume after training"
+      }
+    ]
+  }
+}

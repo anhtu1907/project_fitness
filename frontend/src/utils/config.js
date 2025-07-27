@@ -1,0 +1,3 @@
+const PAYPAL_CLIENT_ID="AVwfp2uxX6BPVYvC0Hjwq33ax3xyjEJnytdBU1TW7COEvcVz4xS1uE4_QlciX3IvqtzNqRl7g9dodl9D"
+
+export {PAYPAL_CLIENT_ID};

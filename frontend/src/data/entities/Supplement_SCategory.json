@@ -1,0 +1,12 @@
+[
+  {
+    "pcId": "PC001",
+    "supplementId": "SUPL001",
+    "sCategoryId": "SCAT01"
+  },
+  {
+    "pcId": "PC002",
+    "supplementId": "SUPL001",
+    "sCategoryId": "SCAT02"
+  }
+]

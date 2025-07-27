@@ -1,0 +1,50 @@
+[
+  {
+    "id": "1",
+    "name": "Rogue Fitness",
+    "contact": "info@roguefitness.com",
+    "address": "545 E 5th Ave, Columbus, OH 43201, USA"
+  },
+  {
+    "id": "2",
+    "name": "Technogym",
+    "contact": "info@technogym.com",
+    "address": "Via Calcinaro 2861, 47521 Cesena, Italy"
+  },
+  {
+    "id": "3",
+    "name": "Life Fitness",
+    "contact": "contact@lifefitness.com",
+    "address": "5100 River Road, Schiller Park, IL 60176, USA"
+  },
+  {
+    "id": "4",
+    "name": "Precor",
+    "contact": "support@precor.com",
+    "address": "20031 142nd Ave NE, Woodinville, WA 98072, USA"
+  },
+  {
+    "id": "5",
+    "name": "Optimum Nutrition",
+    "contact": "info@optimumnutrition.com",
+    "address": "2002 S 5070 W, Salt Lake City, UT 84104, USA"
+  },
+  {
+    "id": "6",
+    "name": "Rule One Proteins",
+    "contact": "support@ruleonepoteins.com",
+    "address": "3500 Lacey Road, Suite 1200 Downers Grove, IL 60515, USA"
+  },
+  {
+    "id": "7",
+    "name": "Mutant",
+    "contact": "info@mutantsupps.com",
+    "address": "10691 Shellbridge Way, Richmond, BC V6X 2W8, Canada"
+  },
+  {
+    "id": "8",
+    "name": "Nutrabolics",
+    "contact": "support@nutrabolics.com",
+    "address": "1329 Niagara Stone Rd, Niagara-on-the-Lake, ON L0S 1J0, Canada"
+  }
+]

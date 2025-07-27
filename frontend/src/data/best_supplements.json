@@ -1,0 +1,47 @@
+[
+  {
+    "id": 9,
+    "name": "BCAA Energy Drink Mix",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
+    "price": 32.99,
+    "discount": 10,
+    "stock": 60,
+    "rating": 4.8
+  },
+  {
+    "id": 11,
+    "name": "Pre-Workout Energy Formula",
+    "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400",
+    "price": 44.99,
+    "discount": 0,
+    "stock": 35,
+    "rating": 2.3
+  },
+  {
+    "id": 15,
+    "name": "Omega-3 Fish Oil",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
+    "price": 19.99,
+    "discount": 5,
+    "stock": 80,
+    "rating": 3.7
+  },
+  {
+    "id": 19,
+    "name": "Casein Protein Powder",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
+    "price": 39.99,
+    "discount": 5,
+    "stock": 30,
+    "rating": 1.9
+  },
+  {
+    "id": 23,
+    "name": "Glutamine Powder",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
+    "price": 22.99,
+    "discount": 5,
+    "stock": 55,
+    "rating": 4.1
+  }
+]

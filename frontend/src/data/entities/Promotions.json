@@ -1,0 +1,16 @@
+[
+  {
+    "promotionId": "PROMO01",
+    "name": "Summer Discount",
+    "discount": 10,
+    "startDate": "2025-06-01",
+    "endDate": "2025-07-01"
+  },
+  {
+    "promotionId": "PROMO02",
+    "name": "Buy 1 Get 1",
+    "discount": 50,
+    "startDate": "2025-08-01",
+    "endDate": "2025-08-15"
+  }
+]

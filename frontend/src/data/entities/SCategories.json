@@ -1,0 +1,14 @@
+[
+  {
+    "sCategoryId": "SCAT01",
+    "name": "Pre Workout",
+    "image": "/images/categories/preworkout.png",
+    "description": "Supplements used before workout for energy"
+  },
+  {
+    "sCategoryId": "SCAT02",
+    "name": "Protein",
+    "image": "/images/categories/protein.png",
+    "description": "Protein-based recovery and muscle growth supplements"
+  }
+]

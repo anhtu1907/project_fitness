@@ -1,0 +1,50 @@
+[
+  {
+    "productId": "P001",
+    "supplierId": "SUP001",
+    "promotionId": "PROMO01",
+    "name": "Adjustable Dumbbell",
+    "description": "Versatile dumbbell with adjustable weight plates.",
+    "image": "/images/products/dumbbell.jpg",
+    "price": 120.0,
+    "stock": 15,
+    "rating": 4.5,
+    "type": "equipment"
+  },
+  {
+    "productId": "P002",
+    "supplierId": "SUP001",
+    "promotionId": null,
+    "name": "Treadmill Pro",
+    "description": "High-end treadmill with incline and heart rate monitor.",
+    "image": "/images/products/treadmill.jpg",
+    "price": 850.0,
+    "stock": 5,
+    "rating": 4.7,
+    "type": "equipment"
+  },
+  {
+    "productId": "P102",
+    "supplierId": "SUP002",
+    "promotionId": "PROMO02",
+    "name": "Whey Protein Isolate",
+    "description": "Fast-absorbing protein with high BCAA content.",
+    "image": "/images/products/whey.jpg",
+    "price": 49.99,
+    "stock": 50,
+    "rating": 4.8,
+    "type": "supplement"
+  },
+  {
+    "productId": "P103",
+    "supplierId": "SUP002",
+    "promotionId": null,
+    "name": "Creatine Monohydrate",
+    "description": "Creatine for strength and recovery support.",
+    "image": "/images/products/creatine.jpg",
+    "price": 29.99,
+    "stock": 40,
+    "rating": 4.6,
+    "type": "supplement"
+  }
+]

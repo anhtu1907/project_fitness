@@ -1,0 +1,68 @@
+[
+  {
+    "id": 6,
+    "name": "Adjustable Dumbbell Set",
+    "description": "Space-saving adjustable dumbbells with quick-change weight system.",
+    "price": 299.99,
+    "stock": 15,
+    "rating": 4.6,
+    "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400",
+    "promotion": {
+      "promotionId": 1,
+      "discount": 20
+    },
+    "supplier": {
+      "supplierId": 1,
+      "name": "Rogue Fitness"
+    },
+    "equipment": {
+      "equipmentId": 6,
+      "size": "5-50lbs",
+      "color": "Black",
+      "gender": "Male",
+      "categories": [
+        {
+          "categoryId": 2,
+          "name": "Arms"
+        },
+        {
+          "categoryId": 6,
+          "name": "Shoulders"
+        }
+      ]
+    }
+  },
+  {
+    "id": 6,
+    "name": "Adjustable Dumbbell Set",
+    "description": "Space-saving adjustable dumbbells with quick-change weight system.",
+    "price": 299.99,
+    "stock": 15,
+    "rating": 4.6,
+    "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400",
+    "promotion": {
+      "promotionId": 1,
+      "discount": 20
+    },
+    "supplier": {
+      "supplierId": 1,
+      "name": "Rogue Fitness"
+    },
+    "equipment": {
+      "equipmentId": 6,
+      "size": "5-50lbs",
+      "color": "Black",
+      "gender": "Male",
+      "categories": [
+        {
+          "categoryId": 2,
+          "name": "Arms"
+        },
+        {
+          "categoryId": 6,
+          "name": "Shoulders"
+        }
+      ]
+    }
+  }
+]

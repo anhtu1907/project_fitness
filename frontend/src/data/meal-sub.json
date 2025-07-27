@@ -1,0 +1,123 @@
+{
+  "meal_time": [
+    { "name": "Morning" },
+    { "name": "Afternoon" },
+    { "name": "Evening" }
+  ],
+  "meal_category": [
+    { "category_name": "Goal-based", "category_image": "" },
+    { "category_name": "Time-base", "category_image": "" },
+    { "category_name": "Diet-type", "category_image": "" },
+    { "category_name": "Dish-type", "category_image": "" }
+  ],
+  "meal_sub_category": [
+    {
+      "sub_category_name": "Muscle Gain",
+      "sub_category_image": "",
+      "description": "Foods designed to support muscle growth, often high in protein and calories to aid in muscle repair and increase mass",
+      "category_id": 1
+    },
+    {
+      "sub_category_name": "Weight Loss",
+      "sub_category_image": "",
+      "description": "Meals focused on calorie control, often with lower fat and carb content to help achieve weight loss goals",
+      "category_id": 1
+    },
+    {
+      "sub_category_name": "Maintenance",
+      "sub_category_image": "",
+      "description": "Balanced meals aimed at maintaining current body weight, providing a mix of nutrients to support overall health",
+      "category_id": 1
+    },
+    {
+      "sub_category_name": "Breakfast",
+      "sub_category_image": "",
+      "description": "The first meal of the day, typically high in nutrients to kickstart metabolism and provide energy for the morning",
+      "category_id": 2
+    },
+    {
+      "sub_category_name": "Lunch",
+      "sub_category_image": "",
+      "description": "A mid-day meal designed to replenish energy, often with a balanced mix of protein, carbs, and vegetables",
+      "category_id": 2
+    },
+    {
+      "sub_category_name": "Dinner",
+      "sub_category_image": "",
+      "description": "The evening meal, which can vary in size and composition depending on personal goals, but typically provides a source of protein and vegetables",
+      "category_id": 2
+    },
+    {
+      "sub_category_name": "Pre Workout",
+      "sub_category_image": "",
+      "description": "Meals consumed before a workout to provide energy, typically higher in carbs and moderate in protein",
+      "category_id": 2
+    },
+    {
+      "sub_category_name": "Post Workout",
+      "sub_category_image": "",
+      "description": "Meals eaten after a workout to aid recovery, typically high in protein to repair muscles and moderate in carbs to replenish energy",
+      "category_id": 2
+    },
+    {
+      "sub_category_name": "Low-carb",
+      "sub_category_image": "",
+      "description": "Meals that minimize carbohydrate intake, focusing on high-protein, fat, and fiber to promote fat burning",
+      "category_id": 3
+    },
+    {
+      "sub_category_name": "High-protein",
+      "sub_category_image": "",
+      "description": "Meals with a focus on protein, essential for muscle repair and growth, often used in fitness or bodybuilding diets",
+      "category_id": 3
+    },
+    {
+      "sub_category_name": "Vegan",
+      "sub_category_image": "",
+      "description": "Plant-based meals that exclude all animal products, including meat, dairy, and eggs",
+      "category_id": 3
+    },
+    {
+      "sub_category_name": "Vegetarian",
+      "sub_category_image": "",
+      "description": "Meals that exclude meat, but may include dairy products and eggs",
+      "category_id": 3
+    },
+    {
+      "sub_category_name": "Paleo",
+      "sub_category_image": "",
+      "description": "A diet based on eating foods that would have been available to early humans, such as meat, fish, fruits, vegetables, nuts, and seeds, while avoiding processed foods",
+      "category_id": 3
+    },
+    {
+      "sub_category_name": "Gluten-free",
+      "sub_category_image": "",
+      "description": "Meals that exclude gluten, a protein found in wheat, barley, and rye, for those with gluten sensitivities or celiac disease",
+      "category_id": 3
+    },
+    {
+      "sub_category_name": "Salad",
+      "sub_category_image": "",
+      "description": "A dish typically consisting of a mixture of vegetables, fruits, nuts, and often topped with dressings or proteins",
+      "category_id": 4
+    },
+    {
+      "sub_category_name": "Meat",
+      "sub_category_image": "",
+      "description": "Dishes based around meat such as beef, chicken, or pork, often grilled, roasted, or cooked in various ways",
+      "category_id": 4
+    },
+    {
+      "sub_category_name": "Fruit",
+      "sub_category_image": "",
+      "description": "Dishes centered around fruits, often served fresh or as part of a dessert or side dish",
+      "category_id": 4
+    },
+    {
+      "sub_category_name": "Dessert",
+      "sub_category_image": "",
+      "description": "Sweet dishes typically served at the end of a meal, such as cakes, pies, and ice cream",
+      "category_id": 4
+    }
+  ]
+}

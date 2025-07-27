@@ -1,0 +1,18 @@
+[
+  {
+    "orderId": "ORD001",
+    "customerId": "U001",
+    "paymentId": "PAY001",
+    "orderDate": "2025-07-01T10:00:00Z",
+    "totalAmount": 199.99,
+    "status": "Paid"
+  },
+  {
+    "orderId": "ORD002",
+    "customerId": "U002",
+    "paymentId": "PAY002",
+    "orderDate": "2025-07-02T15:30:00Z",
+    "totalAmount": 89.50,
+    "status": "Pending"
+  }
+]

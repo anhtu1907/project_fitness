@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: finalProject
+  config:
+    import: optional:env.properties
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # url: jdbc:mysql://localhost:3306/finalProject
+    # username: root
+    # password: 1234
+    url: jdbc:mysql://fitmate.mysql.database.azure.com:3306/fitmatedb?useSSL=true
+    username: fitmate
+    password: ${AZURE_PASSWORD}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 20MB
+  mail: #JavaMailSender
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: 8080
+  address: 0.0.0.0
+
+jwt: #JWT Config
+  signerKey: ${JWT_SIGNER_KEY}
+  expiration: 600
+  expirationRefreshToken: 604800
+  revoke: true
+
+paypal:
+  clientId: ${PAYPAL_CLIENT_ID}
+  clientSecret: ${PAYPAL_SECRET}
+  mode: sandbox # or live
+  successUrl: http://localhost:8080/api/payment/paypal/success
+  cancelUrl: http://localhost:8080/api/payment/paypal/cancel
+
+frontend: #Frontend Domain
+  domain: localhost:3000
+
+app: #App config
+  backend-url: http://localhost:8080
+  config:
+    filter:
+      limitTimeWindow: 60000
+      maxRequest: 100
+    file:
+      max-size: 5242880
+    paths:
+      public-dir: public
+      upload-dir: upload
+      common-images-dir: images
+      images-dir: images
+      logos-dir: logos
+      avatars-dir: avatars
+      articles-dir: articles
+      pdfs-dir: pdfs
+      audios-dir: audios
+      docs-dir: docs
+      videos-dir: videos
+      categories-dir: categories

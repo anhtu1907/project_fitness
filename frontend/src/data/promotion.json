@@ -1,0 +1,38 @@
+[
+    {
+        "id" : 1,
+        "name" : "Sale for End Year",
+        "introduction" : "Get ready for our end-of-year sale! Enjoy exclusive discounts on all memberships and classes.",
+        "image" : "https://images.pexels.com/photos/3863/firework-new-year-s-eve-december-31-fireworks.jpg",
+        "discount": 20,
+        "startDate": "2025-12-01",
+        "endDate": "2025-12-31"
+    },
+    {
+        "id": 2,
+        "name": "Black Friday Sale",
+        "introduction": "Black Friday is here! Take advantage of our biggest sale of the year with massive discounts on all products.",
+        "image": "https://images.pexels.com/photos/5947544/pexels-photo-5947544.jpeg",
+        "discount": 30,
+        "startDate": "2025-11-24",
+        "endDate": "2025-11-30"
+    },
+    {
+        "id": 3,
+        "name": "Summer Clearance",
+        "introduction": "Clearance sale for summer! Get up to 50% off on selected items. Limited time offer.",
+        "image": "https://images.pexels.com/photos/46710/pexels-photo-46710.jpeg",
+        "discount": 50,
+        "startDate": "2025-06-01",
+        "endDate": "2025-07-30"
+    },
+    {
+        "id": 4,
+        "name": "Spring Sale",
+        "introduction": "Spring into savings with our Spring Sale! Enjoy 25% off on all fitness gear and apparel.",
+        "image": "https://images.pexels.com/photos/33542/flowers-nature-plant-spring.jpg",
+        "discount": 15,
+        "startDate": "2025-03-01",
+        "endDate": "2025-03-31"
+    }
+]

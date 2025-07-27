@@ -1,0 +1,58 @@
+[
+  {
+    "orderDetailId": "OD001",
+    "productId": "P001",
+    "orderId": "ORD001",
+    "quantity": 1,
+    "unitPrice": 120.00,
+    "subtotal": 120.00
+  },
+  {
+    "orderDetailId": "OD002",
+    "productId": "P102",
+    "orderId": "ORD001",
+    "quantity": 2,
+    "unitPrice": 39.99,
+    "subtotal": 79.98
+  },
+  {
+    "orderDetailId": "OD003",
+    "productId": "P103",
+    "orderId": "ORD002",
+    "quantity": 1,
+    "unitPrice": 49.50,
+    "subtotal": 49.50
+  },
+  {
+    "orderDetailId": "OD004",
+    "productId": "P001",
+    "orderId": "ORD002",
+    "quantity": 1,
+    "unitPrice": 120.00,
+    "subtotal": 120.00
+  },
+  {
+    "orderDetailId": "OD005",
+    "productId": "P102",
+    "orderId": "ORD002",
+    "quantity": 1,
+    "unitPrice": 39.99,
+    "subtotal": 39.99
+  },
+  {
+    "orderDetailId": "OD001",
+    "productId": "P001",
+    "orderId": "ORD001",
+    "quantity": 1,
+    "unitPrice": 120.00,
+    "subtotal": 120.00
+  },
+  {
+    "orderDetailId": "OD002",
+    "productId": "P102",
+    "orderId": "ORD001",
+    "quantity": 2,
+    "unitPrice": 39.99,
+    "subtotal": 79.98
+  }
+]

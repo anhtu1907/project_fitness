@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "name": "Vitamins",
+        "image": "https://robohash.org/vitamins?set=set2",
+        "description": "Essential vitamins and minerals for overall health and wellness."
+    },
+    {
+        "id": 2,
+        "name": "Protein Powder",
+        "image": "https://robohash.org/protein?set=set2",
+        "description": "High-quality protein supplements for muscle growth and recovery."
+    },
+    {
+        "id": 3,
+        "name": "Pre-Workout",
+        "image": "https://robohash.org/preworkout?set=set2",
+        "description": "Energy boosting supplements to enhance workout performance."
+    },
+    {
+        "id": 4,
+        "name": "Post-Workout",
+        "image": "https://robohash.org/postworkout?set=set2",
+        "description": "Recovery supplements to help muscle repair and growth after training."
+    },
+    {
+        "id": 5,
+        "name": "Creatine",
+        "image": "https://robohash.org/creatine?set=set2",
+        "description": "Creatine supplements for increased strength, power, and muscle mass."
+    },
+    {
+        "id": 6,
+        "name": "BCAAs",
+        "image": "https://robohash.org/bcaa?set=set2",
+        "description": "Branched-chain amino acids for muscle preservation and recovery."
+    },
+    {
+        "id": 7,
+        "name": "Fat Burners",
+        "image": "https://robohash.org/fatburner?set=set2",
+        "description": "Thermogenic supplements to support weight loss and metabolism."
+    },
+    {
+        "id": 8,
+        "name": "Mass Gainers",
+        "image": "https://robohash.org/massgainer?set=set2",
+        "description": "High-calorie supplements for lean muscle mass and weight gain."
+    },
+    {
+        "id": 9,
+        "name": "Omega-3",
+        "image": "https://robohash.org/omega3?set=set2",
+        "description": "Essential fatty acids for joint health and cardiovascular support."
+    },
+    {
+        "id": 10,
+        "name": "Sleep & Recovery",
+        "image": "https://robohash.org/sleep?set=set2",
+        "description": "Natural supplements to improve sleep quality and recovery time."
+    }
+]

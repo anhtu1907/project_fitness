@@ -1,0 +1,20 @@
+[
+  {
+    "user_id": 1,
+    "distance": 6.5,
+    "speed": 6.0,
+    "time": 65,
+    "met_id": 5,
+    "kcal": 630.42,
+    "created_at": "GETDATE()"
+  },
+  {
+    "user_id": 2,
+    "distance": 3.2,
+    "speed": 4.0,
+    "time": 48,
+    "met_id": 2,
+    "kcal": 168.0,
+    "created_at": "GETDATE()"
+  }
+]

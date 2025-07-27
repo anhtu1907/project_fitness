@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "type": "equipment",
+    "name": "arm",
+    "image": "https://robohash.org/mail@ashallendesign.co.uk?set=set2",
+    "description": "Arm exercises and equipment for strength training."
+  },
+  {
+    "id": 2,
+    "type": "equipment",
+    "name": "leg",
+    "image": "https://robohash.org/mail@ashallendesign.co.uk?set=set2",
+    "description": "Leg exercises and equipment for lower body strength."
+  },
+  {
+    "id": 3,
+    "type": "equipment",
+    "name": "core",
+    "image": "https://robohash.org/mail@ashallendesign.co.uk?set=set2",
+    "description": "Core exercises and equipment for stability and strength."
+  },
+  {
+    "id": 4,
+    "type": "dietary",
+    "name": "protein",
+    "image": "https://robohash.org/mail@ashallendesign.co.uk?set=set2",
+    "description": "Protein supplements and nutrition for muscle recovery."
+  },
+  {
+    "id": 5,
+    "type": "dietary",
+    "name": "vitamins",
+    "image": "https://robohash.org/mail@ashallendesign.co.uk?set=set2",
+    "description": "Vitamins and minerals for overall health."
+  }
+]

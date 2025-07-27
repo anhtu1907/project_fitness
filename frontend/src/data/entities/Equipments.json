@@ -1,0 +1,18 @@
+[
+  {
+    "equipmentId": "EQ001",
+    "productId": "P001",
+    "eCategoryId": "ECAT01",
+    "size": "Adjustable",
+    "color": "Black",
+    "gender": "Unisex"
+  },
+  {
+    "equipmentId": "EQ002",
+    "productId": "P002",
+    "eCategoryId": "ECAT02",
+    "size": "Large",
+    "color": "Silver",
+    "gender": "Unisex"
+  }
+]
